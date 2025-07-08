@@ -34,7 +34,6 @@ final class User extends Authenticatable
      * @var list<string>
      */
     protected $guarded = ['id'];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -46,7 +45,6 @@ final class User extends Authenticatable
         'updated_at',
         'deleted_at',
     ];
-
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
