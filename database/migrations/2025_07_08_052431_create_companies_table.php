@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('website')->nullable();
             $table->unsignedTinyInteger('is_active')
-            ->index()
-            ->default(value: Status::ACTIVE->value);
+                ->index()
+                ->default(value: Status::ACTIVE->value);
             $table->timestamps();
             $table->softDeletes();
         });

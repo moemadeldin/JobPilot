@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\JobApplicationStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,16 +17,16 @@ return new class extends Migration
         Schema::create('job_applications', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')
-            ->nullable()
-            ->constrained('users')
-            ->cascadeOnDelete();
+                ->nullable()
+                ->constrained('users')
+                ->cascadeOnDelete();
             $table->foreignUuid('job_vacancy_id')
-            ->nullable()
-            ->constrained('job_vacancies')
-            ->cascadeOnDelete();
+                ->nullable()
+                ->constrained('job_vacancies')
+                ->cascadeOnDelete();
             $table->unsignedTinyInteger('status')
-            ->index()
-            ->default(JobApplicationStatus::PENDING->value);
+                ->index()
+                ->default(JobApplicationStatus::PENDING->value);
             $table->timestamps();
             $table->softDeletes();
         });

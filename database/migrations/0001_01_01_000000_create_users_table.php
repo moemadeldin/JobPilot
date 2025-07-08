@@ -21,8 +21,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->unsignedTinyInteger('is_active')
-            ->index()
-            ->default(value: Status::ACTIVE->value);
+                ->index()
+                ->default(value: Status::ACTIVE->value);
             $table->string('verification_code')->index()->nullable();
             $table->rememberToken();
             $table->timestamps();

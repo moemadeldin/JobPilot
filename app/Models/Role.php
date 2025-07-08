@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 final class Role extends Model
 {
     use SoftDeletes;
+
     protected $guarded = ['id'];
 
     public function users(): BelongsToMany

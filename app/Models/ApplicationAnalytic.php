@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 final class ApplicationAnalytic extends Model
 {
     use SoftDeletes;
+
     protected $guarded = ['id'];
+
     public function jobVacancy(): BelongsTo
     {
         return $this->belongsTo(JobVacancy::class);

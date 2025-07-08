@@ -16,31 +16,37 @@ final class JobVacancy extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(JobCategory::class);
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function applications(): HasMany
+    {
+        return $this->hasMany(JobApplication::class);
+    }
+
+    public function jobAnalytics(): HasMany
+    {
+        return $this->hasMany(JobAnalytic::class);
+    }
+
+    public function applicationAnalytics(): HasMany
+    {
+        return $this->hasMany(ApplicationAnalytic::class);
+    }
+
     protected function casts(): array
     {
         return [
             'employment_type' => EmploymentType::class,
             'is_active' => Status::class,
         ];
-    }
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(JobCategory::class);
-    }
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
-    }
-    public function applications(): HasMany
-    {
-        return $this->hasMany(JobApplication::class);
-    }
-    public function jobAnalytics(): HasMany
-    {
-        return $this->hasMany(JobAnalytic::class);
-    }
-    public function applicationAnalytics(): HasMany
-    {
-        return $this->hasMany(ApplicationAnalytic::class);
     }
 }

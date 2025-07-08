@@ -54,22 +54,27 @@ final class User extends Authenticatable
     {
         return $this->hasOne(Profile::class);
     }
+
     public function resume(): HasOne
     {
         return $this->hasOne(Resume::class);
     }
+
     public function company(): HasOne
     {
         return $this->hasOne(Company::class);
     }
+
     public function applications(): HasMany
     {
         return $this->hasMany(JobApplication::class);
     }
+
     public function analytics(): HasMany
     {
         return $this->hasMany(UserAnalytic::class);
     }
+
     /**
      * Get the attributes that should be cast.
      *

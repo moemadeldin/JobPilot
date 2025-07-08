@@ -15,18 +15,21 @@ final class Company extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function vacancies(): HasMany
+    {
+        return $this->hasMany(JobVacancy::class);
+    }
+
     protected function casts(): array
     {
         return [
             'is_active' => Status::class,
         ];
-    }
-    public function owner(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-    public function vacancies(): HasMany
-    {
-        return $this->hasMany(JobVacancy::class);
     }
 }

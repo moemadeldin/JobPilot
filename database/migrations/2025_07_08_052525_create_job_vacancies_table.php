@@ -33,8 +33,8 @@ return new class extends Migration
                 ->index()
                 ->default(EmploymentType::FULL_TIME);
             $table->unsignedTinyInteger('is_active')
-            ->index()
-            ->default(value: Status::ACTIVE->value);
+                ->index()
+                ->default(value: Status::ACTIVE->value);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 final class JobCategory extends Model
 {
     use SoftDeletes;
+
     protected $guarded = ['id'];
+
     public function vacancies(): HasMany
     {
         return $this->hasMany(JobVacancy::class);
