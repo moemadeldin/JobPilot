@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\EmploymentType;
 use App\Enums\Status;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class JobVacancy extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasUuids;
 
     protected $guarded = ['id'];
 
