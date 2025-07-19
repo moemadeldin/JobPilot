@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table): void {
             $table->uuid('id')->primary();
-            $table->foreignUuid('owner_id')
+            $table->foreignUuid('user_id')
                 ->nullable()
                 ->constrained('users')
                 ->cascadeOnDelete();

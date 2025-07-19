@@ -6,6 +6,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\Roles;
 use App\Enums\Status;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -49,7 +50,6 @@ final class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
-
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
@@ -59,22 +59,22 @@ final class User extends Authenticatable
     {
         return $this->hasOne(Resume::class);
     }
-
-    public function company(): HasOne
+    public function companies(): HasMany
     {
-        return $this->hasOne(Company::class);
+        return $this->hasMany(Company::class);
     }
-
     public function applications(): HasMany
     {
         return $this->hasMany(JobApplication::class);
     }
-
     public function analytics(): HasMany
     {
         return $this->hasMany(UserAnalytic::class);
     }
-
+    public function hasRole(Roles $role): bool
+    {
+        return $this->roles->contains('name', $role->value);
+    }
     /**
      * Get the attributes that should be cast.
      *
