@@ -21,7 +21,7 @@ use Laravel\Sanctum\HasApiTokens;
 final class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, HasApiTokens, HasUuids;
+    use HasApiTokens, HasFactory, HasUuids, Notifiable, SoftDeletes;
 
     public const MIN_VERIFICATION_CODE = 100_000;
 
@@ -35,6 +35,7 @@ final class User extends Authenticatable
      * @var list<string>
      */
     protected $guarded = ['id'];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -46,10 +47,12 @@ final class User extends Authenticatable
         'updated_at',
         'deleted_at',
     ];
+
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
     }
+
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
@@ -59,22 +62,27 @@ final class User extends Authenticatable
     {
         return $this->hasOne(Resume::class);
     }
+
     public function companies(): HasMany
     {
         return $this->hasMany(Company::class);
     }
+
     public function applications(): HasMany
     {
         return $this->hasMany(JobApplication::class);
     }
+
     public function analytics(): HasMany
     {
         return $this->hasMany(UserAnalytic::class);
     }
+
     public function hasRole(Roles $role): bool
     {
         return $this->roles->contains('name', $role->value);
     }
+
     /**
      * Get the attributes that should be cast.
      *

@@ -23,21 +23,22 @@ abstract class BaseCompanyController extends Controller
 
     public function __construct(private readonly CompanyService $companyService) {}
 
-    public function index(): AnonymousResourceCollection
+    final public function index(): AnonymousResourceCollection
     {
         return CompanyResource::collection($this->getCompanies());
     }
-    public function store(StoreCompanyRequest $request): JsonResponse
+
+    final public function store(StoreCompanyRequest $request): JsonResponse
     {
         return $this->success(CompanyResource::make($this->companyService->create(CompanyCreateDTO::fromArray($request->validated()))), 'Company created successfully');
     }
 
-    public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
+    final public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
         return $this->success(CompanyResource::make($this->companyService->update(CompanyUpdateDTO::fromArray($request->validated()), $company)), 'Company updated');
     }
 
-    public function destroy(Company $company): Response
+    final public function destroy(Company $company): Response
     {
         $this->authorize('delete', $company);
 
@@ -45,7 +46,8 @@ abstract class BaseCompanyController extends Controller
 
         return $this->noContent();
     }
-    public function restore(Company $company): Response
+
+    final public function restore(Company $company): Response
     {
         $this->authorize('restore', $company);
 

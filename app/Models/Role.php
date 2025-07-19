@@ -12,17 +12,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class Role extends Model
 {
-    use SoftDeletes, HasUuids;
+    use HasUuids, SoftDeletes;
 
     protected $guarded = ['id'];
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
+
     protected function casts(): array
     {
         return [
             'name' => Roles::class,
         ];
-    }
-    public function users(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class);
     }
 }

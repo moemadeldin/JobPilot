@@ -7,8 +7,8 @@ namespace App\Actions\Auth;
 use App\DTOs\Auth\LoginDTO;
 use App\Models\User;
 use App\Repositories\AuthRepository;
-use App\Services\UserValidator;
 use App\Services\TokenManager;
+use App\Services\UserValidator;
 
 final class LoginAction
 {

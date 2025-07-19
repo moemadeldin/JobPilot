@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources;
 
-use App\Enums\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CompanyResource extends JsonResource
+final class CompanyResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -26,7 +27,7 @@ class CompanyResource extends JsonResource
                 'address' => $this->address,
                 'website' => $this->website,
                 'is_active' => $this->is_active->label(),
-            ]
+            ],
         ];
     }
 }

@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Enums\Status;
-use App\Models\Company;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateCompanyRequest extends FormRequest
+final class UpdateCompanyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +16,7 @@ class UpdateCompanyRequest extends FormRequest
     public function authorize(): bool
     {
         $company = $this->route('company');
-        
+
         return $this->user()?->can('update', $company);
     }
 

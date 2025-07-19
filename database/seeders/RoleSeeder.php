@@ -17,10 +17,10 @@ final class RoleSeeder extends Seeder
     public function run(): void
     {
         Role::create([
-            'name' => Roles::ADMIN->value
+            'name' => Roles::ADMIN->value,
         ]);
         Role::create([
-            'name' => Roles::OWNER->value
+            'name' => Roles::OWNER->value,
         ]);
     }
 }

@@ -50,11 +50,11 @@ final class CreateUserCommand extends Command
 
             return;
         }
-        $roleValue = match (strtolower($roleName)) {
+        $roleValue = match (mb_strtolower($roleName)) {
             'admin' => Roles::ADMIN->value,
             'owner' => Roles::OWNER->value,
         };
-        
+
         $role = Role::where('name', $roleValue)->first();
         if (! $role) {
             $this->error('Role not found');

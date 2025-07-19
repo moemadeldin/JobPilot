@@ -14,9 +14,11 @@ final class CompanyController extends BaseCompanyController
 {
     use APIResponses;
 
-    public function __construct(private readonly CompanyRepository $companyRepository, private readonly CompanyService $companyService) {
+    public function __construct(private readonly CompanyRepository $companyRepository, private readonly CompanyService $companyService)
+    {
         parent::__construct($companyService);
     }
+
     protected function getCompanies(): LengthAwarePaginator
     {
         return $this->companyRepository->getAllCompanies();

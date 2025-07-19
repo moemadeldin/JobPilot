@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Enums\Roles;
 use App\Models\Company;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
-class CompanyPolicy
+final class CompanyPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -64,12 +65,14 @@ class CompanyPolicy
     {
         return false;
     }
+
     private function checkIfAdminOrOwner(User $user): bool
     {
         return $user->hasRole(Roles::ADMIN) || $user->hasRole(Roles::OWNER);
     }
+
     private function checkIfUserOwnsThisCompany(User $user, Company $company): bool
     {
-    return $company->user_id === $user->id;
+        return $company->user_id === $user->id;
     }
 }

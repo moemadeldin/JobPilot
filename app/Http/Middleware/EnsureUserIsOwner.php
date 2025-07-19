@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use App\Enums\Roles;
@@ -9,19 +11,21 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureUserIsOwner
+final class EnsureUserIsOwner
 {
     use APIResponses;
+
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): JsonResponse|Response
     {
-        if(auth()->user()->hasRole(Roles::ADMIN) || auth()->user()->hasRole(Roles::OWNER)) {
+        if (auth()->user()->hasRole(Roles::ADMIN) || auth()->user()->hasRole(Roles::OWNER)) {
             return $next($request);
         }
+
         return $this->fail('Forbidden', Response::HTTP_FORBIDDEN);
     }
 }

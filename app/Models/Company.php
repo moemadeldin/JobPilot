@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class Company extends Model
 {
-    use SoftDeletes, HasUuids;
+    use HasUuids, SoftDeletes;
 
     protected $guarded = ['id'];
 

@@ -25,7 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     require __DIR__.'/../routes/admin_api.php';
                     require __DIR__.'/../routes/owner_api.php';
                 });
-            }
+        }
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([

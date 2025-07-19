@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class JobVacancy extends Model
 {
-    use SoftDeletes, HasUuids;
+    use HasUuids, SoftDeletes;
 
     protected $guarded = ['id'];
 
