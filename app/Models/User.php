@@ -47,7 +47,6 @@ final class User extends Authenticatable
         'updated_at',
         'deleted_at',
     ];
-
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);

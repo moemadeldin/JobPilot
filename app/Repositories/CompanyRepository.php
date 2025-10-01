@@ -10,7 +10,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 final class CompanyRepository
 {
-    private const NUMBER_OF_COMPANIES = 10;
+    private const NUMBER_OF_COMPANIES = 3;
 
     public function getAllCompaniesByOwner(User $user, int $number_of_companies = self::NUMBER_OF_COMPANIES): LengthAwarePaginator
     {

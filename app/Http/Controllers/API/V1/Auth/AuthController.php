@@ -15,6 +15,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\StoreUserRequest;
 use App\Utils\APIResponses;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 final class AuthController extends Controller
 {
@@ -45,11 +46,17 @@ final class AuthController extends Controller
             return $this->fail($e->getMessage(), $e->getCode());
         }
     }
+    public function logout(): Response
+    {
+        $user = auth()->user();
+        
+        $user->tokens()->delete();
+        return $this->noContent();
+    }
+    public function me(): JsonResponse
+    {
+        $user = auth()->user();
 
-    // public function logout(): Response
-    // {
-    //     $this->authService->logout(auth()->user());
-
-    //     return $this->noContent();
-    // }
+        return $this->success($user, 'me');
+    }
 }
