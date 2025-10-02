@@ -22,5 +22,8 @@ final class RoleSeeder extends Seeder
         Role::create([
             'name' => Roles::OWNER->value,
         ]);
+        Role::create([
+            'name' => Roles::USER->value,
+        ]);
     }
 }

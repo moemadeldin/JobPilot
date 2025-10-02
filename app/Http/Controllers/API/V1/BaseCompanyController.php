@@ -6,13 +6,16 @@ namespace App\Http\Controllers\API\V1;
 
 use App\DTOs\CompanyCreateDTO;
 use App\DTOs\CompanyUpdateDTO;
+use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
+use App\Interfaces\CompanyServiceInterface;
 use App\Models\Company;
-use App\Services\CompanyService;
-use App\Utils\APIResponses;
+use App\Models\User;
+use App\Traits\APIResponses;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -21,21 +24,25 @@ abstract class BaseCompanyController extends Controller
 {
     use APIResponses;
 
-    public function __construct(private readonly CompanyService $companyService) {}
+    public function __construct(private readonly CompanyServiceInterface $companyService) {}
 
     final public function index(): AnonymousResourceCollection
     {
-        return CompanyResource::collection($this->getCompanies());
+        return CompanyResource::collection(Company::companies()->get());
     }
 
-    final public function store(StoreCompanyRequest $request): JsonResponse
+    final public function store(StoreCompanyRequest $request, #[CurrentUser] User $user): JsonResponse
     {
-        return $this->success(CompanyResource::make($this->companyService->create(CompanyCreateDTO::fromArray($request->validated()))), 'Company created successfully');
+        return $this->success(
+            CompanyResource::make($this->companyService->create($user, CompanyCreateDTO::fromArray($request->validated()))), SuccessMessages::COMPANY_CREATED->value
+        );
     }
 
     final public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
-        return $this->success(CompanyResource::make($this->companyService->update(CompanyUpdateDTO::fromArray($request->validated()), $company)), 'Company updated');
+        return $this->success(
+            CompanyResource::make($this->companyService->update(CompanyUpdateDTO::fromArray($request->validated()), $company)), SuccessMessages::COMPANY_UPDATED->value
+        );
     }
 
     final public function destroy(Company $company): Response

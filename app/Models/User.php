@@ -8,6 +8,8 @@ namespace App\Models;
 
 use App\Enums\Roles;
 use App\Enums\Status;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -86,6 +88,12 @@ final class User extends Authenticatable
     public function isOwner(): bool
     {
         return $this->roles()->first()?->name->value === Roles::OWNER->value;
+    }
+
+    #[Scope]
+    protected function getUserByEmail(Builder $query, string $email): Builder
+    {
+        return $query->where('email', $email);
     }
 
     /**

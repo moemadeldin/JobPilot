@@ -10,7 +10,9 @@ use Illuminate\Container\Attributes\CurrentUser;
 
 final class TokenManager implements TokenManagerInterface
 {
-    private const personal = 'Personal Access Token';
+    private const register = 'Register Access Token';
+
+    private const login = 'Login Access Token';
 
     private const reset = 'Password Reset Token';
 
@@ -19,7 +21,8 @@ final class TokenManager implements TokenManagerInterface
     public function createAccessToken(User $user, string $type): string
     {
         $tokenName = match ($type) {
-            'personal' => self::personal,
+            'register' => self::register,
+            'login' => self::login,
             'reset' => self::reset,
             'email' => self::email,
         };

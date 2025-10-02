@@ -5,26 +5,24 @@ declare(strict_types=1);
 namespace App\Actions\Auth;
 
 use App\DTOs\Auth\LoginDTO;
+use App\Interfaces\Auth\TokenManagerInterface;
+use App\Interfaces\Auth\UserValidatorInterface;
 use App\Models\User;
-use App\Repositories\AuthRepository;
-use App\Services\TokenManager;
-use App\Services\UserValidator;
 
 final class LoginAction
 {
     public function __construct(
-        private readonly AuthRepository $authRepository,
-        private readonly TokenManager $tokenManager,
-        private readonly UserValidator $userValidator,
+        private readonly TokenManagerInterface $tokenManager,
+        private readonly UserValidatorInterface $userValidator,
     ) {}
 
     public function handle(LoginDTO $dto): User
     {
-        $user = $this->authRepository->getUserByEmail($dto->email);
+        $user = User::getUserByEmail($dto->email)->first();
         $this->userValidator->validateUserCredentials($user, $dto->password);
         $this->userValidator->validateUserIsActive($user);
 
-        $this->tokenManager->createAccessToken($user, 'personal');
+        $this->tokenManager->createAccessToken($user, 'login');
 
         return $user;
     }

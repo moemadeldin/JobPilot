@@ -8,4 +8,6 @@ enum SuccessMessages: string
 {
     case REGISTERED = 'User Registered Successfully.';
     case LOGGED_IN = 'User Logged in Successfully.';
+    case COMPANY_CREATED = 'Company Created Successfully.';
+    case COMPANY_UPDATED = 'Company Updated Successfully.';
 }

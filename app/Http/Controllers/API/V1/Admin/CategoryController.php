@@ -10,7 +10,7 @@ use App\Http\Requests\StoreJobCategoryRequest;
 use App\Http\Requests\UpdateJobCategoryRequest;
 use App\Models\JobCategory;
 use App\Services\JobCategoryService;
-use App\Utils\APIResponses;
+use App\Traits\APIResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 

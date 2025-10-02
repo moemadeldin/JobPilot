@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Interfaces\Auth;
 
 use App\Models\User;
+use SensitiveParameter;
 
 interface UserValidatorInterface
 {
@@ -12,5 +13,5 @@ interface UserValidatorInterface
 
     public function validateUserIsActive(User $user): void;
 
-    public function validateUserCredentials(User $user, string $password): void;
+    public function validateUserCredentials(User $user, #[SensitiveParameter] string $password): void;
 }

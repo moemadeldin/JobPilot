@@ -27,14 +27,18 @@ final class UserValidator implements UserValidatorInterface
     public function validateUserIsActive(User $user): void
     {
         if ($user->status === Status::BLOCKED->value) {
-            throw new AuthException(ValidateMessages::BLOCKED->value, Response::HTTP_FORBIDDEN);
+            throw new AuthException(
+                ValidateMessages::BLOCKED->value, Response::HTTP_FORBIDDEN
+            );
         }
     }
 
     public function validateUserCredentials(User $user, string $password): void
     {
         if (! Hash::check($password, $user->password)) {
-            throw new AuthException(ValidateMessages::INVALID_CREDENTIALS->value, Response::HTTP_BAD_REQUEST);
+            throw new AuthException(
+                ValidateMessages::INVALID_CREDENTIALS->value, Response::HTTP_BAD_REQUEST
+            );
         }
     }
 }

@@ -13,7 +13,10 @@ use App\Exceptions\AuthException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\StoreUserRequest;
-use App\Utils\APIResponses;
+use App\Interfaces\Auth\TokenManagerInterface;
+use App\Models\User;
+use App\Traits\APIResponses;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -21,23 +24,20 @@ final class AuthController extends Controller
 {
     use APIResponses;
 
-    public function __construct(
-        private readonly RegisterAction $register,
-        private readonly LoginAction $login
-    ) {}
+    public function __construct(private readonly TokenManagerInterface $tokenManager) {}
 
-    public function register(StoreUserRequest $request): JsonResponse
+    public function register(StoreUserRequest $request, RegisterAction $action): JsonResponse
     {
         return $this->success(
-            $this->register->handle(
+            $action->handle(
                 RegisterDTO::fromArray($request->validated())), SuccessMessages::REGISTERED->value);
     }
 
-    public function login(LoginRequest $request): JsonResponse
+    public function login(LoginRequest $request, LoginAction $action): JsonResponse
     {
         try {
             return $this->success(
-                $this->login->handle(
+                $action->handle(
                     LoginDTO::fromArray($request->validated())
                 ),
                 SuccessMessages::LOGGED_IN->value
@@ -47,19 +47,15 @@ final class AuthController extends Controller
         }
     }
 
-    public function logout(): Response
+    public function logout(#[CurrentUser] User $user): Response
     {
-        $user = auth()->user();
-
-        $user->tokens()->delete();
+        $this->tokenManager->deleteAccessToken($user);
 
         return $this->noContent();
     }
 
-    public function me(): JsonResponse
+    public function me(#[CurrentUser] User $user): JsonResponse
     {
-        $user = auth()->user();
-
         return $this->success($user, 'me');
     }
 }

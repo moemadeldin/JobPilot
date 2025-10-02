@@ -23,6 +23,7 @@ final class CompanyResource extends JsonResource
             'company_details' => [
                 'id' => $this->id,
                 'name' => $this->name,
+                'slug' => $this->slug,
                 'industry' => $this->industry,
                 'address' => $this->address,
                 'website' => $this->website,

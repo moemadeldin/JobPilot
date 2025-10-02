@@ -23,6 +23,10 @@ return new class extends Migration
             $table->string('name')
                 ->index()
                 ->nullable();
+            $table->string('slug')
+                ->nullable()
+                ->index()
+                ->unique();
             $table->string('industry')
                 ->index()
                 ->nullable();

@@ -6,13 +6,16 @@ namespace App\Services;
 
 use App\DTOs\CompanyCreateDTO;
 use App\DTOs\CompanyUpdateDTO;
+use App\Interfaces\CompanyServiceInterface;
 use App\Models\Company;
+use App\Models\User;
+use Illuminate\Container\Attributes\CurrentUser;
 
-final class CompanyService
+final class CompanyService implements CompanyServiceInterface
 {
-    public function create(CompanyCreateDTO $dto): Company
+    public function create(#[CurrentUser] User $user, CompanyCreateDTO $dto): Company
     {
-        $company = auth()->user()->companies()->create($dto->toArray());
+        $company = $user->companies()->create($dto->toArray());
 
         return $company;
     }

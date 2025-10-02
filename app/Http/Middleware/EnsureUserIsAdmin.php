@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\Enums\Roles;
-use App\Utils\APIResponses;
+use App\Traits\APIResponses;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 final class EnsureUserIsAdmin
@@ -22,7 +22,7 @@ final class EnsureUserIsAdmin
      */
     public function handle(Request $request, Closure $next): JsonResponse|Response
     {
-        if (auth()->user()->hasRole(Roles::ADMIN)) {
+        if (Auth::user()->isAdmin()) {
             return $next($request);
         }
 

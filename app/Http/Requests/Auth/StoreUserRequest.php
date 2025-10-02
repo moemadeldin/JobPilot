@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 
 final class StoreUserRequest extends FormRequest
@@ -14,7 +15,7 @@ final class StoreUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::guest();
     }
 
     /**
@@ -25,8 +26,8 @@ final class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email:rfc,dns', 'unique:users,email', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'],
-            'password' => ['required', 'confirmed', Password::min(6)->letters()->numbers(), 'regex:/^[a-zA-Z0-9]+$/'],
+            'email' => ['required', 'email:rfc,dns', 'unique:users,email'],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ];
     }
 }
