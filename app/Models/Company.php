@@ -30,6 +30,11 @@ final class Company extends Model
     protected function casts(): array
     {
         return [
+            'user_id' => 'integer',
+            'name' => 'string',
+            'industry' => 'string',
+            'address' => 'string',
+            'website' => 'string',
             'is_active' => Status::class,
         ];
     }

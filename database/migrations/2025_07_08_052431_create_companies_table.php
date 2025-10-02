@@ -20,23 +20,19 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('users')
                 ->cascadeOnDelete();
-            $table->string('name')->index()->nullable();
-            $table->string('industry')->index()->nullable();
+            $table->string('name')
+                ->index()
+                ->nullable();
+            $table->string('industry')
+                ->index()
+                ->nullable();
             $table->string('address')->nullable();
             $table->string('website')->nullable();
-            $table->unsignedTinyInteger('is_active')
+            $table->string('is_active')
                 ->index()
-                ->default(value: Status::ACTIVE->value);
+                ->default(Status::ACTIVE->value);
             $table->timestamps();
             $table->softDeletes();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('companies');
     }
 };

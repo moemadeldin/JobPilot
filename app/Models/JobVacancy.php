@@ -46,6 +46,12 @@ final class JobVacancy extends Model
     protected function casts(): array
     {
         return [
+            'title' => 'string',
+            'job_category_id' => 'integer',
+            'company_id' => 'integer',
+            'description' => 'string',
+            'location' => 'string',
+            'expected_salary' => 'string',
             'employment_type' => EmploymentType::class,
             'is_active' => Status::class,
         ];

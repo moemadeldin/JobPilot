@@ -47,6 +47,7 @@ final class User extends Authenticatable
         'updated_at',
         'deleted_at',
     ];
+
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
@@ -77,9 +78,14 @@ final class User extends Authenticatable
         return $this->hasMany(UserAnalytic::class);
     }
 
-    public function hasRole(Roles $role): bool
+    public function isAdmin(): bool
     {
-        return $this->roles->contains('name', $role->value);
+        return $this->roles()->first()?->name->value === Roles::ADMIN->value;
+    }
+
+    public function isOwner(): bool
+    {
+        return $this->roles()->first()?->name->value === Roles::OWNER->value;
     }
 
     /**
@@ -90,9 +96,13 @@ final class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'username' => 'string',
+            'email' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => Status::class,
+            'verification_code' => 'string',
+            'verification_code_expire_at' => 'datetime',
         ];
     }
 }

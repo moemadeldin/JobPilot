@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum JobApplicationStatus: int
+enum JobApplicationStatus: string
 {
-    case PENDING = 0;
-    case APPROVED = 1;
-    case REJECTED = 2;
-    case REQUEST_ADDITIONAL_INFORMATION = 3;
+    case PENDING = 'pending';
+    case APPROVED = 'approved';
+    case REJECTED = 'rejected';
+    case REQUEST_ADDITIONAL_INFORMATION = 'request additional information';
 
     public function label(): string
     {

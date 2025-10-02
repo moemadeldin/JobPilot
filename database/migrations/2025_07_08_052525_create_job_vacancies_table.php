@@ -27,24 +27,18 @@ return new class extends Migration
                 ->constrained('companies')
                 ->cascadeOnDelete();
             $table->text('description')->nullable();
-            $table->string('location')->index()->nullable();
+            $table->string('location')
+                ->index()
+                ->nullable();
             $table->decimal('expected_salary', 10, 2)->nullable();
-            $table->unsignedTinyInteger('employment_type')
+            $table->string('employment_type')
                 ->index()
                 ->default(EmploymentType::FULL_TIME);
-            $table->unsignedTinyInteger('is_active')
+            $table->string('is_active')
                 ->index()
                 ->default(value: Status::ACTIVE->value);
             $table->timestamps();
             $table->softDeletes();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('job_vacancies');
     }
 };

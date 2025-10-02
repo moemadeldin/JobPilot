@@ -19,4 +19,11 @@ final class JobCategory extends Model
     {
         return $this->hasMany(JobVacancy::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'name' => 'string',
+        ];
+    }
 }

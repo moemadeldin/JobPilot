@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum Status: int
+enum Status: string
 {
-    case ACTIVE = 1;
-    case INACTIVE = 2;
-    case BLOCKED = 3;
+    case ACTIVE = 'admin';
+    case INACTIVE = 'inactive';
+    case BLOCKED = 'blocked';
 
     public function label(): string
     {

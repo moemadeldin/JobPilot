@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\JobApplicationStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,5 +24,14 @@ final class JobApplication extends Model
     public function jobVacancy(): BelongsTo
     {
         return $this->belongsTo(JobVacancy::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'integer',
+            'job_vacancy_id' => 'integer',
+            'status' => JobApplicationStatus::class,
+        ];
     }
 }

@@ -24,19 +24,11 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('job_vacancies')
                 ->cascadeOnDelete();
-            $table->unsignedTinyInteger('status')
+            $table->string('status')
                 ->index()
                 ->default(JobApplicationStatus::PENDING->value);
             $table->timestamps();
             $table->softDeletes();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('job_applications');
     }
 };

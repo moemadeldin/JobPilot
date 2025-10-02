@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum EmploymentType: int
+enum EmploymentType: string
 {
-    case FULL_TIME = 1;
-    case REMOTELY = 2;
-    case CONTRACT = 3;
-    case HYBRID = 4;
+    case FULL_TIME = 'full time';
+    case REMOTELY = 'remotely';
+    case PART_TIME = 'part time';
+    case HYBRID = 'hybrid';
 
     public function label(): string
     {
         return match ($this) {
             self::FULL_TIME => 'Full-Time',
             self::REMOTELY => 'Remote',
-            self::CONTRACT => 'Contract',
+            self::PART_TIME => 'Part-Time',
             self::HYBRID => 'Hybrid',
         };
     }

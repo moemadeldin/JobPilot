@@ -19,4 +19,12 @@ final class UserAnalytic extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'integer',
+            'activity_date' => 'datetime',
+        ];
+    }
 }

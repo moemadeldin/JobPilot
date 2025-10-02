@@ -24,12 +24,4 @@ return new class extends Migration
             $table->softDeletes();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('user_analytics');
-    }
 };

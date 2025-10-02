@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Interfaces\Auth\TokenManagerInterface;
 use App\Models\User;
+use Illuminate\Container\Attributes\CurrentUser;
 
 final class TokenManager implements TokenManagerInterface
 {
@@ -26,7 +27,7 @@ final class TokenManager implements TokenManagerInterface
         return $user->access_token = $user->createToken($tokenName)->plainTextToken;
     }
 
-    public function deleteAccessToken(User $user): void
+    public function deleteAccessToken(#[CurrentUser] User $user): void
     {
         $user->tokens()->delete();
     }

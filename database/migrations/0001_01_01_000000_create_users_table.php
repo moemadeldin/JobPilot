@@ -16,14 +16,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table): void {
             $table->uuid('id')->primary();
-            $table->string('name')->nullable();
-            $table->string('email')->index()->nullable();
+            $table->string('username')
+                ->index()
+                ->nullable();
+            $table->string('email')
+                ->index()
+                ->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
-            $table->unsignedTinyInteger('is_active')
+            $table->string('is_active')
                 ->index()
                 ->default(value: Status::ACTIVE->value);
             $table->string('verification_code')->index()->nullable();
+            $table->timestamp('verification_code_expire_at')->index()->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
@@ -43,15 +48,5 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
     }
 };

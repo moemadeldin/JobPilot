@@ -46,13 +46,16 @@ final class AuthController extends Controller
             return $this->fail($e->getMessage(), $e->getCode());
         }
     }
+
     public function logout(): Response
     {
         $user = auth()->user();
-        
+
         $user->tokens()->delete();
+
         return $this->noContent();
     }
+
     public function me(): JsonResponse
     {
         $user = auth()->user();

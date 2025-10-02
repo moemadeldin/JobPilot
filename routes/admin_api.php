@@ -14,4 +14,4 @@ Route::prefix('admin/dashboard')
 
         Route::resource('job-categories', CategoryController::class)->except(['show', 'edit', 'create']);
         Route::post('/job-categories/{jobCategory}/restore', [CompanyController::class, 'restore'])->withTrashed();
-});
+    });

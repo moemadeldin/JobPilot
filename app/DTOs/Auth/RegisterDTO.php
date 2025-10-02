@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\DTOs\Auth;
 
+use SensitiveParameter;
+
 final readonly class RegisterDTO
 {
     public function __construct(
         public string $email,
-        public string $password,
+        #[SensitiveParameter] public string $password,
     ) {}
 
     public static function fromArray(array $data): self

@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-enum Roles: int
+enum Roles: string
 {
-    case ADMIN = 1;
-    case OWNER = 2;
+    case ADMIN = 'admin';
+    case OWNER = 'owner';
+    case USER = 'user';
 
     public function label(): string
     {
         return match ($this) {
             self::ADMIN => 'Admin',
             self::OWNER => 'Owner',
+            self::USER => 'User',
         };
     }
 }

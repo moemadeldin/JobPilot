@@ -19,4 +19,12 @@ final class Resume extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'integer',
+            'name' => 'string',
+        ];
+    }
 }

@@ -19,4 +19,12 @@ final class ApplicationAnalytic extends Model
     {
         return $this->belongsTo(JobVacancy::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'job_vacancies_id' => 'integer',
+            'activity_date' => 'datetime',
+        ];
+    }
 }

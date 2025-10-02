@@ -13,6 +13,7 @@ final class JobCategoryService
     {
         return JobCategory::create($dto->toArray());
     }
+
     public function update(JobCategory $jobCategory, JobCategoryDTO $dto): JobCategory
     {
         $jobCategory->update($dto->toArray());

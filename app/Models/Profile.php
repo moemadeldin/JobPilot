@@ -24,4 +24,16 @@ final class Profile extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'integer',
+            'first_name' => 'string',
+            'last_name' => 'string',
+            'avatar' => 'string',
+            'phone' => 'string',
+            'country' => 'string',
+        ];
+    }
 }
