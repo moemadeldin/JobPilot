@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\EmploymentType;
 use App\Enums\Status;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,13 +15,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class JobVacancy extends Model
 {
-    use HasUuids, SoftDeletes;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $guarded = ['id'];
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(JobCategory::class);
+        return $this->belongsTo(JobCategory::class, 'job_category_id');
     }
 
     public function company(): BelongsTo
@@ -47,8 +48,8 @@ final class JobVacancy extends Model
     {
         return [
             'title' => 'string',
-            'job_category_id' => 'integer',
-            'company_id' => 'integer',
+            'job_category_id' => 'string',
+            'company_id' => 'string',
             'description' => 'string',
             'location' => 'string',
             'expected_salary' => 'string',

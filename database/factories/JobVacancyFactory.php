@@ -1,0 +1,42 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Database\Factories;
+
+use App\Enums\EmploymentType;
+use App\Enums\Status;
+use App\Models\Company;
+use App\Models\JobCategory;
+use App\Models\JobVacancy;
+use Database\Factories\Concerns\RefreshOnCreate;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ */
+final class JobVacancyFactory extends Factory
+{
+    use RefreshOnCreate;
+
+    protected $model = JobVacancy::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'title' => $this->faker->title,
+            'job_category_id' => JobCategory::factory(),
+            'company_id' => Company::factory(),
+            'description' => $this->faker->text(200),
+            'location' => $this->faker->city,
+            'expected_salary' => $this->faker->numberBetween(30000, 120000),
+            'employment_type' => EmploymentType::FULL_TIME->value,
+            'is_active' => Status::ACTIVE->value,
+        ];
+    }
+}

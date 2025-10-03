@@ -20,8 +20,6 @@ final class CategoryController extends Controller
 
     public function __construct(private readonly JobCategoryService $jobCategoryService) {}
 
-    public function index() {}
-
     public function store(StoreJobCategoryRequest $request): JsonResponse
     {
 

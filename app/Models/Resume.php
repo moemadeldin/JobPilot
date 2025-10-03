@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class Resume extends Model
 {
-    use HasUuids, SoftDeletes;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $guarded = ['id'];
 
@@ -23,7 +24,7 @@ final class Resume extends Model
     protected function casts(): array
     {
         return [
-            'user_id' => 'integer',
+            'user_id' => 'string',
             'name' => 'string',
         ];
     }

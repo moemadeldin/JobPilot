@@ -10,6 +10,7 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class Company extends Model
 {
-    use HasUuids, Sluggable, SoftDeletes;
+    use HasFactory, HasUuids, Sluggable, SoftDeletes;
 
     public const NUMBER_OF_COMPANIES = 3;
 
@@ -54,7 +55,7 @@ final class Company extends Model
     protected function casts(): array
     {
         return [
-            'user_id' => 'integer',
+            'user_id' => 'string',
             'name' => 'string',
             'industry' => 'string',
             'address' => 'string',

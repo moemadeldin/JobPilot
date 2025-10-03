@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\Status;
+use App\Models\User;
+use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -13,9 +16,13 @@ use Illuminate\Support\Str;
  */
 final class UserFactory extends Factory
 {
+    use RefreshOnCreate;
+
     /**
      * The current password being used by the factory.
      */
+    protected $model = User::class;
+
     protected static ?string $password;
 
     /**
@@ -26,10 +33,10 @@ final class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => self::$password ??= Hash::make('password'),
+            'is_active' => Status::ACTIVE->value,
             'remember_token' => Str::random(10),
         ];
     }

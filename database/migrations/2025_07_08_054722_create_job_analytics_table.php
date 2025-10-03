@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('job_analytics', function (Blueprint $table): void {
             $table->uuid('id')->primary();
-            $table->foreignUuid('job_vacancies_id')
+            $table->foreignUuid('job_vacancy_id')
                 ->nullable()
                 ->constrained('job_vacancies')
                 ->cascadeOnDelete();
