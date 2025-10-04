@@ -61,8 +61,7 @@ test('job vacancy has many application analytics', function (): void {
     expect($jobVacancy->applicationAnalytics)->toHaveCount(3);
 });
 
-
-test('job vacancy scope filter by job_category_id', function(): void {
+test('job vacancy scope filter by job_category_id', function (): void {
 
     $categoryA = JobCategory::factory()->create();
     $categoryB = JobCategory::factory()->create();
@@ -77,7 +76,7 @@ test('job vacancy scope filter by job_category_id', function(): void {
     expect($result)->toHaveCount(3);
     expect($result->pluck('job_category_id')->unique()->first())->toBe($categoryA->id);
 });
-test('job vacancy scope filter by employment_type', function(): void {
+test('job vacancy scope filter by employment_type', function (): void {
 
     JobVacancy::factory()->count(3)->create(['employment_type' => EmploymentType::REMOTELY->value]);
     JobVacancy::factory()->count(2)->create(['employment_type' => EmploymentType::HYBRID->value]);
@@ -89,7 +88,7 @@ test('job vacancy scope filter by employment_type', function(): void {
     expect($result)->toHaveCount(3);
     expect($result->pluck('employment_type')->unique()->first())->toBe(EmploymentType::REMOTELY);
 });
-test('job vacancy scope filter by status', function(): void {
+test('job vacancy scope filter by status', function (): void {
 
     JobVacancy::factory()->count(3)->create(['is_active' => Status::ACTIVE->value]);
     JobVacancy::factory()->count(2)->create(['is_active' => Status::INACTIVE->value]);
@@ -101,7 +100,7 @@ test('job vacancy scope filter by status', function(): void {
     expect($result)->toHaveCount(3);
     expect($result->pluck('is_active')->unique()->first())->toBe(Status::ACTIVE);
 });
-test('job vacancy scope filter by location', function(): void {
+test('job vacancy scope filter by location', function (): void {
 
     JobVacancy::factory()->count(3)->create(['location' => 'USA']);
     JobVacancy::factory()->count(2)->create(['location' => 'Canada']);

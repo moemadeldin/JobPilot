@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class JobVacancy extends Model
 {
+    public const NUMBER_OF_PAGINATED_JOB_VACANCIES = 6;
     use HasFactory, HasUuids, SoftDeletes;
 
     protected $guarded = ['id'];
@@ -47,7 +48,7 @@ final class JobVacancy extends Model
     }
 
     #[Scope]
-    protected function filterJobCategory(Builder $query, mixed $jobCategory)
+    protected function filterJobCategory(Builder $query, mixed $jobCategory): void
     {
         if (! empty($jobCategory)) {
             $query->where('job_category_id', $jobCategory);
