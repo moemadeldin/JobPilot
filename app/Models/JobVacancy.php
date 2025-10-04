@@ -17,8 +17,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class JobVacancy extends Model
 {
-    public const NUMBER_OF_PAGINATED_JOB_VACANCIES = 6;
     use HasFactory, HasUuids, SoftDeletes;
+
+    public const NUMBER_OF_PAGINATED_JOB_VACANCIES = 6;
 
     protected $guarded = ['id'];
 

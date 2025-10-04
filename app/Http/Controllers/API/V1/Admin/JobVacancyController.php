@@ -24,9 +24,11 @@ use Illuminate\Http\Response;
 final class JobVacancyController extends Controller
 {
     use APIResponses;
+
     public function __construct(
         private readonly FilteredJobVacancyQuery $query,
     ) {}
+
     public function index(JobVacancyFilterRequest $request): JsonResponse
     {
         return $this->success(JobVacancyResource::collection(
