@@ -33,15 +33,15 @@ final class CreateUserCommand extends Command
      */
     public function handle(): void
     {
-        $user['name'] = $this->ask('Name of the new user');
+        $user['username'] = $this->ask('Name of the new user');
         $user['email'] = $this->ask('Email of the new user');
         $user['password'] = $this->secret('Password of the new user');
-        $roleName = $this->choice('Role of the new user', ['admin', 'owner'], 1);
+        $roleName = $this->choice('Role of the new user', ['admin', 'owner', 'user'], 1);
 
         $validator = Validator::make($user, [
-            'name' => ['required', 'string'],
-            'email' => ['required', 'email:rfc,dns', 'unique:users,email', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'],
-            'password' => ['required', Password::min(6)->letters()->numbers(), 'regex:/^[a-zA-Z0-9]+$/'],
+            'username' => ['required', 'string', 'unique:users,username'],
+            'email' => ['required', 'email:rfc,dns', 'unique:users,email'],
+            'password' => ['required', Password::defaults()],
         ]);
         if ($validator->fails()) {
             foreach ($validator->errors()->all() as $error) {
@@ -53,6 +53,7 @@ final class CreateUserCommand extends Command
         $roleValue = match (mb_strtolower($roleName)) {
             'admin' => Roles::ADMIN->value,
             'owner' => Roles::OWNER->value,
+            'user' => Roles::USER->value,
         };
 
         $role = Role::where('name', $roleValue)->first();
@@ -64,7 +65,7 @@ final class CreateUserCommand extends Command
 
         DB::transaction(function () use ($user, $role): void {
             $newUser = User::create([
-                'name' => $user['name'],
+                'username' => $user['username'],
                 'email' => $user['email'],
                 'password' => bcrypt($user['password']),
             ]);

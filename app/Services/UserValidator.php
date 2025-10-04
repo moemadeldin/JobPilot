@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 
 final class UserValidator implements UserValidatorInterface
 {
-    public function validateUser(User $user): void
+    public function validateUser(?User $user): void
     {
         if (! $user) {
             throw new AuthException(

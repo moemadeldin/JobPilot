@@ -22,6 +22,9 @@ final class EnsureUserIsOwner
      */
     public function handle(Request $request, Closure $next): JsonResponse|Response
     {
+        if (! Auth::check()) {
+            return $this->fail('Unauthorized', Response::HTTP_UNAUTHORIZED);
+        }
         if (Auth::user()->isAdmin() || Auth::user()->isOwner()) {
             return $next($request);
         }
