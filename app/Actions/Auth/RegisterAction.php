@@ -9,7 +9,7 @@ use App\Interfaces\Auth\TokenManagerInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-final class RegisterAction
+final readonly class RegisterAction
 {
     public function __construct(
         private readonly TokenManagerInterface $tokenManager,

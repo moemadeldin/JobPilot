@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\DTOs;
 
-final readonly class CompanyUpdateDTO
+final readonly class UpdateCompanyDTO
 {
     public function __construct(
-        public string $name,
-        public string $industry,
-        public string $address,
-        public string $website,
-        public string $is_active,
+        public ?string $name,
+        public ?string $industry,
+        public ?string $address,
+        public ?string $website,
+        public ?string $is_active,
     ) {}
 
     public static function fromArray(array $data): self

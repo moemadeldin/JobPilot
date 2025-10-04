@@ -6,6 +6,8 @@ namespace App\Models;
 
 use App\Enums\EmploymentType;
 use App\Enums\Status;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -42,6 +44,38 @@ final class JobVacancy extends Model
     public function applicationAnalytics(): HasMany
     {
         return $this->hasMany(ApplicationAnalytic::class);
+    }
+
+    #[Scope]
+    protected function filterJobCategory(Builder $query, mixed $jobCategory)
+    {
+        if (! empty($jobCategory)) {
+            $query->where('job_category_id', $jobCategory);
+        }
+    }
+
+    #[Scope]
+    protected function filterEmploymentType(Builder $query, mixed $employmentType): void
+    {
+        if (! empty($employmentType)) {
+            $query->where('employment_type', $employmentType);
+        }
+    }
+
+    #[Scope]
+    protected function filterStatus(Builder $query, mixed $status): void
+    {
+        if (! empty($status)) {
+            $query->where('is_active', $status);
+        }
+    }
+
+    #[Scope]
+    protected function filterLocation(Builder $query, mixed $location): void
+    {
+        if (! empty($location)) {
+            $query->where('location', 'LIKE', "%{$location}%");
+        }
     }
 
     protected function casts(): array

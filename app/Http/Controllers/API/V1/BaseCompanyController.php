@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\API\V1;
 
-use App\DTOs\CompanyCreateDTO;
-use App\DTOs\CompanyUpdateDTO;
+use App\DTOs\CreateCompanyDTO;
+use App\DTOs\UpdateCompanyDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteCompanyRequest;
@@ -29,14 +29,14 @@ abstract class BaseCompanyController extends Controller
     final public function store(StoreCompanyRequest $request, #[CurrentUser] User $user): JsonResponse
     {
         return $this->success(
-            CompanyResource::make($this->companyService->create($user, CompanyCreateDTO::fromArray($request->validated()))), SuccessMessages::COMPANY_CREATED->value, Response::HTTP_CREATED
+            CompanyResource::make($this->companyService->create($user, CreateCompanyDTO::fromArray($request->validated()))), SuccessMessages::COMPANY_CREATED->value, Response::HTTP_CREATED
         );
     }
 
     final public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
         return $this->success(
-            CompanyResource::make($this->companyService->update(CompanyUpdateDTO::fromArray($request->validated()), $company)), SuccessMessages::COMPANY_UPDATED->value
+            CompanyResource::make($this->companyService->update(UpdateCompanyDTO::fromArray($request->validated()), $company)), SuccessMessages::COMPANY_UPDATED->value
         );
     }
 

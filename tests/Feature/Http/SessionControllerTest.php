@@ -97,7 +97,7 @@ it('returns user details', function (): void {
                 'username',
                 'email',
                 'status',
-            ]
+            ],
         ],
     ]);
     $response->assertJson([
@@ -108,7 +108,7 @@ it('returns user details', function (): void {
                 'username' => $user->profile->username ?? null,
                 'email' => $user->email,
                 'status' => $user->is_active->label(),
-            ]
+            ],
         ],
     ]);
 });

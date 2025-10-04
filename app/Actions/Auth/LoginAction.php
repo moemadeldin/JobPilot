@@ -9,7 +9,7 @@ use App\Interfaces\Auth\TokenManagerInterface;
 use App\Interfaces\Auth\UserValidatorInterface;
 use App\Models\User;
 
-final class LoginAction
+final readonly class LoginAction
 {
     public function __construct(
         private readonly TokenManagerInterface $tokenManager,

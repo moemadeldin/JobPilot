@@ -12,4 +12,6 @@ enum SuccessMessages: string
     case JOB_CATEGORY_UPDATED = 'Job Category Updated Successfully.';
     case COMPANY_CREATED = 'Company Created Successfully.';
     case COMPANY_UPDATED = 'Company Updated Successfully.';
+    case JOB_VACANCY_CREATED = 'Job Vacancy Created Successfully.';
+    case JOB_VACANCY_UPDATED = 'Job Vacancy Updated Successfully.';
 }
