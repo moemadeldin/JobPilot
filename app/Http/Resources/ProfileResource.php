@@ -17,9 +17,13 @@ final class ProfileResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'username' => $this->user->username ?? null,
-            'email' => $this->email,
-            'status' => $this->is_active->label(),
+            'authenticated' => true,
+            'user' => [
+                'id' => $this->id,
+                'username' => $this->user->username ?? null,
+                'email' => $this->email,
+                'status' => $this->is_active->label(),
+            ],
         ];
     }
 }
