@@ -13,6 +13,8 @@ use App\Exceptions\AuthException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\StoreUserRequest;
+use App\Http\Resources\LoginResource;
+use App\Http\Resources\ProfileResource;
 use App\Interfaces\Auth\TokenManagerInterface;
 use App\Models\User;
 use App\Traits\APIResponses;
@@ -30,15 +32,17 @@ final class AuthController extends Controller
     {
         return $this->success(
             $action->handle(
-                RegisterDTO::fromArray($request->validated())), SuccessMessages::REGISTERED->value);
+                RegisterDTO::fromArray($request->validated())), SuccessMessages::REGISTERED->value, Response::HTTP_CREATED);
     }
 
     public function login(LoginRequest $request, LoginAction $action): JsonResponse
     {
         try {
             return $this->success(
-                $action->handle(
-                    LoginDTO::fromArray($request->validated())
+                new LoginResource(
+                    $action->handle(
+                        LoginDTO::fromArray($request->validated())
+                    ),
                 ),
                 SuccessMessages::LOGGED_IN->value
             );
@@ -56,6 +60,6 @@ final class AuthController extends Controller
 
     public function me(#[CurrentUser] User $user): JsonResponse
     {
-        return $this->success($user, 'me');
+        return $this->success(new ProfileResource($user), 'me');
     }
 }

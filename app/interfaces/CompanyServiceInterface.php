@@ -15,4 +15,6 @@ interface CompanyServiceInterface
     public function create(#[CurrentUser] User $user, CompanyCreateDTO $dto): Company;
 
     public function update(CompanyUpdateDTO $dto, Company $company): Company;
+
+    public function delete(Company $company): void;
 }

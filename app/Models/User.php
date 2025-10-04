@@ -90,6 +90,11 @@ final class User extends Authenticatable
         return $this->roles()->first()?->name->value === Roles::OWNER->value;
     }
 
+    public function isActive(): bool
+    {
+        return $this->is_active === Status::ACTIVE;
+    }
+
     #[Scope]
     protected function getUserByEmail(Builder $query, string $email): Builder
     {

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Enums\Roles;
+use App\Enums\Status;
 use App\Models\Company;
 use App\Models\JobApplication;
 use App\Models\Profile;
@@ -55,6 +56,13 @@ test('isOwner return true for owner user', function (): void {
     $ownerRole = Role::factory()->create(['name' => Roles::OWNER->value]);
     $user->roles()->attach($ownerRole->id);
     expect($user->isOwner())->toBeTrue();
+});
+test('isActive return true for Active user', function (): void {
+    $user = User::factory()->create([
+        'is_active' => Status::ACTIVE->value,
+    ]);
+
+    expect($user->isActive())->toBeTrue();
 });
 
 test('getUserByEmail return real email', function (): void {

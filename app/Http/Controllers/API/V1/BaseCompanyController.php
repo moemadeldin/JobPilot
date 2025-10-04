@@ -8,6 +8,7 @@ use App\DTOs\CompanyCreateDTO;
 use App\DTOs\CompanyUpdateDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteCompanyRequest;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
@@ -17,7 +18,6 @@ use App\Models\User;
 use App\Traits\APIResponses;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 abstract class BaseCompanyController extends Controller
@@ -26,15 +26,10 @@ abstract class BaseCompanyController extends Controller
 
     public function __construct(private readonly CompanyServiceInterface $companyService) {}
 
-    final public function index(): AnonymousResourceCollection
-    {
-        return CompanyResource::collection(Company::companies()->get());
-    }
-
     final public function store(StoreCompanyRequest $request, #[CurrentUser] User $user): JsonResponse
     {
         return $this->success(
-            CompanyResource::make($this->companyService->create($user, CompanyCreateDTO::fromArray($request->validated()))), SuccessMessages::COMPANY_CREATED->value
+            CompanyResource::make($this->companyService->create($user, CompanyCreateDTO::fromArray($request->validated()))), SuccessMessages::COMPANY_CREATED->value, Response::HTTP_CREATED
         );
     }
 
@@ -45,20 +40,9 @@ abstract class BaseCompanyController extends Controller
         );
     }
 
-    final public function destroy(Company $company): Response
+    final public function destroy(DeleteCompanyRequest $request, Company $company): Response
     {
-        $this->authorize('delete', $company);
-
-        $company->delete();
-
-        return $this->noContent();
-    }
-
-    final public function restore(Company $company): Response
-    {
-        $this->authorize('restore', $company);
-
-        $company->restore();
+        $this->companyService->delete($company);
 
         return $this->noContent();
     }

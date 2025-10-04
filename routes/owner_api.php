@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('owner/dashboard')
     ->middleware(['auth:sanctum', 'owner'])
+    ->as('owner.')
     ->group(function (): void {
         Route::resource('companies', CompanyController::class)->except(['show', 'edit', 'create']);
-        Route::post('/companies/{company}/restore', [CompanyController::class, 'restore'])->withTrashed();
     });

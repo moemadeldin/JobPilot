@@ -7,7 +7,9 @@ namespace App\Providers;
 use App\Interfaces\Auth\TokenManagerInterface;
 use App\Interfaces\Auth\UserValidatorInterface;
 use App\Interfaces\CompanyServiceInterface;
+use App\Interfaces\JobCategoryInterface;
 use App\Services\CompanyService;
+use App\Services\JobCategoryService;
 use App\Services\TokenManager;
 use App\Services\UserValidator;
 use Illuminate\Support\ServiceProvider;
@@ -34,6 +36,10 @@ final class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             UserValidatorInterface::class,
             UserValidator::class
+        );
+        $this->app->bind(
+            JobCategoryInterface::class,
+            JobCategoryService::class
         );
         $this->app->bind(
             CompanyServiceInterface::class,

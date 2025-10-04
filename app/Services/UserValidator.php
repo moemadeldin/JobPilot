@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Enums\Messages\Auth\ValidateMessages;
-use App\Enums\Status;
 use App\Exceptions\AuthException;
 use App\Interfaces\Auth\UserValidatorInterface;
 use App\Models\User;
@@ -26,9 +25,9 @@ final class UserValidator implements UserValidatorInterface
 
     public function validateUserIsActive(User $user): void
     {
-        if ($user->status === Status::BLOCKED->value) {
+        if (! $user->isActive()) {
             throw new AuthException(
-                ValidateMessages::BLOCKED->value, Response::HTTP_FORBIDDEN
+                ValidateMessages::AUTH_ERROR->value, Response::HTTP_FORBIDDEN
             );
         }
     }

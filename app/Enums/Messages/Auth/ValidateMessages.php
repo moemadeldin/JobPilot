@@ -6,6 +6,6 @@ namespace App\Enums\Messages\Auth;
 
 enum ValidateMessages: string
 {
-    case BLOCKED = 'User is blocked.';
+    case AUTH_ERROR = 'Authentication error.';
     case INVALID_CREDENTIALS = 'Invalid credentials.';
 }

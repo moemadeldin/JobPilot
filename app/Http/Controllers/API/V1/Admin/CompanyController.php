@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers\API\V1\Admin;
 
 use App\Http\Controllers\API\V1\BaseCompanyController;
+use App\Http\Resources\CompanyResource;
 use App\Interfaces\CompanyServiceInterface;
 use App\Models\Company;
 use App\Traits\APIResponses;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 final class CompanyController extends BaseCompanyController
 {
@@ -19,10 +20,10 @@ final class CompanyController extends BaseCompanyController
         parent::__construct($companyService);
     }
 
-    protected function getCompanies(): LengthAwarePaginator
+    final public function index(): AnonymousResourceCollection
     {
-        return Company::query()
+        return CompanyResource::collection(Company::query()
             ->companies()
-            ->paginate(Company::NUMBER_OF_COMPANIES);
+            ->paginate(Company::NUMBER_OF_COMPANIES));
     }
 }

@@ -22,8 +22,17 @@ final class CompanyService implements CompanyServiceInterface
 
     public function update(CompanyUpdateDTO $dto, Company $company): Company
     {
+        // dd($user->id === $company->user_id);
+        // if(! $user->id === $company->user_id) {
+        //     $company->update($dto->toArray());
+        // }
         $company->update($dto->toArray());
 
         return $company;
+    }
+
+    public function delete(Company $company): void
+    {
+        $company->delete();
     }
 }

@@ -5,19 +5,25 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\DTOs\JobCategoryDTO;
+use App\Interfaces\JobCategoryInterface;
 use App\Models\JobCategory;
 
-final class JobCategoryService
+final class JobCategoryService implements JobCategoryInterface
 {
     public function create(JobCategoryDTO $dto): JobCategory
     {
         return JobCategory::create($dto->toArray());
     }
 
-    public function update(JobCategory $jobCategory, JobCategoryDTO $dto): JobCategory
+    public function update(JobCategory $category, JobCategoryDTO $dto): JobCategory
     {
-        $jobCategory->update($dto->toArray());
+        $category->update($dto->toArray());
 
-        return $jobCategory;
+        return $category;
+    }
+
+    public function destroy(JobCategory $category): void
+    {
+        $category->delete();
     }
 }
