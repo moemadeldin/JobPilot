@@ -117,14 +117,14 @@ it('can log out', function (): void {
 
     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(route('logout.post'));
+    $response = $this->deleteJson(route('logout.destroy'));
     $response->assertNoContent();
 
     expect($user->tokens()->count())->toBe(0);
 });
 it('require authentication to log out', function (): void {
 
-    $response = $this->postJson(route('logout.post'));
+    $response = $this->deleteJson(route('logout.destroy'));
 
     $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 
