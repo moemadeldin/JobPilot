@@ -11,6 +11,7 @@ use App\DTOs\CreateJobVacancyDTO;
 use App\DTOs\UpdateJobVacancyDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteJobVacancyRequest;
 use App\Http\Requests\JobVacancyFilterRequest;
 use App\Http\Requests\StoreJobVacancyRequest;
 use App\Http\Requests\UpdateJobVacancyRequest;
@@ -54,7 +55,7 @@ final class JobVacancyController extends Controller
             $action->handle(UpdateJobVacancyDTO::fromArray($request->validated()), $jobVacancy), SuccessMessages::JOB_VACANCY_UPDATED->value);
     }
 
-    public function destroy(DeleteJobVacancyAction $action, JobVacancy $jobVacancy): Response
+    public function destroy(DeleteJobVacancyRequest $request, DeleteJobVacancyAction $action, JobVacancy $jobVacancy): Response
     {
         $action->handle($jobVacancy);
 

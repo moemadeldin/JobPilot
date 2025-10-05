@@ -23,7 +23,6 @@ final class CategoryController extends Controller
 
     public function store(StoreJobCategoryRequest $request): JsonResponse
     {
-
         return $this->success($this->jobCategoryService->create(JobCategoryDTO::fromArray($request->validated())), SuccessMessages::JOB_CATEGORY_CREATED->value, Response::HTTP_CREATED);
     }
 
