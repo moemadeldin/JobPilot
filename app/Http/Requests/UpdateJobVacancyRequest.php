@@ -17,7 +17,7 @@ final class UpdateJobVacancyRequest extends FormRequest
 {
     public function authorize(
         #[CurrentUser()] User $user,
-        #[RouteParameter('jobVacancy')] JobVacancy $jobVacancy
+        #[RouteParameter('job_vacancy')] JobVacancy $jobVacancy
     ): bool {
         return $user->isAdmin() || $jobVacancy->company?->owner?->is($user);
     }

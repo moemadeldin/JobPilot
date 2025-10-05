@@ -31,6 +31,24 @@ it('can create a job vacancy', function (): void {
     $response->assertStatus(Response::HTTP_CREATED);
 
 });
+it('owner can create a job vacancy', function (): void {
+    $user = User::factory()->create();
+    $ownerRole = Role::factory()->create(['name' => Roles::OWNER->value]);
+    $user->roles()->attach($ownerRole->id);
+
+    $jobCategory = JobCategory::factory()->create(['name' => 'Tech']);
+    $company = Company::factory()->create();
+
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->postJson(route('owner.job-vacancies.store'), JobVacancy::factory()->create([
+        'job_category_id' => $jobCategory->id,
+        'company_id' => $company->id,
+    ])->toArray());
+
+    $response->assertStatus(Response::HTTP_CREATED);
+
+});
 it('can see a job vacancy', function (): void {
     $user = User::factory()->create();
     $adminRole = Role::factory()->create(['name' => Roles::ADMIN->value]);
@@ -98,11 +116,37 @@ it('can update a job vacancy', function (): void {
     expect($jobVacancy->title)->toBe('Frontend React Developer');
 
 });
+it('owner can update a job vacancy', function (): void {
+    $user = User::factory()->create();
+    $ownerRole = Role::factory()->create(['name' => Roles::OWNER->value]);
+    $user->roles()->attach($ownerRole->id);
+
+    $jobCategory = JobCategory::factory()->create(['name' => 'Tech']);
+    $company = Company::factory()->create([
+        'user_id' => $user->id,
+    ]);
+
+    $jobVacancy = JobVacancy::factory()->create([
+        'job_category_id' => $jobCategory->id,
+        'company_id' => $company->id,
+    ]);
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->putJson(route('owner.job-vacancies.update', $jobVacancy), [
+        'title' => 'Frontend React Developer',
+    ]);
+
+    $response->assertOk();
+    $jobVacancy->refresh();
+    expect($jobVacancy->title)->toBe('Frontend React Developer');
+
+});
 it('can delete a job vacancy', function (): void {
     $user = User::factory()->create();
     $adminRole = Role::factory()->create(['name' => Roles::ADMIN->value]);
     $user->roles()->attach($adminRole->id);
     $jobVacancy = JobVacancy::factory()->create();
+
     Sanctum::actingAs($user, ['*']);
 
     $response = $this->deleteJson(route('admin.job-vacancies.destroy', $jobVacancy));
@@ -110,11 +154,78 @@ it('can delete a job vacancy', function (): void {
     $response->assertNoContent();
 
 });
-
-it('owner or user can create a job vacancy', function (): void {
+it('owner can delete a job vacancy', function (): void {
     $user = User::factory()->create();
     $ownerRole = Role::factory()->create(['name' => Roles::OWNER->value]);
     $user->roles()->attach($ownerRole->id);
+    $company = Company::factory()->create([
+        'user_id' => $user->id,
+    ]);
+    $jobVacancy = JobVacancy::factory()->create([
+        'company_id' => $company->id,
+    ]);
+    Sanctum::actingAs($user, ['*']);
+
+    $response = $this->deleteJson(route('owner.job-vacancies.destroy', $jobVacancy));
+
+    $response->assertNoContent();
+
+});
+
+it('owner can view only his job vacancies', function (): void {
+    $userAdmin = User::factory()->create();
+    $adminRole = Role::factory()->create(['name' => Roles::ADMIN->value]);
+    $userAdmin->roles()->attach($adminRole->id);
+
+    $userOwner = User::factory()->create();
+    $ownerRole = Role::factory()->create(['name' => Roles::OWNER->value]);
+    $userOwner->roles()->attach($ownerRole->id);
+
+    $jobCategory = JobCategory::factory()->create(['name' => 'Tech']);
+    $companyAdmin = Company::factory()->create([
+        'user_id' => $userAdmin->id,
+    ]);
+    $companyOwner = Company::factory()->create([
+        'user_id' => $userOwner->id,
+    ]);
+
+    $jobVacancyAdmin = JobVacancy::factory()->count(5)->create([
+        'job_category_id' => $jobCategory->id,
+        'company_id' => $companyAdmin->id,
+    ]);
+    $jobVacancyOwner = JobVacancy::factory()->count(3)->create([
+        'job_category_id' => $jobCategory->id,
+        'company_id' => $companyOwner->id,
+    ]);
+    Sanctum::actingAs($userOwner, ['*']);
+    $response = $this->getJson(route('owner.job-vacancies.index'));
+
+    $response->assertOk();
+
+    $response->assertJsonStructure([
+        'data' => [
+            '*' => [
+                'job' => [
+                    'id',
+                    'job_category_id',
+                    'company_id',
+                    'title',
+                    'description',
+                    'location',
+                    'expected_salary',
+                    'employment_type',
+                    'status',
+                ],
+            ],
+        ],
+    ])->assertJsonCount(3, 'data');
+
+    $response->assertJsonFragment([
+        'company_id' => $companyOwner->id,
+    ]);
+});
+it('user can create a job vacancy', function (): void {
+    $user = User::factory()->create();
 
     Sanctum::actingAs($user, ['*']);
 

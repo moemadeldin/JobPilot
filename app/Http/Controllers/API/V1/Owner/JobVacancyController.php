@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\API\V1\Admin;
+namespace App\Http\Controllers\API\V1\Owner;
 
 use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Controllers\API\V1\BaseJobVacancyController;
 use App\Http\Requests\JobVacancyFilterRequest;
 use App\Http\Resources\JobVacancyResource;
 use App\Models\JobVacancy;
+use App\Models\User;
 use App\Queries\FilteredJobVacancyQuery;
 use App\Traits\APIResponses;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 
 final class JobVacancyController extends BaseJobVacancyController
@@ -21,10 +23,10 @@ final class JobVacancyController extends BaseJobVacancyController
         private readonly FilteredJobVacancyQuery $query
     ) {}
 
-    public function index(JobVacancyFilterRequest $request): JsonResponse
+    public function index(#[CurrentUser] User $user, JobVacancyFilterRequest $request): JsonResponse
     {
         return $this->success(JobVacancyResource::collection(
-            $this->query->builder($request->validated())
+            $this->query->builder($request->validated(), $user)
                 ->paginate(JobVacancy::NUMBER_OF_PAGINATED_JOB_VACANCIES)
         ), SuccessMessages::FILTERED_SUCCESS->value);
     }
