@@ -15,6 +15,12 @@ final readonly class UpdateJobVacancyDTO
         public ?string $expected_salary,
         public ?string $employment_type,
         public ?string $is_active,
+        public ?string $responsibilities,
+        public ?string $requirements,
+        public ?string $skills_required,
+        public ?int $experience_years_min,
+        public ?int $experience_years_max,
+        public ?string $nice_to_have,
     ) {}
 
     public static function fromArray(array $data): self
@@ -28,6 +34,12 @@ final readonly class UpdateJobVacancyDTO
             expected_salary: $data['expected_salary'] ?? null,
             employment_type: $data['employment_type'] ?? null,
             is_active: $data['is_active'] ?? null,
+            responsibilities: $data['responsibilities'] ?? null,
+            requirements: $data['requirements'] ?? null,
+            skills_required: $data['skills_required'] ?? null,
+            experience_years_min: $data['experience_years_min'] ?? null,
+            experience_years_max: $data['experience_years_max'] ?? null,
+            nice_to_have: $data['nice_to_have'] ?? null,
         );
     }
 
@@ -42,6 +54,12 @@ final readonly class UpdateJobVacancyDTO
             'expected_salary' => $this->expected_salary,
             'employment_type' => $this->employment_type,
             'is_active' => $this->is_active,
+            'responsibilities' => $this->responsibilities,
+            'requirements' => $this->requirements,
+            'skills_required' => $this->skills_required,
+            'experience_years_min' => $this->experience_years_min,
+            'experience_years_max' => $this->experience_years_max,
+            'nice_to_have' => $this->nice_to_have,
         ];
     }
 }

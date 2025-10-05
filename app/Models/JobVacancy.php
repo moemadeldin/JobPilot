@@ -91,6 +91,12 @@ final class JobVacancy extends Model
             'expected_salary' => 'string',
             'employment_type' => EmploymentType::class,
             'is_active' => Status::class,
+            'responsibilities' => 'string',
+            'requirements' => 'string',
+            'skills_required' => 'string',
+            'experience_years_min' => 'integer',
+            'experience_years_max' => 'integer',
+            'nice_to_have' => 'string',
         ];
     }
 }

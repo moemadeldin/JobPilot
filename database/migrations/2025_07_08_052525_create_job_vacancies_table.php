@@ -26,7 +26,13 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('companies')
                 ->cascadeOnDelete();
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
+            $table->text('responsibilities')->nullable();
+            $table->text('requirements')->nullable();
+            $table->text('skills_required')->nullable();
+            $table->integer('experience_years_min')->nullable();
+            $table->integer('experience_years_max')->nullable();
+            $table->text('nice_to_have')->nullable();
             $table->string('location')
                 ->index()
                 ->nullable();

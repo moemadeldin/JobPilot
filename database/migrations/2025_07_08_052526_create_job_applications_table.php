@@ -24,9 +24,19 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('job_vacancies')
                 ->cascadeOnDelete();
+            $table->foreignUuid('resume_id')
+                ->nullable()
+                ->constrained('resumes')
+                ->cascadeOnDelete();
+            $table->longText('cover_letter')->nullable();
+            $table->decimal('compatibility_score', 5, 2)->nullable();
+            $table->json('feedback')->nullable();
+            $table->longText('improvement_suggestions')->nullable();
             $table->string('status')
                 ->index()
                 ->default(JobApplicationStatus::PENDING->value);
+            $table->timestamp('applied_at')->nullable();
+            $table->timestamp('reviewed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

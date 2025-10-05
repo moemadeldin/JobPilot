@@ -28,6 +28,8 @@ final class JobVacancyFactory extends Factory
      */
     public function definition(): array
     {
+        $minExp = $this->faker->numberBetween(1, 2);
+
         return [
             'title' => $this->faker->title,
             'job_category_id' => JobCategory::factory(),
@@ -37,6 +39,12 @@ final class JobVacancyFactory extends Factory
             'expected_salary' => $this->faker->numberBetween(30000, 120000),
             'employment_type' => EmploymentType::FULL_TIME->value,
             'is_active' => Status::ACTIVE->value,
+            'responsibilities' => $this->faker->text(200),
+            'requirements' => $this->faker->text(200),
+            'skills_required' => $this->faker->text(200),
+            'experience_years_min' => $minExp,
+            'experience_years_max' => $this->faker->numberBetween($minExp, 10),
+            'nice_to_have' => $this->faker->text(100),
         ];
     }
 }

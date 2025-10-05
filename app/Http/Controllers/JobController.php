@@ -28,8 +28,8 @@ final class JobController extends Controller
         ), SuccessMessages::FILTERED_SUCCESS->value);
     }
 
-    public function show(JobVacancy $jobVacancy): JsonResponse
+    public function show(JobVacancy $job): JsonResponse
     {
-        return $this->success(new JobVacancyResource($jobVacancy), '');
+        return $this->success(new JobVacancyResource($job), '');
     }
 }

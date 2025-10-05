@@ -38,6 +38,12 @@ final class UpdateJobVacancyRequest extends FormRequest
             'expected_salary' => ['nullable', 'numeric'],
             'employment_type' => ['nullable', Rule::in(EmploymentType::cases())],
             'is_active' => ['nullable', Rule::in(Status::cases())],
+            'responsibilities' => ['nullable', 'string'],
+            'requirements' => ['nullable', 'string'],
+            'skills_required' => ['nullable', 'string'],
+            'experience_years_min' => ['nullable', 'integer'],
+            'experience_years_max' => ['nullable', 'integer'],
+            'nice_to_have' => ['nullable', 'string'],
         ];
     }
 }

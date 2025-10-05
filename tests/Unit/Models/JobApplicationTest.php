@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\JobApplication;
 use App\Models\JobVacancy;
+use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -29,4 +30,14 @@ test('job application belongs to job vacancy', function (): void {
 
     expect($jobApplication->jobVacancy)->toBeInstanceOf(JobVacancy::class);
     expect($jobApplication->job_vacancy_id)->toBe($jobVacancy->id);
+});
+test('job application belongs to resume', function (): void {
+    $resume = Resume::factory()->create();
+
+    $jobApplication = JobApplication::factory()->create([
+        'resume_id' => $resume->id,
+    ]);
+
+    expect($jobApplication->resume)->toBeInstanceOf(Resume::class);
+    expect($jobApplication->resume_id)->toBe($resume->id);
 });

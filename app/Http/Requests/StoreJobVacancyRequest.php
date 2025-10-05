@@ -27,6 +27,12 @@ final class StoreJobVacancyRequest extends FormRequest
             'expected_salary' => ['required', 'string'],
             'employment_type' => ['required', Rule::in(EmploymentType::cases())],
             'is_active' => ['required', Rule::in(Status::cases())],
+            'responsibilities' => ['required', 'string'],
+            'requirements' => ['required', 'string'],
+            'skills_required' => ['required', 'string'],
+            'experience_years_min' => ['required', 'integer'],
+            'experience_years_max' => ['required', 'integer'],
+            'nice_to_have' => ['nullable', 'string'],
         ];
     }
 }
