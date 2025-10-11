@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\API\V1\Admin;
 
+use App\Actions\JobCategory\CreateJobCategoryAction;
+use App\Actions\JobCategory\DeleteJobCategoryAction;
+use App\Actions\JobCategory\UpdateJobCategoryAction;
 use App\DTOs\JobCategoryDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreJobCategoryRequest;
 use App\Http\Requests\UpdateJobCategoryRequest;
-use App\Interfaces\JobCategoryInterface;
 use App\Models\JobCategory;
 use App\Traits\APIResponses;
 use Illuminate\Http\JsonResponse;
@@ -19,21 +21,19 @@ final class CategoryController extends Controller
 {
     use APIResponses;
 
-    public function __construct(private readonly JobCategoryInterface $jobCategoryService) {}
-
-    public function store(StoreJobCategoryRequest $request): JsonResponse
+    public function store(StoreJobCategoryRequest $request, CreateJobCategoryAction $action): JsonResponse
     {
-        return $this->success($this->jobCategoryService->create(JobCategoryDTO::fromArray($request->validated())), SuccessMessages::JOB_CATEGORY_CREATED->value, Response::HTTP_CREATED);
+        return $this->success($action->handle(JobCategoryDTO::fromArray($request->validated())), SuccessMessages::JOB_CATEGORY_CREATED->value, Response::HTTP_CREATED);
     }
 
-    public function update(UpdateJobCategoryRequest $request, JobCategory $category): JsonResponse
+    public function update(UpdateJobCategoryRequest $request, JobCategory $category, UpdateJobCategoryAction $action): JsonResponse
     {
-        return $this->success($this->jobCategoryService->update($category, JobCategoryDTO::fromArray($request->validated())), SuccessMessages::JOB_CATEGORY_UPDATED->value);
+        return $this->success($action->handle($category, JobCategoryDTO::fromArray($request->validated())), SuccessMessages::JOB_CATEGORY_UPDATED->value);
     }
 
-    public function destroy(JobCategory $category): Response
+    public function destroy(JobCategory $category, DeleteJobCategoryAction $action): Response
     {
-        $this->jobCategoryService->destroy($category);
+        $action->handle($category);
 
         return $this->noContent();
     }

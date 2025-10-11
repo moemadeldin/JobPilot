@@ -38,7 +38,7 @@ final class JobController extends Controller
 
     public function show(JobVacancy $job): JsonResponse
     {
-        return $this->success(new JobVacancyResource($job), '');
+        return $this->success(new JobVacancyResource($job), SuccessMessages::JOB_VACANCY_RETRIEVED->value);
     }
 
     public function store(
@@ -56,7 +56,7 @@ final class JobController extends Controller
             $request->safe()->cover_letter
         );
 
-        return $this->success(new JobApplicationResource($application), 'Application submitted successfully.', Response::HTTP_CREATED);
+        return $this->success(new JobApplicationResource($application), SuccessMessages::APPLICATION_SUBMITTED->value, Response::HTTP_CREATED);
 
     }
 }

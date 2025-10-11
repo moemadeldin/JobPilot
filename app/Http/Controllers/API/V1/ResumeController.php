@@ -6,6 +6,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Actions\CreateResumeAction;
 use App\DTOs\CreateResumeDTO;
+use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreResumeRequest;
 use App\Models\User;
@@ -23,6 +24,6 @@ final class ResumeController extends Controller
      */
     public function __invoke(#[CurrentUser] User $user, StoreResumeRequest $request, CreateResumeAction $action): JsonResponse
     {
-        return $this->success($action->handle($user, CreateResumeDTO::fromArray($request->validated())), '', Response::HTTP_CREATED);
+        return $this->success($action->handle($user, CreateResumeDTO::fromArray($request->validated())), SuccessMessages::RESUME_UPLOADED->value, Response::HTTP_CREATED);
     }
 }
