@@ -28,6 +28,8 @@ final class ResumeFactory extends Factory
         return [
             'user_id' => User::factory(),
             'name' => $this->faker->name,
+            'path' => 'resumes/'.$this->faker->uuid().'pdf',
+            'extracted_text' => $this->faker->text,
         ];
     }
 }

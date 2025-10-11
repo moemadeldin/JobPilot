@@ -20,7 +20,7 @@ final readonly class CreateJobVacancyDTO
         public string $skills_required,
         public int $experience_years_min,
         public int $experience_years_max,
-        public string $nice_to_have,
+        public ?string $nice_to_have,
     ) {}
 
     public static function fromArray(array $data): self
@@ -39,7 +39,7 @@ final readonly class CreateJobVacancyDTO
             skills_required: $data['skills_required'],
             experience_years_min: $data['experience_years_min'],
             experience_years_max: $data['experience_years_max'],
-            nice_to_have: $data['nice_to_have'],
+            nice_to_have: $data['nice_to_have'] ?? null,
         );
     }
 

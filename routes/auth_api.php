@@ -3,7 +3,8 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\API\V1\Auth\SessionController;
-use App\Http\Controllers\JobController;
+use App\Http\Controllers\API\V1\JobController;
+use App\Http\Controllers\API\V1\ResumeController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function (): void {
@@ -14,5 +15,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::controller(JobController::class)->group(function (): void {
         Route::get('/jobs', 'index')->name('jobs.index');
         Route::get('/jobs/{job}', 'show')->name('jobs.show');
+        Route::post('/jobs/{job}', 'store')->name('jobs.store');
     });
+    Route::post('/resumes', ResumeController::class)->name('resumes.store');
 });

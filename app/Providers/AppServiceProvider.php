@@ -8,8 +8,10 @@ use App\Interfaces\Auth\TokenManagerInterface;
 use App\Interfaces\Auth\UserValidatorInterface;
 use App\Interfaces\CompanyServiceInterface;
 use App\Interfaces\JobCategoryInterface;
+use App\Interfaces\ResumeTextExtractorInterface;
 use App\Services\CompanyService;
 use App\Services\JobCategoryService;
+use App\Services\ResumeTextExtractor;
 use App\Services\TokenManager;
 use App\Services\UserValidator;
 use Illuminate\Support\ServiceProvider;
@@ -44,6 +46,10 @@ final class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             CompanyServiceInterface::class,
             CompanyService::class
+        );
+        $this->app->bind(
+            ResumeTextExtractorInterface::class,
+            ResumeTextExtractor::class
         );
     }
 }
