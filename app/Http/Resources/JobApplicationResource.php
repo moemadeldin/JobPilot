@@ -26,7 +26,7 @@ final class JobApplicationResource extends JsonResource
             'job_vacancy_id' => $this->job_vacancy_id,
             'resume_id' => $this->resume_id,
             'cover_letter' => $this->cover_letter,
-            'status' => $this->status,
+            'status' => $this->status->label(),
 
             'evaluation' => [
                 'compatibility_score' => $this->compatibility_score
