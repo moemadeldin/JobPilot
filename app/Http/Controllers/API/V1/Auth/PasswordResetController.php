@@ -38,7 +38,7 @@ final class PasswordResetController extends Controller
     public function resetPassword(#[CurrentUser] User $user, ResetPasswordRequest $request): JsonResponse
     {
         return $this->success(
-            $this->passwordResetService->reset($user, $request->safe()->password), SuccessMessages::PASSWORD_RECOVERED->value
+            $this->passwordResetService->reset($user, $request->safe()->new_password), SuccessMessages::PASSWORD_RECOVERED->value
         );
     }
 }

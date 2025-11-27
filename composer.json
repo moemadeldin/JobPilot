@@ -12,6 +12,7 @@
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
+        "laravel/telescope": "^5.15",
         "laravel/tinker": "^2.10.1",
         "openai-php/laravel": "^0.17.1",
         "smalot/pdfparser": "^2.12"

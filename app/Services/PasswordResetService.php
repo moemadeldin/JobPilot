@@ -52,10 +52,10 @@ final class PasswordResetService implements PasswordResetInterface
 
     }
 
-    public function reset(User $user, string $password): ?User
+    public function reset(User $user, string $newPassword): ?User
     {
         $user->update([
-            'password' => $password,
+            'password' => $newPassword,
         ]);
         $this->tokenManagerService->deleteAccessToken($user);
 
