@@ -55,10 +55,10 @@ final class PasswordResetService implements PasswordResetInterface
     public function reset(User $user, string $newPassword): ?User
     {
         $user->update([
+            'verification_code' => null,
             'password' => $newPassword,
         ]);
         $this->tokenManagerService->deleteAccessToken($user);
-
         return $user;
     }
 
