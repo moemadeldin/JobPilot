@@ -7,9 +7,9 @@ namespace App\Services;
 use OpenAI\Laravel\Facades\OpenAI;
 use RuntimeException;
 
-final readonly class EvaluateResumeWithAIService
+final readonly class GenerateMockInterviewQAService
 {
-    public function evaluate(string $resumeText, string $jobDescription): array
+    public function generate(string $resumeText, string $jobDescription): array
     {
         $prompt = $this->getPrompt($resumeText, $jobDescription);
 
@@ -18,7 +18,7 @@ final readonly class EvaluateResumeWithAIService
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => 'You are a structured evaluator. Always return only JSON — no text outside of JSON.',
+                    'content' => 'You are a structured interviewer. Always return only JSON — no text outside of JSON.',
                 ],
                 [
                     'role' => 'user',
@@ -34,19 +34,12 @@ final readonly class EvaluateResumeWithAIService
 
         $data = json_decode((string) $content, true, 512, JSON_THROW_ON_ERROR);
 
-        return [
-            'score' => $data['score'] ?? 0,
-            'feedback' => [
-                'strengths' => $data['feedback']['strengths'] ?? [],
-                'weaknesses' => $data['feedback']['weaknesses'] ?? [],
-            ],
-            'suggestions' => $data['suggestions'] ?? 'No suggestions available.',
-        ];
+        return $data['qa'] ?? [];
     }
 
     private function getPrompt(string $resumeText, string $jobDescription): string
     {
-        $template = config('openai.prompts.evaluation');
+        $template = config('openai.prompts.mock_interview');
 
         return str_replace(
             ['{resume}', '{job_description}'],

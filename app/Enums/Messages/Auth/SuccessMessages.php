@@ -21,4 +21,5 @@ enum SuccessMessages: string
     case FILTERED_SUCCESS = 'Filtered Successfully';
     case RESUME_UPLOADED = 'Resume has been uploaded.';
     case APPLICATION_SUBMITTED = 'Application submitted successfully.';
+    case MOCK_INTERVIEW_EXPECTED_QUESTIONS = 'Expected Interview Questions.';
 }

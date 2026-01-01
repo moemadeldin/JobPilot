@@ -7,9 +7,9 @@ namespace App\Services;
 use OpenAI\Laravel\Facades\OpenAI;
 use RuntimeException;
 
-final readonly class EvaluateResumeWithAIService
+final readonly class MockInterviewService
 {
-    public function evaluate(string $resumeText, string $jobDescription): array
+    public function generate(string $resumeText, string $jobDescription): array
     {
         $prompt = $this->getPrompt($resumeText, $jobDescription);
 
@@ -35,23 +35,32 @@ final readonly class EvaluateResumeWithAIService
         $data = json_decode((string) $content, true, 512, JSON_THROW_ON_ERROR);
 
         return [
-            'score' => $data['score'] ?? 0,
-            'feedback' => [
-                'strengths' => $data['feedback']['strengths'] ?? [],
-                'weaknesses' => $data['feedback']['weaknesses'] ?? [],
-            ],
-            'suggestions' => $data['suggestions'] ?? 'No suggestions available.',
+            'question' => $data['question'],
+            'answer' => $data['answer'],
         ];
     }
 
     private function getPrompt(string $resumeText, string $jobDescription): string
     {
-        $template = config('openai.prompts.evaluation');
+        return <<<PROMPT
+You are an AI HR assistant generating mock interview Q&A for a candidate based on their resume and the job description.
 
-        return str_replace(
-            ['{resume}', '{job_description}'],
-            [$resumeText, $jobDescription],
-            $template
-        );
+Generate 10-15 highly relevant question-answer pairs commonly asked in interviews for this position. Keep answers concise yet informative.
+
+Respond strictly in valid JSON:
+{
+  "qa": [
+    {"question": "Question 1?", "answer": "Answer 1."},
+    {"question": "Question 2?", "answer": "Answer 2."},
+    ...
+  ]
+}
+
+RESUME:
+{$resumeText}
+
+JOB DESCRIPTION:
+{$jobDescription}
+PROMPT;
     }
 }

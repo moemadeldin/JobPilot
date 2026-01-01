@@ -39,7 +39,7 @@ final class JobApplicationResource extends JsonResource
                 'improvement_suggestions' => $this->improvement_suggestions,
                 'reviewed_at' => $this->reviewed_at?->toIso8601String(),
             ],
-
+            // 'mock_interview_status' => $this->mock_interview_status->label(),
             // Timestamps
             'applied_at' => $this->applied_at?->toIso8601String(),
             'created_at' => $this->created_at?->toIso8601String(),

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\API\V1\Auth\PasswordResetController;
 use App\Http\Controllers\API\V1\Auth\SessionController;
 use App\Http\Controllers\API\V1\JobController;
+use App\Http\Controllers\API\V1\MockInterviewController;
 use App\Http\Controllers\API\V1\ResumeController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +24,24 @@ Route::middleware('auth:sanctum')->group(function (): void {
             ->name('reset.password');
     });
 
-    Route::apiResource('jobs', JobController::class);
+    Route::controller(JobController::class)->group(function (): void {
+        Route::get('jobs', 'index')
+            ->name('jobs.index');
+        Route::get('jobs/{job}', 'show')
+            ->name('jobs.show');
+        Route::post('jobs/{job}/apply', 'store')
+            ->name('jobs.store');
+    });
+
     Route::post('/resumes', ResumeController::class)
         ->name('resumes.store');
+
+    Route::controller(MockInterviewController::class)->group(function (): void {
+        Route::get('applications/{application}/mock', 'show')
+            ->name('mock.show');
+        Route::post('applications/{application}/mock/accept', 'store')
+            ->name('mock.store');
+        Route::delete('applications/{application}/mock/decline', 'destroy')
+            ->name('mock.destroy');
+    });
 });

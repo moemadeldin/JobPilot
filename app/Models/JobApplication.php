@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\JobApplicationStatus;
+use App\Enums\MockInterviewStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
@@ -22,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property array<array-key, mixed>|null $feedback
  * @property string|null $improvement_suggestions
  * @property JobApplicationStatus $status
+ * @property MockInterviewStatus $mock_interview_status
  * @property Carbon|null $applied_at
  * @property Carbon|null $reviewed_at
  * @property Carbon|null $created_at
@@ -52,12 +55,18 @@ final class JobApplication extends Model
         return $this->belongsTo(Resume::class);
     }
 
+    public function mockInterviews(): HasMany
+    {
+        return $this->hasMany(MockInterviewQuestion::class);
+    }
+
     protected function casts(): array
     {
         return [
             'user_id' => 'string',
             'job_vacancy_id' => 'string',
             'status' => JobApplicationStatus::class,
+            'mock_interview_status' => MockInterviewStatus::class,
             'resume_id' => 'string',
             'cover_letter' => 'string',
             'compatibility_score' => 'decimal:2',

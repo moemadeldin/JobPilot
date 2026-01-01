@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Enums\JobApplicationStatus;
+use App\Enums\MockInterviewStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -35,6 +36,8 @@ return new class extends Migration
             $table->string('status')
                 ->index()
                 ->default(JobApplicationStatus::PENDING->value);
+            $table->string('mock_interview_status')->index()
+                ->default(MockInterviewStatus::SUGGESTED->value);
             $table->timestamp('applied_at')->nullable();
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamps();

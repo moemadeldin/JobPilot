@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Enums\JobApplicationStatus;
+use App\Enums\MockInterviewStatus;
 use App\Models\JobApplication;
 use App\Models\JobVacancy;
 use App\Models\Resume;
@@ -41,10 +42,12 @@ final readonly class ApplyToJobAction
             $resume->extracted_text,
             $job->description
         );
+        $mockInterviewStatus = ($evaluation['score'] >= 70) ? MockInterviewStatus::SUGGESTED->value : MockInterviewStatus::DISQUALIFIED->value;
         $application->update([
             'compatibility_score' => $evaluation['score'],
             'feedback' => $evaluation['feedback'],
             'improvement_suggestions' => $evaluation['suggestions'],
+            'mock_interview_status' => $mockInterviewStatus,
             'reviewed_at' => now(),
         ]);
     }
