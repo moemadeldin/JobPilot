@@ -9,6 +9,7 @@ use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use App\Models\User;
 use App\Traits\APIResponses;
+use App\Utilities\Constants;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -20,6 +21,6 @@ final class CompanyController extends BaseCompanyController
     {
         return CompanyResource::collection(Company::query()
             ->companiesByOwner($user)
-            ->paginate(Company::NUMBER_OF_COMPANIES));
+            ->paginate(Constants::NUMBER_OF_COMPANIES));
     }
 }

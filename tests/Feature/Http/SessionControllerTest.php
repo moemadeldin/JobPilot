@@ -64,12 +64,13 @@ it('returns error when login fails', function (): void {
     $response = $this->postJson(route('login.store'), [
         'email' => 'johndoe@gmail.com',
         'password' => 'wrongpassword123',
-        'is_active' => Status::BLOCKED->value,
+        'status' => Status::BLOCKED->value,
     ]);
 
     if (! $user->isActive()) {
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
+
     $response->assertStatus(Response::HTTP_BAD_REQUEST);
 
 });
@@ -107,7 +108,7 @@ it('returns user details', function (): void {
                 'id' => $user->id,
                 'username' => $user->profile->username ?? null,
                 'email' => $user->email,
-                'status' => $user->is_active->label(),
+                'status' => $user->status->label(),
             ],
         ],
     ]);

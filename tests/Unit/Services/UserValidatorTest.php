@@ -31,7 +31,7 @@ test('user is found', function (): void {
 });
 test('user is not active', function (): void {
 
-    $user = User::factory()->create(['is_active' => Status::INACTIVE]);
+    $user = User::factory()->create(['status' => Status::INACTIVE]);
 
     $this->expectException(AuthException::class);
     $this->expectExceptionMessage(ValidateMessages::AUTH_ERROR->value);
@@ -41,7 +41,7 @@ test('user is not active', function (): void {
 });
 test('user is active', function (): void {
 
-    $user = User::factory()->create(['is_active' => Status::ACTIVE]);
+    $user = User::factory()->create(['status' => Status::ACTIVE]);
 
     $this->validator->validateUserIsActive($user);
 
@@ -63,6 +63,26 @@ test('user passes correct credentials', function (): void {
     $user = User::factory()->create(['password' => '0123456789Aa']);
 
     $this->validator->validateUserCredentials($user, '0123456789Aa');
+
+    expect(true)->toBeTrue();
+
+});
+test('user passes wrong verfiication code', function (): void {
+
+    $user = User::factory()->create(['verification_code' => '2222']);
+
+    $this->expectException(AuthException::class);
+    $this->expectExceptionMessage(ValidateMessages::INCORRECT_CODE->value);
+    $this->expectExceptionCode(Response::HTTP_BAD_REQUEST);
+
+    $this->validator->validateVerificationCode($user, '2223');
+
+});
+test('user passes correct verfiication code', function (): void {
+
+    $user = User::factory()->create(['verification_code' => '2222']);
+
+    $this->validator->validateVerificationCode($user, '2222');
 
     expect(true)->toBeTrue();
 

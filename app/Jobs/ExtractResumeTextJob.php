@@ -12,7 +12,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 final class ExtractResumeTextJob implements ShouldQueue
 {
-    use Dispatchable, Queueable;
+    use Dispatchable;
+    use Queueable;
 
     public function __construct(private Resume $resume) {}
 
@@ -21,6 +22,7 @@ final class ExtractResumeTextJob implements ShouldQueue
         $text = $extractor->extract($this->resume->path);
 
         if ($text) {
+            $text = mb_convert_encoding($text, 'UTF-8', 'auto');
             $this->resume->update(['extracted_text' => $text]);
         }
     }

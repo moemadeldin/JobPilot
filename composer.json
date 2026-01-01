@@ -18,7 +18,10 @@
         "smalot/pdfparser": "^2.12"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.6",
+        "driftingly/rector-laravel": "^2.1",
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.8",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.41",
@@ -27,7 +30,8 @@
         "pestphp/pest": "^3.8",
         "pestphp/pest-plugin-faker": "^3.0",
         "pestphp/pest-plugin-laravel": "^3.2",
-        "pestphp/pest-plugin-type-coverage": "^3.6"
+        "pestphp/pest-plugin-type-coverage": "^3.6",
+        "rector/rector": "^2.3"
     },
     "autoload": {
         "psr-4": {
@@ -42,6 +46,13 @@
         }
     },
     "scripts": {
+        "test:types": "phpstan analyse",
+        "test:type-coverage": "@php artisan test --coverage --min=100",
+        "test:unit": "@php artisan test --coverage",
+        "lint": [
+            "rector",
+            "pint --parallel"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
@@ -62,8 +73,9 @@
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" --names='server,queue,vite'"
         ],
         "test": [
-            "@php artisan config:clear --ansi",
-            "@php artisan test"
+            "@test:type-coverage",
+            "@test:unit",
+            "@test:types"
         ]
     },
     "extra": {

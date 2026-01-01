@@ -16,6 +16,10 @@ final class DeleteJobVacancyRequest extends FormRequest
         #[CurrentUser] User $user,
         #[RouteParameter('job_vacancy')] JobVacancy $jobVacancy
     ): bool {
-        return $user->isAdmin() || $jobVacancy->company->owner->is($user);
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        return $jobVacancy->company->owner->is($user);
     }
 }

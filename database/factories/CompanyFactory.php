@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 final class CompanyFactory extends Factory
 {
@@ -27,16 +27,16 @@ final class CompanyFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->company;
+        $name = $this->faker->company();
 
         return [
             'user_id' => User::factory(),
             'name' => $name,
             'slug' => Str::slug($name),
-            'industry' => $this->faker->name,
-            'address' => $this->faker->address,
-            'website' => $this->faker->url,
-            'is_active' => Status::ACTIVE->value,
+            'industry' => $this->faker->name(),
+            'address' => $this->faker->address(),
+            'website' => $this->faker->url(),
+            'status' => Status::ACTIVE->value,
         ];
     }
 }

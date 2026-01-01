@@ -11,7 +11,7 @@ Route::prefix('admin/dashboard')
     ->middleware(['auth:sanctum', 'admin'])
     ->as('admin.')
     ->group(function (): void {
-        Route::resource('companies', CompanyController::class)->except(['show', 'edit', 'create']);
-        Route::resource('categories', CategoryController::class)->except(['show', 'edit', 'create']);
-        Route::resource('job-vacancies', JobVacancyController::class)->except(['edit', 'create']);
+        Route::apiResource('companies', CompanyController::class);
+        Route::apiResource('categories', CategoryController::class);
+        Route::apiResource('job-vacancies', JobVacancyController::class);
     });

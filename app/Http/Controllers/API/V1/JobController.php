@@ -6,7 +6,6 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Actions\ApplyToJobAction;
 use App\Enums\Messages\Auth\SuccessMessages;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\JobVacancyFilterRequest;
 use App\Http\Requests\StoreJobApplicationRequest;
 use App\Http\Resources\JobApplicationResource;
@@ -16,23 +15,24 @@ use App\Models\Resume;
 use App\Models\User;
 use App\Queries\FilteredJobVacancyQuery;
 use App\Traits\APIResponses;
+use App\Utilities\Constants;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-final class JobController extends Controller
+final readonly class JobController
 {
     use APIResponses;
 
     public function __construct(
-        private readonly FilteredJobVacancyQuery $query
+        private FilteredJobVacancyQuery $query
     ) {}
 
     public function index(JobVacancyFilterRequest $request): JsonResponse
     {
         return $this->success(JobVacancyResource::collection(
             $this->query->builder($request->validated())
-                ->paginate(JobVacancy::NUMBER_OF_PAGINATED_JOB_VACANCIES)
+                ->paginate(Constants::NUMBER_OF_PAGINATED_JOB_VACANCIES)
         ), SuccessMessages::FILTERED_SUCCESS->value);
     }
 
@@ -47,7 +47,9 @@ final class JobController extends Controller
         StoreJobApplicationRequest $request,
         ApplyToJobAction $action): JsonResponse
     {
-        $resume = Resume::findOrFail($request->safe()->resume_id);
+        $resume = Resume::query()
+            ->where('id', $request->safe()->resume_id)
+            ->first();
 
         $application = $action->handle(
             $user,

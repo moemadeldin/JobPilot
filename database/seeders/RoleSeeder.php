@@ -16,13 +16,13 @@ final class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create([
+        Role::query()->create([
             'name' => Roles::ADMIN->value,
         ]);
-        Role::create([
+        Role::query()->create([
             'name' => Roles::OWNER->value,
         ]);
-        Role::create([
+        Role::query()->create([
             'name' => Roles::USER->value,
         ]);
     }

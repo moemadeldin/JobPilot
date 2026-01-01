@@ -6,9 +6,9 @@ namespace App\Enums;
 
 enum EmploymentType: string
 {
-    case FULL_TIME = 'full time';
+    case FULL_TIME = 'full-time';
     case REMOTELY = 'remotely';
-    case PART_TIME = 'part time';
+    case PART_TIME = 'part-time';
     case HYBRID = 'hybrid';
 
     public function label(): string

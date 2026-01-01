@@ -24,7 +24,7 @@ it('admin can create a company', function (): void {
         'industry' => 'Cloud Computing',
         'address' => '880 Cirrus Lane, Suite 505, Miami, FL 33101',
         'website' => 'www.vortexcloud.io',
-        'is_active' => Status::ACTIVE->value,
+        'status' => Status::ACTIVE->value,
     ]);
     $response->assertStatus(Response::HTTP_CREATED);
 
@@ -43,7 +43,7 @@ it('owner can create a company', function (): void {
         'industry' => 'Cloud Computing',
         'address' => '880 Cirrus Lane, Suite 505, Miami, FL 33101',
         'website' => 'www.vortexcloud.io',
-        'is_active' => Status::ACTIVE->value,
+        'status' => Status::ACTIVE->value,
     ]);
     $response->assertStatus(Response::HTTP_CREATED);
 
@@ -64,7 +64,7 @@ it('admin can update a company', function (): void {
         'industry' => 'Cloud Computing',
         'address' => '880 Cirrus Lane, Suite 505, Miami, FL 33101',
         'website' => 'www.vortexcloud.io',
-        'is_active' => Status::ACTIVE->value,
+        'status' => Status::ACTIVE->value,
     ]);
     $response->assertOk();
 
@@ -99,7 +99,7 @@ it('owner can update his company', function (): void {
         'industry' => 'Cloud Computing',
         'address' => '880 Cirrus Lane, Suite 505, Miami, FL 33101',
         'website' => 'www.vortexcloud.io',
-        'is_active' => Status::ACTIVE->value,
+        'status' => Status::ACTIVE->value,
     ]);
     $response->assertOk();
 });
@@ -132,7 +132,7 @@ it('user can create a company', function (): void {
         'industry' => 'Cloud Computing',
         'address' => '880 Cirrus Lane, Suite 505, Miami, FL 33101',
         'website' => 'www.vortexcloud.io',
-        'is_active' => Status::ACTIVE->value,
+        'status' => Status::ACTIVE->value,
     ]);
     $response->assertStatus(Response::HTTP_FORBIDDEN);
 });
@@ -175,6 +175,6 @@ it('admin can view all companies', function (): void {
 
     $response->assertOk();
 
-    expect(Company::count())->toBe(12);
+    expect(Company::query()->count())->toBe(12);
 
 });

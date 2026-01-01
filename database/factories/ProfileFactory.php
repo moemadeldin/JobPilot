@@ -10,7 +10,7 @@ use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 final class ProfileFactory extends Factory
 {
@@ -27,11 +27,11 @@ final class ProfileFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'avatar' => $this->faker->image(),
-            'phone' => $this->faker->phoneNumber,
-            'country' => $this->faker->country,
+            'phone' => $this->faker->phoneNumber(),
+            'country' => $this->faker->country(),
         ];
     }
 }

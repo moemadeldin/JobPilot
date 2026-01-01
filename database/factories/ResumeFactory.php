@@ -10,7 +10,7 @@ use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 final class ResumeFactory extends Factory
 {
@@ -27,9 +27,9 @@ final class ResumeFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'name' => $this->faker->name,
+            'name' => $this->faker->name(),
             'path' => 'resumes/'.$this->faker->uuid().'pdf',
-            'extracted_text' => $this->faker->text,
+            'extracted_text' => $this->faker->text(),
         ];
     }
 }

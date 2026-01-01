@@ -10,6 +10,7 @@ use App\Models\JobVacancy;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Container\Attributes\RouteParameter;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,13 +20,17 @@ final class UpdateJobVacancyRequest extends FormRequest
         #[CurrentUser()] User $user,
         #[RouteParameter('job_vacancy')] JobVacancy $jobVacancy
     ): bool {
-        return $user->isAdmin() || $jobVacancy->company?->owner?->is($user);
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        return (bool) $jobVacancy->company?->owner?->is($user);
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -36,8 +41,8 @@ final class UpdateJobVacancyRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'location' => ['nullable', 'string'],
             'expected_salary' => ['nullable', 'numeric'],
-            'employment_type' => ['nullable', Rule::in(EmploymentType::cases())],
-            'is_active' => ['nullable', Rule::in(Status::cases())],
+            'employment_type' => ['nullable', Rule::enum(EmploymentType::class)],
+            'status' => ['nullable', Rule::enum(Status::class)],
             'responsibilities' => ['nullable', 'string'],
             'requirements' => ['nullable', 'string'],
             'skills_required' => ['nullable', 'string'],

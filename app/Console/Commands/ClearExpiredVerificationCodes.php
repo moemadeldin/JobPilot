@@ -28,7 +28,7 @@ final class ClearExpiredVerificationCodes extends Command
      */
     public function handle(): void
     {
-        User::whereNotNull('verification_code')
+        User::query()->whereNotNull('verification_code')
             ->where('verification_code_expire_at', '<', now())
             ->update([
                 'verification_code' => null,

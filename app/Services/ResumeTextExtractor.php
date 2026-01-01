@@ -14,7 +14,6 @@ final class ResumeTextExtractor implements ResumeTextExtractorInterface
     public function extract(string $path): ?string
     {
         $fullPath = Storage::disk('public')->path($path);
-
         if (! is_file($fullPath)) {
             return null;
         }
@@ -39,7 +38,7 @@ final class ResumeTextExtractor implements ResumeTextExtractorInterface
             $pdf = $parser->parseFile($file);
             $text = $pdf->getText();
 
-            return trim($text) ?: null;
+            return mb_trim($text) ?: null;
         } catch (Throwable) {
             return null;
         }
@@ -51,7 +50,7 @@ final class ResumeTextExtractor implements ResumeTextExtractorInterface
             $cmd = 'pdftotext -layout '.escapeshellarg($file).' -';
             $output = shell_exec($cmd);
 
-            return $output ? trim($output) : null;
+            return $output ? mb_trim($output) : null;
         } catch (Throwable) {
             return null;
         }
@@ -59,8 +58,10 @@ final class ResumeTextExtractor implements ResumeTextExtractorInterface
 
     private function cleanText(string $text): string
     {
+        $text = str_replace(['•', '◦', '▪', '▫', '–', '—'], ['-', '-', '-', '-', '-', '-'], $text);
+        $text = mb_convert_encoding($text, 'UTF-8', 'UTF-8');
         $text = preg_replace('/\s+/', ' ', $text);
 
-        return trim($text);
+        return mb_trim($text);
     }
 }

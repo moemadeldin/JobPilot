@@ -16,6 +16,10 @@ final class DeleteCompanyRequest extends FormRequest
         #[CurrentUser] User $user,
         #[RouteParameter('company')] Company $company
     ): bool {
-        return $user->isAdmin() || $company->owner()->is($user);
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        return $company->owner()->is($user);
     }
 }

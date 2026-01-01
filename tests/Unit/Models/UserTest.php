@@ -59,7 +59,7 @@ test('isOwner return true for owner user', function (): void {
 });
 test('isActive return true for Active user', function (): void {
     $user = User::factory()->create([
-        'is_active' => Status::ACTIVE->value,
+        'status' => Status::ACTIVE->value,
     ]);
 
     expect($user->isActive())->toBeTrue();

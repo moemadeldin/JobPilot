@@ -40,7 +40,7 @@ return new class extends Migration
             $table->string('employment_type')
                 ->index()
                 ->default(EmploymentType::FULL_TIME);
-            $table->string('is_active')
+            $table->string('status')
                 ->index()
                 ->default(value: Status::ACTIVE->value);
             $table->timestamps();

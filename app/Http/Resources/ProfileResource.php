@@ -22,7 +22,7 @@ final class ProfileResource extends JsonResource
                 'id' => $this->id,
                 'username' => $this->user->username ?? null,
                 'email' => $this->email,
-                'status' => $this->is_active->label(),
+                'status' => $this->status->label(),
             ],
         ];
     }

@@ -24,7 +24,7 @@ test('creates a new admin user', function (): void {
         'email' => 'johndoe@gmail.com',
     ]);
 
-    $user = User::where('email', 'johndoe@gmail.com')->first();
+    $user = User::query()->where('email', 'johndoe@gmail.com')->first();
     expect($user->roles->pluck('name'))->toContain(Roles::ADMIN);
 });
 
@@ -45,7 +45,7 @@ test('creates a new owner user', function (): void {
         'email' => 'johndoe@gmail.com',
     ]);
 
-    $user = User::where('email', 'johndoe@gmail.com')->first();
+    $user = User::query()->where('email', 'johndoe@gmail.com')->first();
     expect($user->roles->pluck('name'))->toContain(Roles::OWNER);
 });
 test('creates a new user ', function (): void {
@@ -65,7 +65,7 @@ test('creates a new user ', function (): void {
         'email' => 'johndoe@gmail.com',
     ]);
 
-    $user = User::where('email', 'johndoe@gmail.com')->first();
+    $user = User::query()->where('email', 'johndoe@gmail.com')->first();
     expect($user->roles->pluck('name'))->toContain(Roles::USER);
 });
 

@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Container\Attributes\RouteParameter;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -18,13 +19,17 @@ final class UpdateCompanyRequest extends FormRequest
         #[CurrentUser()] User $user,
         #[RouteParameter('company')] Company $company
     ): bool {
-        return $user->isAdmin() || $company->owner()->is($user);
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        return $company->owner()->is($user);
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -33,7 +38,7 @@ final class UpdateCompanyRequest extends FormRequest
             'industry' => ['nullable', 'string'],
             'address' => ['nullable', 'string'],
             'website' => ['nullable', 'string'],
-            'is_active' => ['nullable', Rule::in(Status::cases())],
+            'status' => ['nullable', Rule::enum(Status::class)],
         ];
     }
 }

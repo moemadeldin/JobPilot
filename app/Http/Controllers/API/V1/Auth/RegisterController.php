@@ -7,13 +7,12 @@ namespace App\Http\Controllers\API\V1\Auth;
 use App\Actions\Auth\RegisterAction;
 use App\DTOs\Auth\RegisterDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\StoreUserRequest;
 use App\Traits\APIResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-final class RegisterController extends Controller
+final readonly class RegisterController
 {
     use APIResponses;
 

@@ -11,6 +11,6 @@ final readonly class CreateJobVacancyAction
 {
     public function handle(CreateJobVacancyDTO $dto): JobVacancy
     {
-        return JobVacancy::create($dto->toArray());
+        return JobVacancy::query()->create($dto->toArray());
     }
 }

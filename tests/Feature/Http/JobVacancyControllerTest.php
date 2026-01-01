@@ -64,44 +64,40 @@ it('can see a job vacancy', function (): void {
 
     $response->assertJsonStructure([
         'data' => [
-            'job' => [
-                'id',
-                'job_category_id',
-                'company_id',
-                'title',
-                'description',
-                'location',
-                'expected_salary',
-                'employment_type',
-                'status',
-                'responsibilities',
-                'requirements',
-                'skills_required',
-                'experience_years_min',
-                'experience_years_max',
-                'nice_to_have',
-            ],
+            'id',
+            'category',
+            'company',
+            'title',
+            'description',
+            'location',
+            'expected_salary',
+            'employment_type',
+            'status',
+            'responsibilities',
+            'requirements',
+            'skills_required',
+            'experience_years_min',
+            'experience_years_max',
+            'nice_to_have',
         ],
     ]);
     $response->assertJson([
         'data' => [
-            'job' => [
-                'id' => $jobVacancy->id,
-                'job_category_id' => $jobVacancy->job_category_id,
-                'company_id' => $jobVacancy->company_id,
-                'title' => $jobVacancy->title,
-                'description' => $jobVacancy->description,
-                'location' => $jobVacancy->location,
-                'expected_salary' => $jobVacancy->expected_salary,
-                'employment_type' => $jobVacancy->employment_type->label(),
-                'status' => $jobVacancy->is_active->label(),
-                'responsibilities' => $jobVacancy->responsibilities,
-                'requirements' => $jobVacancy->requirements,
-                'skills_required' => $jobVacancy->skills_required,
-                'experience_years_min' => $jobVacancy->experience_years_min,
-                'experience_years_max' => $jobVacancy->experience_years_max,
-                'nice_to_have' => $jobVacancy->nice_to_have,
-            ],
+            'id' => $jobVacancy->id,
+            'category' => $jobVacancy->category->name,
+            'company' => $jobVacancy->company->name,
+            'title' => $jobVacancy->title,
+            'description' => $jobVacancy->description,
+            'location' => $jobVacancy->location,
+            'expected_salary' => $jobVacancy->expected_salary,
+            'employment_type' => $jobVacancy->employment_type->label(),
+            'status' => $jobVacancy->status->label(),
+            'responsibilities' => $jobVacancy->responsibilities,
+            'requirements' => $jobVacancy->requirements,
+            'skills_required' => $jobVacancy->skills_required,
+            'experience_years_min' => $jobVacancy->experience_years_min,
+            'experience_years_max' => $jobVacancy->experience_years_max,
+            'nice_to_have' => $jobVacancy->nice_to_have,
         ],
     ]);
 });
@@ -124,6 +120,7 @@ it('can update a job vacancy', function (): void {
     ]);
 
     $response->assertOk();
+
     $jobVacancy->refresh();
     expect($jobVacancy->title)->toBe('Frontend React Developer');
 
@@ -149,6 +146,7 @@ it('owner can update a job vacancy', function (): void {
     ]);
 
     $response->assertOk();
+
     $jobVacancy->refresh();
     expect($jobVacancy->title)->toBe('Frontend React Developer');
 
@@ -201,11 +199,11 @@ it('owner can view only his job vacancies', function (): void {
         'user_id' => $userOwner->id,
     ]);
 
-    $jobVacancyAdmin = JobVacancy::factory()->count(5)->create([
+    JobVacancy::factory()->count(6)->create([
         'job_category_id' => $jobCategory->id,
         'company_id' => $companyAdmin->id,
     ]);
-    $jobVacancyOwner = JobVacancy::factory()->count(3)->create([
+    JobVacancy::factory()->count(3)->create([
         'job_category_id' => $jobCategory->id,
         'company_id' => $companyOwner->id,
     ]);
@@ -217,29 +215,27 @@ it('owner can view only his job vacancies', function (): void {
     $response->assertJsonStructure([
         'data' => [
             '*' => [
-                'job' => [
-                    'id',
-                    'job_category_id',
-                    'company_id',
-                    'title',
-                    'description',
-                    'location',
-                    'expected_salary',
-                    'employment_type',
-                    'status',
-                    'responsibilities',
-                    'requirements',
-                    'skills_required',
-                    'experience_years_min',
-                    'experience_years_max',
-                    'nice_to_have',
-                ],
+                'id',
+                'category',
+                'company',
+                'title',
+                'description',
+                'location',
+                'expected_salary',
+                'employment_type',
+                'status',
+                'responsibilities',
+                'requirements',
+                'skills_required',
+                'experience_years_min',
+                'experience_years_max',
+                'nice_to_have',
             ],
         ],
     ])->assertJsonCount(3, 'data');
 
     $response->assertJsonFragment([
-        'company_id' => $companyOwner->id,
+        'company' => $companyOwner->name,
     ]);
 });
 it('user can create a job vacancy', function (): void {
@@ -262,7 +258,7 @@ it('return all jobs without filters', function (): void {
     $jobCategory = JobCategory::factory()->create(['name' => 'Tech']);
     $company = Company::factory()->create();
 
-    $jobVacancy = JobVacancy::factory()->count(10)->create([
+    JobVacancy::factory()->count(10)->create([
         'job_category_id' => $jobCategory->id,
         'company_id' => $company->id,
     ]);
@@ -275,28 +271,26 @@ it('return all jobs without filters', function (): void {
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'job' => [
-                        'id',
-                        'job_category_id',
-                        'company_id',
-                        'title',
-                        'description',
-                        'location',
-                        'expected_salary',
-                        'employment_type',
-                        'status',
-                        'responsibilities',
-                        'requirements',
-                        'skills_required',
-                        'experience_years_min',
-                        'experience_years_max',
-                        'nice_to_have',
-                    ],
+                    'id',
+                    'category',
+                    'company',
+                    'title',
+                    'description',
+                    'location',
+                    'expected_salary',
+                    'employment_type',
+                    'status',
+                    'responsibilities',
+                    'requirements',
+                    'skills_required',
+                    'experience_years_min',
+                    'experience_years_max',
+                    'nice_to_have',
                 ],
             ],
         ]);
 });
-it('return all jobs filtered by job_category_id', function (): void {
+it('return all jobs filtered by category slug', function (): void {
     $user = User::factory()->create();
     $adminRole = Role::factory()->create(['name' => Roles::ADMIN->value]);
     $user->roles()->attach($adminRole->id);
@@ -305,52 +299,50 @@ it('return all jobs filtered by job_category_id', function (): void {
     $designJobCategory = JobCategory::factory()->create(['name' => 'Design']);
     $company = Company::factory()->create();
 
-    $techJobVacancy = JobVacancy::factory()->count(5)->create([
+    JobVacancy::factory()->count(6)->create([
         'job_category_id' => $techJobCategory->id,
         'company_id' => $company->id,
     ]);
-    $designJobVacancy = JobVacancy::factory()->count(5)->create([
+    JobVacancy::factory()->count(6)->create([
         'job_category_id' => $designJobCategory->id,
         'company_id' => $company->id,
     ]);
     Sanctum::actingAs($user, ['*']);
 
     $response = $this->getJson(route('admin.job-vacancies.index', [
-        'job_category_id' => $techJobCategory->id,
+        'category' => $techJobCategory->slug,
     ]));
 
     $response->assertOk()
-        ->assertJsonCount(5, 'data')
+        ->assertJsonCount(6, 'data')
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'job' => [
-                        'id',
-                        'job_category_id',
-                        'company_id',
-                        'title',
-                        'description',
-                        'location',
-                        'expected_salary',
-                        'employment_type',
-                        'status',
-                        'responsibilities',
-                        'requirements',
-                        'skills_required',
-                        'experience_years_min',
-                        'experience_years_max',
-                        'nice_to_have',
-                    ],
+                    'id',
+                    'category',
+                    'company',
+                    'title',
+                    'description',
+                    'location',
+                    'expected_salary',
+                    'employment_type',
+                    'status',
+                    'responsibilities',
+                    'requirements',
+                    'skills_required',
+                    'experience_years_min',
+                    'experience_years_max',
+                    'nice_to_have',
                 ],
             ],
         ]);
-    $returnedIds = collect($response->json('data'))
-        ->pluck('job.job_category_id')
+    $returnedName = collect($response->json('data'))
+        ->pluck('category')
         ->filter()
-        ->map(fn ($id): string => (string) $id)
+        ->map(fn ($name): string => $name)
         ->unique()
         ->values();
-    expect($returnedIds)->toContain($techJobCategory->id);
+    expect($returnedName)->toContain($techJobCategory->name);
 });
 it('return all jobs filtered by status', function (): void {
     $user = User::factory()->create();
@@ -360,52 +352,50 @@ it('return all jobs filtered by status', function (): void {
     $jobCategory = JobCategory::factory()->create(['name' => 'Tech']);
     $company = Company::factory()->create();
 
-    $activeJobVacancy = JobVacancy::factory()->count(5)->create([
+    $activeJobVacancy = JobVacancy::factory()->count(6)->create([
         'job_category_id' => $jobCategory->id,
         'company_id' => $company->id,
-        'is_active' => Status::ACTIVE->value,
+        'status' => Status::ACTIVE->value,
     ]);
-    $inactiveJobVacancy = JobVacancy::factory()->count(5)->create([
+    $inactiveJobVacancy = JobVacancy::factory()->count(6)->create([
         'job_category_id' => $jobCategory->id,
         'company_id' => $company->id,
-        'is_active' => Status::INACTIVE->value,
+        'status' => Status::INACTIVE->value,
     ]);
     Sanctum::actingAs($user, ['*']);
 
     $response = $this->getJson(route('admin.job-vacancies.index', [
-        'is_active' => Status::ACTIVE->value,
+        'status' => Status::ACTIVE->value,
     ]));
 
     $response->assertOk()
-        ->assertJsonCount(5, 'data')
+        ->assertJsonCount(6, 'data')
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'job' => [
-                        'id',
-                        'job_category_id',
-                        'company_id',
-                        'title',
-                        'description',
-                        'location',
-                        'expected_salary',
-                        'employment_type',
-                        'status',
-                        'responsibilities',
-                        'requirements',
-                        'skills_required',
-                        'experience_years_min',
-                        'experience_years_max',
-                        'nice_to_have',
-                    ],
+                    'id',
+                    'category',
+                    'company',
+                    'title',
+                    'description',
+                    'location',
+                    'expected_salary',
+                    'employment_type',
+                    'status',
+                    'responsibilities',
+                    'requirements',
+                    'skills_required',
+                    'experience_years_min',
+                    'experience_years_max',
+                    'nice_to_have',
                 ],
             ],
         ]);
     $returnedStatuses = collect($response->json('data'))
-        ->pluck('job.status')
+        ->pluck('status')
         ->values();
 
-    expect($returnedStatuses)->toHaveCount(5);
+    expect($returnedStatuses)->toHaveCount(6);
     expect($returnedStatuses->first())->toBe('Active');
 });
 it('return all jobs filtered by employment type', function (): void {
@@ -416,12 +406,12 @@ it('return all jobs filtered by employment type', function (): void {
     $jobCategory = JobCategory::factory()->create(['name' => 'Tech']);
     $company = Company::factory()->create();
 
-    $remotelyJobVacancy = JobVacancy::factory()->count(5)->create([
+    JobVacancy::factory()->count(6)->create([
         'job_category_id' => $jobCategory->id,
         'company_id' => $company->id,
         'employment_type' => EmploymentType::REMOTELY,
     ]);
-    $hybridJobVacancy = JobVacancy::factory()->count(5)->create([
+    JobVacancy::factory()->count(6)->create([
         'job_category_id' => $jobCategory->id,
         'company_id' => $company->id,
         'employment_type' => EmploymentType::HYBRID,
@@ -429,39 +419,37 @@ it('return all jobs filtered by employment type', function (): void {
     Sanctum::actingAs($user, ['*']);
 
     $response = $this->getJson(route('admin.job-vacancies.index', [
-        'employment_type' => EmploymentType::REMOTELY->value,
+        'type' => EmploymentType::REMOTELY->value,
     ]));
 
     $response->assertOk()
-        ->assertJsonCount(5, 'data')
+        ->assertJsonCount(6, 'data')
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'job' => [
-                        'id',
-                        'job_category_id',
-                        'company_id',
-                        'title',
-                        'description',
-                        'location',
-                        'expected_salary',
-                        'employment_type',
-                        'status',
-                        'responsibilities',
-                        'requirements',
-                        'skills_required',
-                        'experience_years_min',
-                        'experience_years_max',
-                        'nice_to_have',
-                    ],
+                    'id',
+                    'category',
+                    'company',
+                    'title',
+                    'description',
+                    'location',
+                    'expected_salary',
+                    'employment_type',
+                    'status',
+                    'responsibilities',
+                    'requirements',
+                    'skills_required',
+                    'experience_years_min',
+                    'experience_years_max',
+                    'nice_to_have',
                 ],
             ],
         ]);
     $returnedStatuses = collect($response->json('data'))
-        ->pluck('job.employment_type')
+        ->pluck('employment_type')
         ->values();
 
-    expect($returnedStatuses)->toHaveCount(5);
+    expect($returnedStatuses)->toHaveCount(6);
     expect($returnedStatuses->first())->toBe('Remote');
 });
 it('return all jobs filtered by location', function (): void {
@@ -472,12 +460,12 @@ it('return all jobs filtered by location', function (): void {
     $jobCategory = JobCategory::factory()->create(['name' => 'Tech']);
     $company = Company::factory()->create();
 
-    $usJobVacancy = JobVacancy::factory()->count(5)->create([
+    $usJobVacancy = JobVacancy::factory()->count(6)->create([
         'job_category_id' => $jobCategory->id,
         'company_id' => $company->id,
         'location' => 'USA',
     ]);
-    $canadaJobVacancy = JobVacancy::factory()->count(5)->create([
+    $canadaJobVacancy = JobVacancy::factory()->count(6)->create([
         'job_category_id' => $jobCategory->id,
         'company_id' => $company->id,
         'location' => 'CA',
@@ -489,34 +477,32 @@ it('return all jobs filtered by location', function (): void {
     ]));
 
     $response->assertOk()
-        ->assertJsonCount(5, 'data')
+        ->assertJsonCount(6, 'data')
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    'job' => [
-                        'id',
-                        'job_category_id',
-                        'company_id',
-                        'title',
-                        'description',
-                        'location',
-                        'expected_salary',
-                        'employment_type',
-                        'status',
-                        'responsibilities',
-                        'requirements',
-                        'skills_required',
-                        'experience_years_min',
-                        'experience_years_max',
-                        'nice_to_have',
-                    ],
+                    'id',
+                    'category',
+                    'company',
+                    'title',
+                    'description',
+                    'location',
+                    'expected_salary',
+                    'employment_type',
+                    'status',
+                    'responsibilities',
+                    'requirements',
+                    'skills_required',
+                    'experience_years_min',
+                    'experience_years_max',
+                    'nice_to_have',
                 ],
             ],
         ]);
     $returnedStatuses = collect($response->json('data'))
-        ->pluck('job.location')
+        ->pluck('location')
         ->values();
 
-    expect($returnedStatuses)->toHaveCount(5);
+    expect($returnedStatuses)->toHaveCount(6);
     expect($returnedStatuses->first())->toBe('USA');
 });

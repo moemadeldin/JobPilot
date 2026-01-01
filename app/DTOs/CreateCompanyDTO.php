@@ -11,7 +11,7 @@ final readonly class CreateCompanyDTO
         public string $industry,
         public string $address,
         public string $website,
-        public string $is_active,
+        public string $status,
     ) {}
 
     public static function fromArray(array $data): self
@@ -21,7 +21,7 @@ final readonly class CreateCompanyDTO
             industry: $data['industry'],
             address: $data['address'],
             website: $data['website'],
-            is_active: $data['is_active'],
+            status: $data['status'],
         );
     }
 
@@ -32,7 +32,7 @@ final readonly class CreateCompanyDTO
             'industry' => $this->industry,
             'address' => $this->address,
             'website' => $this->website,
-            'is_active' => $this->is_active,
+            'status' => $this->status,
         ];
     }
 }

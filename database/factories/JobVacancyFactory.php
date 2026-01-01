@@ -9,11 +9,12 @@ use App\Enums\Status;
 use App\Models\Company;
 use App\Models\JobCategory;
 use App\Models\JobVacancy;
+use App\Models\User;
 use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 final class JobVacancyFactory extends Factory
 {
@@ -31,14 +32,14 @@ final class JobVacancyFactory extends Factory
         $minExp = $this->faker->numberBetween(1, 2);
 
         return [
-            'title' => $this->faker->title,
+            'title' => $this->faker->title(),
             'job_category_id' => JobCategory::factory(),
             'company_id' => Company::factory(),
             'description' => $this->faker->text(200),
-            'location' => $this->faker->city,
+            'location' => $this->faker->city(),
             'expected_salary' => $this->faker->numberBetween(30000, 120000),
             'employment_type' => EmploymentType::FULL_TIME->value,
-            'is_active' => Status::ACTIVE->value,
+            'status' => Status::ACTIVE->value,
             'responsibilities' => $this->faker->text(200),
             'requirements' => $this->faker->text(200),
             'skills_required' => $this->faker->text(200),

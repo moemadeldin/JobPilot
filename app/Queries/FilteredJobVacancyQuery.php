@@ -14,9 +14,9 @@ final readonly class FilteredJobVacancyQuery
     {
         $query = JobVacancy::query()
             ->with(['company', 'category'])
-            ->filterJobCategory($data['job_category_id'] ?? null)
-            ->filterEmploymentType($data['employment_type'] ?? null)
-            ->filterStatus($data['is_active'] ?? null)
+            ->filterJobCategory($data['category'] ?? null)
+            ->filterEmploymentType($data['type'] ?? null)
+            ->filterStatus($data['status'] ?? null)
             ->filterLocation($data['location'] ?? null);
 
         if ($user && $user->isOwner()) {

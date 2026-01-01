@@ -273,7 +273,7 @@ Jobs can be filtered by:
 -   `job_category_id` - Filter by category
 -   `employment_type` - Filter by employment type
 -   `location` - Filter by location (partial match)
--   `is_active` - Filter by active status
+-   `status` - Filter by active status
 
 ## 🧪 Testing
 

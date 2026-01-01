@@ -35,6 +35,7 @@ it('can update a category', function (): void {
     ]);
 
     $response->assertOk();
+
     $category->refresh();
     expect($category->name)->toBe('Tech');
 

@@ -24,31 +24,30 @@ it('can see listing of jobs', function (): void {
         'message',
         'data' => [
             '*' => [
-                'job' => [
-                    'id',
-                    'job_category_id',
-                    'company_id',
-                    'title',
-                    'description',
-                    'location',
-                    'expected_salary',
-                    'employment_type',
-                    'status',
-                ],
+                'id',
+                'category',
+                'company',
+                'title',
+                'description',
+                'location',
+                'expected_salary',
+                'employment_type',
+                'status',
+
             ],
         ],
     ]);
 
     $response->assertJsonFragment([
         'id' => $jobVacancy->id,
-        'job_category_id' => $jobVacancy->job_category_id,
-        'company_id' => $jobVacancy->company_id,
+        'category' => $jobVacancy->category->name,
+        'company' => $jobVacancy->company->name,
         'title' => $jobVacancy->title,
         'description' => $jobVacancy->description,
         'location' => $jobVacancy->location,
         'expected_salary' => $jobVacancy->expected_salary,
         'employment_type' => $jobVacancy->employment_type->label(),
-        'status' => $jobVacancy->is_active->label(),
+        'status' => $jobVacancy->status->label(),
     ]);
 });
 it('can view a job vacancy', function (): void {
@@ -65,32 +64,28 @@ it('can view a job vacancy', function (): void {
 
     $response->assertJsonStructure([
         'data' => [
-            'job' => [
-                'id',
-                'job_category_id',
-                'company_id',
-                'title',
-                'description',
-                'location',
-                'expected_salary',
-                'employment_type',
-                'status',
-            ],
+            'id',
+            'category',
+            'company',
+            'title',
+            'description',
+            'location',
+            'expected_salary',
+            'employment_type',
+            'status',
         ],
     ]);
     $response->assertJson([
         'data' => [
-            'job' => [
-                'id' => $jobVacancy->id,
-                'job_category_id' => $jobVacancy->job_category_id,
-                'company_id' => $jobVacancy->company_id,
-                'title' => $jobVacancy->title,
-                'description' => $jobVacancy->description,
-                'location' => $jobVacancy->location,
-                'expected_salary' => $jobVacancy->expected_salary,
-                'employment_type' => $jobVacancy->employment_type->label(),
-                'status' => $jobVacancy->is_active->label(),
-            ],
+            'id' => $jobVacancy->id,
+            'category' => $jobVacancy->category->name,
+            'company' => $jobVacancy->company->name,
+            'title' => $jobVacancy->title,
+            'description' => $jobVacancy->description,
+            'location' => $jobVacancy->location,
+            'expected_salary' => $jobVacancy->expected_salary,
+            'employment_type' => $jobVacancy->employment_type->label(),
+            'status' => $jobVacancy->status->label(),
         ],
     ]);
 });

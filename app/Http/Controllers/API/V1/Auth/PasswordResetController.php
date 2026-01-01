@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Enums\Messages\Auth\SuccessMessages;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\Auth\VerificationCodeRequest;
@@ -15,11 +14,11 @@ use App\Traits\APIResponses;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 
-final class PasswordResetController extends Controller
+final readonly class PasswordResetController
 {
     use APIResponses;
 
-    public function __construct(private readonly PasswordResetInterface $passwordResetService) {}
+    public function __construct(private PasswordResetInterface $passwordResetService) {}
 
     public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
     {

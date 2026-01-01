@@ -10,6 +10,6 @@ Route::prefix('owner/dashboard')
     ->middleware(['auth:sanctum', 'owner'])
     ->as('owner.')
     ->group(function (): void {
-        Route::resource('companies', CompanyController::class)->except(['show', 'edit', 'create']);
-        Route::resource('job-vacancies', JobVacancyController::class)->except(['edit', 'create']);
+        Route::apiResource('companies', CompanyController::class);
+        Route::apiResource('job-vacancies', JobVacancyController::class);
     });

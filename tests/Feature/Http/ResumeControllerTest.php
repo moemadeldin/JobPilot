@@ -23,7 +23,7 @@ it('can upload resume', function (): void {
 
     $response->assertStatus(Response::HTTP_CREATED);
 
-    $resume = Resume::first();
+    $resume = Resume::query()->first();
 
     Storage::disk('public')->assertExists($resume->path);
 

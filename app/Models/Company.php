@@ -9,20 +9,36 @@ use App\Traits\Sluggable;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property string $id
+ * @property string|null $user_id
+ * @property string|null $name
+ * @property string|null $slug
+ * @property string|null $industry
+ * @property string|null $address
+ * @property string|null $website
+ * @property Status $status
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read User|null $owner
+ * @property-read Collection<int, JobVacancy> $vacancies
+ */
 final class Company extends Model
 {
-    use HasFactory, HasUuids, Sluggable, SoftDeletes;
-
-    public const NUMBER_OF_COMPANIES = 3;
-
-    protected $guarded = ['id'];
+    use HasFactory;
+    use HasUuids;
+    use Sluggable;
+    use SoftDeletes;
 
     public function getRouteKeyName(): string
     {
@@ -60,7 +76,7 @@ final class Company extends Model
             'industry' => 'string',
             'address' => 'string',
             'website' => 'string',
-            'is_active' => Status::class,
+            'status' => Status::class,
         ];
     }
 }

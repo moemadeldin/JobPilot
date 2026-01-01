@@ -50,13 +50,14 @@ final class CreateUserCommand extends Command
 
             return;
         }
+
         $roleValue = match (mb_strtolower($roleName)) {
             'admin' => Roles::ADMIN->value,
             'owner' => Roles::OWNER->value,
             'user' => Roles::USER->value,
         };
 
-        $role = Role::where('name', $roleValue)->first();
+        $role = Role::query()->where('name', $roleValue)->first();
         if (! $role) {
             $this->error('Role not found');
 
@@ -64,7 +65,7 @@ final class CreateUserCommand extends Command
         }
 
         DB::transaction(function () use ($user, $role): void {
-            $newUser = User::create([
+            $newUser = User::query()->create([
                 'username' => $user['username'],
                 'email' => $user['email'],
                 'password' => bcrypt($user['password']),

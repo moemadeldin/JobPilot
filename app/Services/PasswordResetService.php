@@ -4,66 +4,76 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Enums\Messages\Auth\ValidateMessages;
 use App\Events\PasswordVerificationCodeSent;
-use App\Exceptions\AuthException;
 use App\Interfaces\Auth\PasswordResetInterface;
 use App\Interfaces\Auth\TokenManagerInterface;
+use App\Interfaces\Auth\UserValidatorInterface;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Http\Response;
+use App\Utilities\Constants;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use SensitiveParameter;
 
-final class PasswordResetService implements PasswordResetInterface
+final readonly class PasswordResetService implements PasswordResetInterface
 {
-    public function __construct(private readonly TokenManagerInterface $tokenManagerService) {}
+    public function __construct(private TokenManagerInterface $tokenManagerService, private UserValidatorInterface $userValidator) {}
 
-    public function forgot(string $email): ?User
+    public function forgot(string $email): User
     {
-        return DB::transaction(function () use ($email): ?User {
+        return DB::transaction(function () use ($email): User {
             $user = User::getUserByEmail($email)->first();
 
-            if (! $user->isActive()) {
-                throw new AuthException(ValidateMessages::USER_IS_NOT_ACTIVE->value, Response::HTTP_FORBIDDEN);
-            }
-            $user->update([
-                'verification_code' => $this->generateRandomVerificationCode(),
-                'verification_code_expire_at' => Carbon::now()->addMinutes(User::EXPIRATION_VERIFICATION_CODE_TIME_IN_MINUTES),
-            ]);
-            $user->access_token = $this->tokenManagerService->createAccessToken($user, 'reset');
-            event(new PasswordVerificationCodeSent($user->email, $user->verification_code));
+            $this->validateStatusAndUpdateUserWithCodeAndToken($user);
 
             return $user;
         });
     }
 
-    public function checkCode(string $email, string $code): ?User
+    public function checkCode(string $email, string $verificationCode): User
     {
-        return DB::transaction(function () use ($email, $code): ?User {
+        return DB::transaction(function () use ($email, $verificationCode): User {
             $user = User::getUserByEmail($email)->first();
 
-            if (! $user->verification_code = $code) {
-                throw new AuthException(ValidateMessages::INCORRECT_CODE->value, Response::HTTP_BAD_REQUEST);
-            }
-            $user->access_token = $this->tokenManagerService->createAccessToken($user, 'reset');
+            $this->validateCodeAndUpdateUserWithToken($user, $verificationCode);
 
             return $user;
         });
 
     }
 
-    public function reset(User $user, string $newPassword): ?User
+    public function reset(User $user, #[SensitiveParameter] string $newPassword): User
     {
         $user->update([
             'verification_code' => null,
+            'verification_code_expire_at' => null,
             'password' => $newPassword,
         ]);
         $this->tokenManagerService->deleteAccessToken($user);
+
         return $user;
+    }
+
+    private function validateStatusAndUpdateUserWithCodeAndToken(User $user): void
+    {
+        $this->userValidator->validateUserIsActive($user);
+
+        $user->update([
+            'verification_code' => $this->generateRandomVerificationCode(),
+            'verification_code_expire_at' => Date::now()->addMinutes(Constants::EXPIRATION_VERIFICATION_CODE_TIME_IN_MINUTES),
+        ]);
+        $this->tokenManagerService->createAccessToken($user, Constants::PASSWORD_RESET_TOKEN_TYPE);
+        event(new PasswordVerificationCodeSent($user->email, $user->verification_code));
+    }
+
+    private function validateCodeAndUpdateUserWithToken(User $user, string $verificationCode): void
+    {
+        $this->userValidator->validateVerificationCode($user, $verificationCode);
+
+        $this->tokenManagerService->createAccessToken($user, Constants::PASSWORD_RESET_TOKEN_TYPE);
     }
 
     private function generateRandomVerificationCode(): int
     {
-        return random_int(User::MIN_VERIFICATION_CODE, User::MAX_VERIFICATION_CODE);
+        return random_int(Constants::MIN_VERIFICATION_CODE, Constants::MAX_VERIFICATION_CODE);
     }
 }

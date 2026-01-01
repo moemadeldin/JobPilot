@@ -6,6 +6,7 @@ namespace App\Http\Requests;
 
 use App\Enums\EmploymentType;
 use App\Enums\Status;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -14,7 +15,7 @@ final class StoreJobVacancyRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -25,8 +26,8 @@ final class StoreJobVacancyRequest extends FormRequest
             'description' => ['required', 'string'],
             'location' => ['required', 'string'],
             'expected_salary' => ['required', 'string'],
-            'employment_type' => ['required', Rule::in(EmploymentType::cases())],
-            'is_active' => ['required', Rule::in(Status::cases())],
+            'employment_type' => ['required', Rule::enum(EmploymentType::class)],
+            'status' => ['required', Rule::enum(Status::class)],
             'responsibilities' => ['required', 'string'],
             'requirements' => ['required', 'string'],
             'skills_required' => ['required', 'string'],

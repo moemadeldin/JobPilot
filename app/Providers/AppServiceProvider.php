@@ -12,6 +12,7 @@ use App\Services\PasswordResetService;
 use App\Services\ResumeTextExtractor;
 use App\Services\TokenManager;
 use App\Services\UserValidator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
 final class AppServiceProvider extends ServiceProvider
@@ -29,6 +30,8 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Model::unguard();
+
         $this->app->bind(
             TokenManagerInterface::class,
             TokenManager::class

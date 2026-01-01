@@ -13,7 +13,7 @@ use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 final class JobApplicationFactory extends Factory
 {
@@ -43,8 +43,8 @@ final class JobApplicationFactory extends Factory
                 ['rating' => 1, 'comment' => 'Unacceptable.'],
             ]),
             'improvement_suggestions' => $this->faker->text(200),
-            'applied_at' => $this->faker->date,
-            'reviewed_at' => $this->faker->date,
+            'applied_at' => $this->faker->date(),
+            'reviewed_at' => $this->faker->date(),
         ];
     }
 }

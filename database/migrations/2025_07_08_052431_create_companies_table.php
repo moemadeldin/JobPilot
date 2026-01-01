@@ -32,7 +32,7 @@ return new class extends Migration
                 ->nullable();
             $table->string('address')->nullable();
             $table->string('website')->nullable();
-            $table->string('is_active')
+            $table->string('status')
                 ->index()
                 ->default(Status::ACTIVE->value);
             $table->timestamps();

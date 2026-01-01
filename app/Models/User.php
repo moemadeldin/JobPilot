@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use App\Enums\Roles;
 use App\Enums\Status;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -17,26 +17,42 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\PersonalAccessToken;
 
+/**
+ * @property string $id
+ * @property string|null $username
+ * @property string|null $email
+ * @property Carbon|null $email_verified_at
+ * @property string|null $password
+ * @property Status $status
+ * @property string|null $verification_code
+ * @property Carbon|null $verification_code_expire_at
+ * @property string|null $remember_token
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Collection<int, UserAnalytic> $analytics
+ * @property-read Collection<int, JobApplication> $applications
+ * @property-read Collection<int, Company> $companies
+ * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
+ * @property-read Profile|null $profile
+ * @property-read Resume|null $resume
+ * @property-read Collection<int, Role> $roles
+ * @property-read Collection<int, PersonalAccessToken> $tokens
+ */
 final class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, HasUuids, Notifiable, SoftDeletes;
-
-    public const MIN_VERIFICATION_CODE = 100_000;
-
-    public const MAX_VERIFICATION_CODE = 999_999;
-
-    public const EXPIRATION_VERIFICATION_CODE_TIME_IN_MINUTES = 5;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $guarded = ['id'];
+    use HasApiTokens;
+    use HasFactory;
+    use HasUuids;
+    use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that should be hidden for serialization.
@@ -92,7 +108,7 @@ final class User extends Authenticatable
 
     public function isActive(): bool
     {
-        return $this->is_active === Status::ACTIVE;
+        return $this->status === Status::ACTIVE;
     }
 
     #[Scope]
@@ -113,7 +129,7 @@ final class User extends Authenticatable
             'email' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_active' => Status::class,
+            'status' => Status::class,
             'verification_code' => 'string',
             'verification_code_expire_at' => 'datetime',
         ];

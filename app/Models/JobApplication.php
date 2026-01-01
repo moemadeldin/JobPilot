@@ -10,12 +10,32 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property string $id
+ * @property string|null $user_id
+ * @property string|null $job_vacancy_id
+ * @property string|null $resume_id
+ * @property string|null $cover_letter
+ * @property numeric|null $compatibility_score
+ * @property array<array-key, mixed>|null $feedback
+ * @property string|null $improvement_suggestions
+ * @property JobApplicationStatus $status
+ * @property Carbon|null $applied_at
+ * @property Carbon|null $reviewed_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read JobVacancy|null $jobVacancy
+ * @property-read Resume|null $resume
+ * @property-read User|null $user
+ */
 final class JobApplication extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes;
-
-    protected $guarded = ['id'];
+    use HasFactory;
+    use HasUuids;
+    use SoftDeletes;
 
     public function user(): BelongsTo
     {

@@ -24,7 +24,7 @@ return new class extends Migration
                 ->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
-            $table->string('is_active')
+            $table->string('status')
                 ->index()
                 ->default(value: Status::ACTIVE->value);
             $table->string('verification_code')->index()->nullable();

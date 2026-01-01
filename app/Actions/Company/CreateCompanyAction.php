@@ -12,8 +12,6 @@ final readonly class CreateCompanyAction
 {
     public function handle(User $user, CreateCompanyDTO $dto): Company
     {
-        $company = $user->companies()->create($dto->toArray());
-
-        return $company;
+        return $user->companies()->create($dto->toArray());
     }
 }

@@ -9,7 +9,6 @@ use App\Actions\JobCategory\DeleteJobCategoryAction;
 use App\Actions\JobCategory\UpdateJobCategoryAction;
 use App\DTOs\JobCategoryDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreJobCategoryRequest;
 use App\Http\Requests\UpdateJobCategoryRequest;
 use App\Models\JobCategory;
@@ -17,7 +16,7 @@ use App\Traits\APIResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-final class CategoryController extends Controller
+final readonly class CategoryController
 {
     use APIResponses;
 

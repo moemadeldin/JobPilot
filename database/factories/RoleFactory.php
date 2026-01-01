@@ -6,11 +6,12 @@ namespace Database\Factories;
 
 use App\Enums\Roles;
 use App\Models\Role;
+use App\Models\User;
 use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 final class RoleFactory extends Factory
 {
@@ -26,7 +27,7 @@ final class RoleFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->randomElement(array_map(fn ($role) => $role->value, Roles::cases())),
+            'name' => $this->faker->randomElement(array_map(fn (Roles $role) => $role->value, Roles::cases())),
         ];
     }
 

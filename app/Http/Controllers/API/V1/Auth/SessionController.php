@@ -8,7 +8,6 @@ use App\Actions\Auth\LoginAction;
 use App\DTOs\Auth\LoginDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
 use App\Exceptions\AuthException;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\LoginResource;
 use App\Http\Resources\ProfileResource;
@@ -19,11 +18,11 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-final class SessionController extends Controller
+final readonly class SessionController
 {
     use APIResponses;
 
-    public function __construct(private readonly TokenManagerInterface $tokenManager) {}
+    public function __construct(private TokenManagerInterface $tokenManager) {}
 
     public function show(#[CurrentUser] User $user): JsonResponse
     {
@@ -41,8 +40,8 @@ final class SessionController extends Controller
                 ),
                 SuccessMessages::LOGGED_IN->value
             );
-        } catch (AuthException $e) {
-            return $this->fail($e->getMessage(), $e->getCode());
+        } catch (AuthException $authException) {
+            return $this->fail($authException->getMessage(), $authException->getCode());
         }
     }
 

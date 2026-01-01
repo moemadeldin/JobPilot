@@ -27,7 +27,7 @@ final class CompanyResource extends JsonResource
                 'industry' => $this->industry,
                 'address' => $this->address,
                 'website' => $this->website,
-                'is_active' => $this->is_active->label(),
+                'status' => $this->status->label(),
             ],
         ];
     }

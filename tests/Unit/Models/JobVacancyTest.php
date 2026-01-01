@@ -70,7 +70,7 @@ test('job vacancy scope filter by job_category_id', function (): void {
     JobVacancy::factory()->count(2)->create(['job_category_id' => $categoryB->id]);
 
     $result = JobVacancy::query()
-        ->filterJobCategory($categoryA->id)
+        ->filterJobCategory($categoryA->slug)
         ->get();
 
     expect($result)->toHaveCount(3);
@@ -90,15 +90,15 @@ test('job vacancy scope filter by employment_type', function (): void {
 });
 test('job vacancy scope filter by status', function (): void {
 
-    JobVacancy::factory()->count(3)->create(['is_active' => Status::ACTIVE->value]);
-    JobVacancy::factory()->count(2)->create(['is_active' => Status::INACTIVE->value]);
+    JobVacancy::factory()->count(3)->create(['status' => Status::ACTIVE->value]);
+    JobVacancy::factory()->count(2)->create(['status' => Status::INACTIVE->value]);
 
     $result = JobVacancy::query()
         ->filterStatus(Status::ACTIVE->value)
         ->get();
 
     expect($result)->toHaveCount(3);
-    expect($result->pluck('is_active')->unique()->first())->toBe(Status::ACTIVE);
+    expect($result->pluck('status')->unique()->first())->toBe(Status::ACTIVE);
 });
 test('job vacancy scope filter by location', function (): void {
 

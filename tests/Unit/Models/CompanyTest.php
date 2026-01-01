@@ -18,7 +18,7 @@ test('getRouteKeyName returns slug', function (): void {
 });
 test('company belongs to owner', function (): void {
     $user = User::factory()->create();
-    $ownerRole = Role::create(['name' => Roles::OWNER->value]);
+    $ownerRole = Role::query()->create(['name' => Roles::OWNER->value]);
     $user->roles()->attach($ownerRole->id);
 
     $company = Company::factory()->create([
@@ -40,7 +40,7 @@ test('company has many vacancies', function (): void {
 
 test('companies scope loads owner relationship', function (): void {
     $user = User::factory()->create();
-    $ownerRole = Role::create(['name' => Roles::OWNER->value]);
+    $ownerRole = Role::query()->create(['name' => Roles::OWNER->value]);
     $user->roles()->attach($ownerRole->id);
 
     $company = Company::factory()->create([
@@ -55,7 +55,7 @@ test('companies scope loads owner relationship', function (): void {
 
 test('companies scope loads companies by owner only', function (): void {
     $user = User::factory()->create();
-    $ownerRole = Role::create(['name' => Roles::OWNER->value]);
+    $ownerRole = Role::query()->create(['name' => Roles::OWNER->value]);
     $user->roles()->attach($ownerRole->id);
 
     $company = Company::factory()->create([

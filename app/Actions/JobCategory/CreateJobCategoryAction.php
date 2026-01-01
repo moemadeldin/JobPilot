@@ -11,6 +11,6 @@ final readonly class CreateJobCategoryAction
 {
     public function handle(JobCategoryDTO $dto): JobCategory
     {
-        return JobCategory::create($dto->toArray());
+        return JobCategory::query()->create($dto->toArray());
     }
 }

@@ -7,7 +7,6 @@ namespace App\Http\Controllers\API\V1;
 use App\Actions\CreateResumeAction;
 use App\DTOs\CreateResumeDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreResumeRequest;
 use App\Models\User;
 use App\Traits\APIResponses;
@@ -15,7 +14,7 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-final class ResumeController extends Controller
+final readonly class ResumeController
 {
     use APIResponses;
 

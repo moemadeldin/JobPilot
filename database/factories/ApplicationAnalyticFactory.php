@@ -6,11 +6,12 @@ namespace Database\Factories;
 
 use App\Models\ApplicationAnalytic;
 use App\Models\JobVacancy;
+use App\Models\User;
 use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 final class ApplicationAnalyticFactory extends Factory
 {
