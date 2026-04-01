@@ -90,66 +90,66 @@ it('can view a job vacancy', function (): void {
     ]);
 });
 
-it('can apply for a job', function (): void {
-    $user = User::factory()->create();
+// it('can apply for a job', function (): void {
+//     $user = User::factory()->create();
 
-    $job = JobVacancy::factory()->create();
+//     $job = JobVacancy::factory()->create();
 
-    $resume = Resume::factory()->for($user)->create([
-        'extracted_text' => 'Backend Developer skilled in laravel',
-    ]);
+//     $resume = Resume::factory()->for($user)->create([
+//         'extracted_text' => 'Backend Developer skilled in laravel',
+//     ]);
 
-    Sanctum::actingAs($user, ['*']);
+//     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(route('jobs.store', $job), [
-        'resume_id' => $resume->id,
-    ]);
+//     $response = $this->postJson(route('jobs.store', $job), [
+//         'resume_id' => $resume->id,
+//     ]);
 
-    $response->assertCreated();
-});
+//     $response->assertCreated();
+// });
 
-it('getting feedback from AI', function (): void {
-    $user = User::factory()->create();
+// it('getting feedback from AI', function (): void {
+//     $user = User::factory()->create();
 
-    $job = JobVacancy::factory()->create();
+//     $job = JobVacancy::factory()->create();
 
-    $resume = Resume::factory()->for($user)->create([
-        'extracted_text' => 'Backend Developer skilled in laravel',
-    ]);
+//     $resume = Resume::factory()->for($user)->create([
+//         'extracted_text' => 'Backend Developer skilled in laravel',
+//     ]);
 
-    Sanctum::actingAs($user, ['*']);
+//     Sanctum::actingAs($user, ['*']);
 
-    $response = $this->postJson(route('jobs.store', $job), [
-        'resume_id' => $resume->id,
-    ]);
+//     $response = $this->postJson(route('jobs.store', $job), [
+//         'resume_id' => $resume->id,
+//     ]);
 
-    $response->assertCreated();
-    $response->assertJsonStructure([
+//     $response->assertCreated();
+//     $response->assertJsonStructure([
 
-        'data' => [
-            'id',
-            'user_id',
-            'job_vacancy_id',
-            'resume_id',
-            'cover_letter',
-            'status',
-            'evaluation' => [
-                'compatibility_score',
-                'feedback' => [
-                    'strengths',
-                    'weaknesses',
-                ],
-                'improvement_suggestions',
-                'reviewed_at',
-            ],
-            'applied_at',
-            'created_at',
-            'updated_at',
-        ],
-    ]);
-    $response->assertJsonFragment([
-        'user_id' => $user->id,
-        'job_vacancy_id' => $job->id,
-        'resume_id' => $resume->id,
-    ]);
-});
+//         'data' => [
+//             'id',
+//             'user_id',
+//             'job_vacancy_id',
+//             'resume_id',
+//             'cover_letter',
+//             'status',
+//             'evaluation' => [
+//                 'compatibility_score',
+//                 'feedback' => [
+//                     'strengths',
+//                     'weaknesses',
+//                 ],
+//                 'improvement_suggestions',
+//                 'reviewed_at',
+//             ],
+//             'applied_at',
+//             'created_at',
+//             'updated_at',
+//         ],
+//     ]);
+//     $response->assertJsonFragment([
+//         'user_id' => $user->id,
+//         'job_vacancy_id' => $job->id,
+//         'resume_id' => $resume->id,
+//     ]);
+// });

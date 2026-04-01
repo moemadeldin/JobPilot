@@ -29,20 +29,20 @@ final readonly class UpdateJobVacancyDTO
     public static function fromArray(array $data): self
     {
         return new self(
-            title: $data['title'] ? (is_string($data['title']) ? $data['title'] : null) : null,
-            job_category_id: $data['job_category_id'] ? (is_string($data['job_category_id']) ? $data['job_category_id'] : null) : null,
-            company_id: $data['company_id'] ? (is_string($data['company_id']) ? $data['company_id'] : null) : null,
-            description: $data['description'] ? (is_string($data['description']) ? $data['description'] : null) : null,
-            location: $data['location'] ? (is_string($data['location']) ? $data['location'] : null) : null,
-            expected_salary: $data['expected_salary'] ? (is_string($data['expected_salary']) ? $data['expected_salary'] : null) : null,
-            employment_type: $data['employment_type'] ? (is_string($data['employment_type']) ? $data['employment_type'] : null) : null,
-            status: $data['status'] ? (is_string($data['status']) ? $data['status'] : null) : null,
-            responsibilities: $data['responsibilities'] ? (is_string($data['responsibilities']) ? $data['responsibilities'] : null) : null,
-            requirements: $data['requirements'] ? (is_string($data['requirements']) ? $data['requirements'] : null) : null,
-            skills_required: $data['skills_required'] ? (is_string($data['skills_required']) ? $data['skills_required'] : null) : null,
-            experience_years_min: $data['experience_years_min'] ? (is_int($data['experience_years_min']) ? $data['experience_years_min'] : null) : null,
-            experience_years_max: $data['experience_years_max'] ? (is_int($data['experience_years_max']) ? $data['experience_years_max'] : null) : null,
-            nice_to_have: $data['nice_to_have'] ? (is_string($data['nice_to_have']) ? $data['nice_to_have'] : null) : null,
+            title: isset($data['title']) ? (is_string($data['title']) ? $data['title'] : null) : null,
+            job_category_id: isset($data['job_category_id']) ? (is_string($data['job_category_id']) ? $data['job_category_id'] : null) : null,
+            company_id: isset($data['company_id']) ? (is_string($data['company_id']) ? $data['company_id'] : null) : null,
+            description: isset($data['description']) ? (is_string($data['description']) ? $data['description'] : null) : null,
+            location: isset($data['location']) ? (is_string($data['location']) ? $data['location'] : null) : null,
+            expected_salary: isset($data['expected_salary']) ? (is_string($data['expected_salary']) ? $data['expected_salary'] : null) : null,
+            employment_type: isset($data['employment_type']) ? (is_string($data['employment_type']) ? $data['employment_type'] : null) : null,
+            status: isset($data['status']) ? (is_string($data['status']) ? $data['status'] : null) : null,
+            responsibilities: isset($data['responsibilities']) ? (is_string($data['responsibilities']) ? $data['responsibilities'] : null) : null,
+            requirements: isset($data['requirements']) ? (is_string($data['requirements']) ? $data['requirements'] : null) : null,
+            skills_required: isset($data['skills_required']) ? (is_string($data['skills_required']) ? $data['skills_required'] : null) : null,
+            experience_years_min: isset($data['experience_years_min']) ? (is_int($data['experience_years_min']) ? $data['experience_years_min'] : null) : null,
+            experience_years_max: isset($data['experience_years_max']) ? (is_int($data['experience_years_max']) ? $data['experience_years_max'] : null) : null,
+            nice_to_have: isset($data['nice_to_have']) ? (is_string($data['nice_to_have']) ? $data['nice_to_have'] : null) : null,
         );
     }
 

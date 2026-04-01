@@ -38,9 +38,11 @@ final readonly class MockInterviewAction
                 if (! is_array($qa)) {
                     continue;
                 }
+
                 if (! isset($qa['question'])) {
                     continue;
                 }
+
                 if (! isset($qa['answer'])) {
                     continue;
                 }

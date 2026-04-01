@@ -24,9 +24,9 @@ final class ProfileResource extends JsonResource
             'authenticated' => true,
             'user' => [
                 'id' => $this->resource->id,
-                'username' => $this->resource->user->username,
-                'email' => $this->resource->user->email,
-                'status' => $this->resource->user->status->label(),
+                'username' => $this->resource->username,
+                'email' => $this->resource->email,
+                'status' => $this->resource->status->label(),
             ],
         ];
     }

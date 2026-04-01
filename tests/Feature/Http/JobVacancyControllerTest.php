@@ -140,11 +140,9 @@ it('owner can update a job vacancy', function (): void {
         'company_id' => $company->id,
     ]);
     Sanctum::actingAs($user, ['*']);
-
     $response = $this->putJson(route('owner.job-vacancies.update', $jobVacancy), [
         'title' => 'Frontend React Developer',
     ]);
-
     $response->assertOk();
 
     $jobVacancy->refresh();

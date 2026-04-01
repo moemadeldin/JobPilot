@@ -106,7 +106,7 @@ it('returns user details', function (): void {
             'authenticated' => true,
             'user' => [
                 'id' => $user->id,
-                'username' => $user->profile->username ?? null,
+                'username' => $user->profile?->username,
                 'email' => $user->email,
                 'status' => $user->status->label(),
             ],
