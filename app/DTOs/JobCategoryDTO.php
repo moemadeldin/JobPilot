@@ -10,13 +10,19 @@ final readonly class JobCategoryDTO
         public ?string $name,
     ) {}
 
+    /**
+     * @param  array<string, mixed>  $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(
-            name: $data['name'],
+            name: $data['name'] ? (is_string($data['name']) ? $data['name'] : null) : null,
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [

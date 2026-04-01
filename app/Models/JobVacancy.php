@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\EmploymentType;
 use App\Enums\Status;
+use Database\Factories\JobVacancyFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -44,35 +45,55 @@ use Illuminate\Support\Carbon;
  */
 final class JobVacancy extends Model
 {
+    /** @use HasFactory<JobVacancyFactory> */
     use HasFactory;
+
     use HasUuids;
     use SoftDeletes;
 
+    /**
+     * @return BelongsTo<JobCategory, $this>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(JobCategory::class, 'job_category_id');
     }
 
+    /**
+     * @return BelongsTo<Company, $this>
+     */
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
+    /**
+     * @return HasMany<JobApplication, $this>
+     */
     public function applications(): HasMany
     {
         return $this->hasMany(JobApplication::class);
     }
 
+    /**
+     * @return HasMany<JobAnalytic, $this>
+     */
     public function jobAnalytics(): HasMany
     {
         return $this->hasMany(JobAnalytic::class);
     }
 
+    /**
+     * @return HasMany<ApplicationAnalytic, $this>
+     */
     public function applicationAnalytics(): HasMany
     {
         return $this->hasMany(ApplicationAnalytic::class);
     }
 
+    /**
+     * @param  Builder<JobVacancy>  $query
+     */
     #[Scope]
     protected function filterJobCategory(Builder $query, mixed $category): void
     {
@@ -83,6 +104,9 @@ final class JobVacancy extends Model
         }
     }
 
+    /**
+     * @param  Builder<JobVacancy>  $query
+     */
     #[Scope]
     protected function filterEmploymentType(Builder $query, mixed $employmentType): void
     {
@@ -91,6 +115,9 @@ final class JobVacancy extends Model
         }
     }
 
+    /**
+     * @param  Builder<JobVacancy>  $query
+     */
     #[Scope]
     protected function filterStatus(Builder $query, mixed $status): void
     {
@@ -99,14 +126,22 @@ final class JobVacancy extends Model
         }
     }
 
+    /**
+     * @param  Builder<JobVacancy>  $query
+     */
     #[Scope]
     protected function filterLocation(Builder $query, mixed $location): void
     {
         if (! empty($location)) {
-            $query->where('location', 'LIKE', sprintf('%%%s%%', $location));
+            $query->where('location', 'LIKE', sprintf('%%%s%%', (string) $location));
         }
     }
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

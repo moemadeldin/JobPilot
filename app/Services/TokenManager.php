@@ -8,6 +8,7 @@ use App\Interfaces\Auth\TokenManagerInterface;
 use App\Models\User;
 use App\Utilities\Constants;
 use Illuminate\Container\Attributes\CurrentUser;
+use InvalidArgumentException;
 
 final class TokenManager implements TokenManagerInterface
 {
@@ -18,6 +19,7 @@ final class TokenManager implements TokenManagerInterface
             Constants::LOGIN_TOKEN_TYPE => Constants::LOGIN_TOKEN_TYPE,
             Constants::PASSWORD_RESET_TOKEN_TYPE => Constants::PASSWORD_RESET_TOKEN_TYPE,
             Constants::EMAIL_VERIFICATION_TOKEN_TYPE => Constants::EMAIL_VERIFICATION_TOKEN_TYPE,
+            default => throw new InvalidArgumentException('Invalid token type'),
         };
 
         return $user->access_token = $user->createToken($tokenName)->plainTextToken;

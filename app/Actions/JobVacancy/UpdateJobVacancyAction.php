@@ -11,12 +11,11 @@ final readonly class UpdateJobVacancyAction
 {
     public function handle(UpdateJobVacancyDTO $dto, JobVacancy $jobVacancy): JobVacancy
     {
-        $jobVacancy->update(
-            array_filter(
-                $dto->toArray(),
-                fn (?string $value): bool => $value !== null
-            )
+        $attributes = array_filter(
+            $dto->toArray(),
+            fn (mixed $value): bool => $value !== null
         );
+        $jobVacancy->update($attributes);
 
         return $jobVacancy;
     }

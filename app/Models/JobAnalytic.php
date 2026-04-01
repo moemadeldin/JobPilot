@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\JobAnalyticFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,15 +23,25 @@ use Illuminate\Support\Carbon;
  */
 final class JobAnalytic extends Model
 {
+    /** @use HasFactory<JobAnalyticFactory> */
     use HasFactory;
+
     use HasUuids;
     use SoftDeletes;
 
+    /**
+     * @return BelongsTo<JobVacancy, $this>
+     */
     public function jobVacancy(): BelongsTo
     {
         return $this->belongsTo(JobVacancy::class);
     }
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 final readonly class FilteredJobVacancyQuery
 {
+    /**
+     * @param  array<string, mixed>  $data
+     * @return Builder<JobVacancy>
+     */
     public function builder(array $data, ?User $user = null): Builder
     {
         $query = JobVacancy::query()

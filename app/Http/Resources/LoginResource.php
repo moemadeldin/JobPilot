@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property-read User $resource
+ */
 final class LoginResource extends JsonResource
 {
     /**
@@ -18,10 +22,10 @@ final class LoginResource extends JsonResource
     {
         return [
             'user' => [
-                'id' => $this->id,
-                'email' => $this->email,
+                'id' => $this->resource->id,
+                'email' => $this->resource->email,
             ],
-            'access_token' => $this->access_token,
+            'access_token' => $this->resource->access_token,
         ];
     }
 }

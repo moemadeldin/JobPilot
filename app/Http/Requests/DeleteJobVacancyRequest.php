@@ -20,6 +20,6 @@ final class DeleteJobVacancyRequest extends FormRequest
             return true;
         }
 
-        return $jobVacancy->company->owner->is($user);
+        return $jobVacancy->company?->owner?->is($user) ?? false;
     }
 }

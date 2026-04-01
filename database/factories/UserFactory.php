@@ -16,6 +16,9 @@ use Illuminate\Support\Str;
  */
 final class UserFactory extends Factory
 {
+    /**
+     * @use RefreshOnCreate<User>
+     */
     use RefreshOnCreate;
 
     /**
@@ -23,7 +26,7 @@ final class UserFactory extends Factory
      */
     protected $model = User::class;
 
-    private static ?string $password;
+    private static string $password;
 
     /**
      * Define the model's default state.

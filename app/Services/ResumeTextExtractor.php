@@ -28,7 +28,7 @@ final class ResumeTextExtractor implements ResumeTextExtractorInterface
             return $this->cleanText($text);
         }
 
-        return $text ? $this->cleanText($text) : null;
+        return null;
     }
 
     private function extractWithPdfParser(string $file): ?string

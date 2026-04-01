@@ -13,12 +13,18 @@ use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<JobApplication>
  */
 final class JobApplicationFactory extends Factory
 {
+    /**
+     * @use RefreshOnCreate<JobApplication>
+     */
     use RefreshOnCreate;
 
+    /**
+     * @var class-string<JobApplication>
+     */
     protected $model = JobApplication::class;
 
     /**

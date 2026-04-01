@@ -6,17 +6,22 @@ namespace Database\Factories;
 
 use App\Models\JobAnalytic;
 use App\Models\JobVacancy;
-use App\Models\User;
 use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<JobAnalytic>
  */
 final class JobAnalyticFactory extends Factory
 {
+    /**
+     * @use RefreshOnCreate<JobAnalytic>
+     */
     use RefreshOnCreate;
 
+    /**
+     * @var class-string<JobAnalytic>
+     */
     protected $model = JobAnalytic::class;
 
     /**

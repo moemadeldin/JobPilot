@@ -19,7 +19,9 @@ final readonly class RegisterAction
     public function handle(RegisterDTO $dto): User
     {
         return DB::transaction(function () use ($dto): User {
-            $user = User::query()->create($dto->toArray());
+            /** @var array<string, mixed> $attributes */
+            $attributes = $dto->toArray();
+            $user = User::query()->create($attributes);
             $this->tokenManager->createAccessToken($user, Constants::REGISTER_TOKEN_TYPE);
 
             return $user;

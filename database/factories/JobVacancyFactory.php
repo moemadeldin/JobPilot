@@ -9,17 +9,22 @@ use App\Enums\Status;
 use App\Models\Company;
 use App\Models\JobCategory;
 use App\Models\JobVacancy;
-use App\Models\User;
 use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<JobVacancy>
  */
 final class JobVacancyFactory extends Factory
 {
+    /**
+     * @use RefreshOnCreate<JobVacancy>
+     */
     use RefreshOnCreate;
 
+    /**
+     * @var class-string<JobVacancy>
+     */
     protected $model = JobVacancy::class;
 
     /**

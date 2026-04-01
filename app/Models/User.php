@@ -7,6 +7,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\Roles;
 use App\Enums\Status;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -37,6 +38,7 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property string|null $access_token
  * @property-read Collection<int, UserAnalytic> $analytics
  * @property-read Collection<int, JobApplication> $applications
  * @property-read Collection<int, Company> $companies
@@ -49,7 +51,10 @@ use Laravel\Sanctum\PersonalAccessToken;
 final class User extends Authenticatable
 {
     use HasApiTokens;
+
+    /** @use HasFactory<UserFactory> */
     use HasFactory;
+
     use HasUuids;
     use Notifiable;
     use SoftDeletes;
@@ -66,31 +71,49 @@ final class User extends Authenticatable
         'deleted_at',
     ];
 
+    /**
+     * @return BelongsToMany<Role, $this>
+     */
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
     }
 
+    /**
+     * @return HasOne<Profile, $this>
+     */
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
     }
 
+    /**
+     * @return HasOne<Resume, $this>
+     */
     public function resume(): HasOne
     {
         return $this->hasOne(Resume::class);
     }
 
+    /**
+     * @return HasMany<Company, $this>
+     */
     public function companies(): HasMany
     {
         return $this->hasMany(Company::class);
     }
 
+    /**
+     * @return HasMany<JobApplication, $this>
+     */
     public function applications(): HasMany
     {
         return $this->hasMany(JobApplication::class);
     }
 
+    /**
+     * @return HasMany<UserAnalytic, $this>
+     */
     public function analytics(): HasMany
     {
         return $this->hasMany(UserAnalytic::class);
@@ -98,12 +121,12 @@ final class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->roles()->first()?->name->value === Roles::ADMIN->value;
+        return $this->roles->contains('name', Roles::ADMIN);
     }
 
     public function isOwner(): bool
     {
-        return $this->roles()->first()?->name->value === Roles::OWNER->value;
+        return $this->roles->contains('name', Roles::OWNER);
     }
 
     public function isActive(): bool
@@ -111,6 +134,10 @@ final class User extends Authenticatable
         return $this->status === Status::ACTIVE;
     }
 
+    /**
+     * @param  Builder<User>  $query
+     * @return Builder<User>
+     */
     #[Scope]
     protected function getUserByEmail(Builder $query, string $email): Builder
     {

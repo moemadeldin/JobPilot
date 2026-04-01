@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\Sluggable;
+use Database\Factories\JobCategoryFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,16 +25,26 @@ use Illuminate\Support\Carbon;
  */
 final class JobCategory extends Model
 {
+    /** @use HasFactory<JobCategoryFactory> */
     use HasFactory;
+
     use HasUuids;
     use Sluggable;
     use SoftDeletes;
 
+    /**
+     * @return HasMany<JobVacancy, $this>
+     */
     public function vacancies(): HasMany
     {
         return $this->hasMany(JobVacancy::class);
     }
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

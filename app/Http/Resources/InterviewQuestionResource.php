@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Models\MockInterviewQuestion;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property-read MockInterviewQuestion $resource
+ */
 final class InterviewQuestionResource extends JsonResource
 {
     /**
@@ -17,9 +21,9 @@ final class InterviewQuestionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'order' => $this->order,
-            'question' => $this->question,
-            'answer' => $this->answer,
+            'order' => $this->resource->order,
+            'question' => $this->resource->question,
+            'answer' => $this->resource->answer,
         ];
     }
 }

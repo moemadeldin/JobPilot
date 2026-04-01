@@ -11,6 +11,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use InvalidArgumentException;
 
 final class CreateUserCommand extends Command
 {
@@ -55,6 +56,7 @@ final class CreateUserCommand extends Command
             'admin' => Roles::ADMIN->value,
             'owner' => Roles::OWNER->value,
             'user' => Roles::USER->value,
+            default => throw new InvalidArgumentException('Invalid role'),
         };
 
         $role = Role::query()->where('name', $roleValue)->first();
@@ -68,11 +70,11 @@ final class CreateUserCommand extends Command
             $newUser = User::query()->create([
                 'username' => $user['username'],
                 'email' => $user['email'],
-                'password' => bcrypt($user['password']),
+                'password' => bcrypt((string) $user['password']),
             ]);
             $newUser->roles()->attach($role->id);
         });
 
-        $this->info('User '.$user['email'].' created successfully');
+        $this->info('User '.($user['email']).' created successfully');
     }
 }

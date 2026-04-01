@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use App\Traits\APIResponses;
 use Closure;
 use Illuminate\Http\JsonResponse;
@@ -22,11 +23,14 @@ final class EnsureUserIsOwner
      */
     public function handle(Request $request, Closure $next): JsonResponse|Response
     {
-        if (! Auth::check()) {
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        if (! $user) {
             return $this->fail('Unauthorized', Response::HTTP_UNAUTHORIZED);
         }
 
-        if (Auth::user()->isAdmin() || Auth::user()->isOwner()) {
+        if ($user->isAdmin() || $user->isOwner()) {
             return $next($request);
         }
 

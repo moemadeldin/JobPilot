@@ -13,6 +13,9 @@ final readonly class RegisterDTO
         #[SensitiveParameter] public string $password,
     ) {}
 
+    /**
+     * @param  array<string>  $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(
@@ -21,6 +24,9 @@ final readonly class RegisterDTO
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [

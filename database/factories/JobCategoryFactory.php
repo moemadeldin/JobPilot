@@ -5,18 +5,23 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\JobCategory;
-use App\Models\User;
 use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<JobCategory>
  */
 final class JobCategoryFactory extends Factory
 {
+    /**
+     * @use RefreshOnCreate<JobCategory>
+     */
     use RefreshOnCreate;
 
+    /**
+     * @var class-string<JobCategory>
+     */
     protected $model = JobCategory::class;
 
     /**

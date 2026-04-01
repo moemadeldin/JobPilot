@@ -19,7 +19,7 @@ final class ExtractResumeTextJob implements ShouldQueue
 
     public function handle(ResumeTextExtractor $extractor): void
     {
-        $text = $extractor->extract($this->resume->path);
+        $text = $extractor->extract((string) $this->resume->path);
 
         if ($text) {
             $text = mb_convert_encoding($text, 'UTF-8', 'auto');

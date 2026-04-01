@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Models\JobVacancy;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property-read JobVacancy $resource
+ */
 final class JobVacancyResource extends JsonResource
 {
     /**
@@ -17,21 +21,21 @@ final class JobVacancyResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'category' => $this->category->name,
-            'company' => $this->company->name,
-            'title' => $this->title,
-            'description' => $this->description,
-            'location' => $this->location,
-            'expected_salary' => $this->expected_salary,
-            'employment_type' => $this->employment_type->label() ?? null,
-            'status' => $this->status->label() ?? null,
-            'responsibilities' => $this->responsibilities,
-            'requirements' => $this->requirements,
-            'skills_required' => $this->skills_required,
-            'experience_years_min' => $this->experience_years_min,
-            'experience_years_max' => $this->experience_years_max,
-            'nice_to_have' => $this->nice_to_have,
+            'id' => $this->resource->id,
+            'category' => $this->resource->category?->name,
+            'company' => $this->resource->company?->name,
+            'title' => $this->resource->title,
+            'description' => $this->resource->description,
+            'location' => $this->resource->location,
+            'expected_salary' => $this->resource->expected_salary,
+            'employment_type' => $this->resource->employment_type->label(),
+            'status' => $this->resource->status->label(),
+            'responsibilities' => $this->resource->responsibilities,
+            'requirements' => $this->resource->requirements,
+            'skills_required' => $this->resource->skills_required,
+            'experience_years_min' => $this->resource->experience_years_min,
+            'experience_years_max' => $this->resource->experience_years_max,
+            'nice_to_have' => $this->resource->nice_to_have,
         ];
     }
 }

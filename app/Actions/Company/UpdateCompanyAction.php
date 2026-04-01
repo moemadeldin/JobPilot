@@ -11,12 +11,11 @@ final readonly class UpdateCompanyAction
 {
     public function handle(UpdateCompanyDTO $dto, Company $company): Company
     {
-        $company->update(
-            array_filter(
-                $dto->toArray(),
-                fn (?string $value): bool => $value !== null
-            )
+        $attributes = array_filter(
+            $dto->toArray(),
+            fn (mixed $value): bool => $value !== null
         );
+        $company->update($attributes);
 
         return $company;
     }

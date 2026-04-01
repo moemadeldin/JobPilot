@@ -13,11 +13,14 @@ final readonly class LoginDTO
         #[SensitiveParameter] public string $password,
     ) {}
 
+    /**
+     * @param  array<string>  $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(
-            email: $data['email'],
-            password: $data['password'],
+            email: (string) $data['email'],
+            password: (string) $data['password'],
         );
     }
 }

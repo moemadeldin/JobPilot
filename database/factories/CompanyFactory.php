@@ -12,12 +12,18 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<Company>
  */
 final class CompanyFactory extends Factory
 {
+    /**
+     * @use RefreshOnCreate<Company>
+     */
     use RefreshOnCreate;
 
+    /**
+     * @var class-string<Company>
+     */
     protected $model = Company::class;
 
     /**

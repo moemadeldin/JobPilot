@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property-read Company $resource
+ */
 final class CompanyResource extends JsonResource
 {
     /**
@@ -18,16 +22,16 @@ final class CompanyResource extends JsonResource
     {
         return [
             'owner' => [
-                $this->owner->username,
+                $this->resource->owner->username ?? null,
             ],
             'company_details' => [
-                'id' => $this->id,
-                'name' => $this->name,
-                'slug' => $this->slug,
-                'industry' => $this->industry,
-                'address' => $this->address,
-                'website' => $this->website,
-                'status' => $this->status->label(),
+                'id' => $this->resource->id,
+                'name' => $this->resource->name,
+                'slug' => $this->resource->slug,
+                'industry' => $this->resource->industry,
+                'address' => $this->resource->address,
+                'website' => $this->resource->website,
+                'status' => $this->resource->status->label(),
             ],
         ];
     }

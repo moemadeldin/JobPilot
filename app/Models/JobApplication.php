@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\JobApplicationStatus;
 use App\Enums\MockInterviewStatus;
+use Database\Factories\JobApplicationFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,30 +37,49 @@ use Illuminate\Support\Carbon;
  */
 final class JobApplication extends Model
 {
+    /** @use HasFactory<JobApplicationFactory> */
     use HasFactory;
+
     use HasUuids;
     use SoftDeletes;
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<JobVacancy, $this>
+     */
     public function jobVacancy(): BelongsTo
     {
         return $this->belongsTo(JobVacancy::class);
     }
 
+    /**
+     * @return BelongsTo<Resume, $this>
+     */
     public function resume(): BelongsTo
     {
         return $this->belongsTo(Resume::class);
     }
 
+    /**
+     * @return HasMany<MockInterviewQuestion, $this>
+     */
     public function mockInterviews(): HasMany
     {
         return $this->hasMany(MockInterviewQuestion::class);
     }
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

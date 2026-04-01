@@ -39,8 +39,8 @@ final readonly class ApplyToJobAction
     private function updateJobApplicationWithEvaluation(JobApplication $application, Resume $resume, JobVacancy $job): void
     {
         $evaluation = $this->aiEvaluator->evaluate(
-            $resume->extracted_text,
-            $job->description
+            (string) $resume->extracted_text,
+            (string) $job->description
         );
         $mockInterviewStatus = ($evaluation['score'] >= 70) ? MockInterviewStatus::SUGGESTED->value : MockInterviewStatus::DISQUALIFIED->value;
         $application->update([

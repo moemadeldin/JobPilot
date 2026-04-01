@@ -6,17 +6,22 @@ namespace Database\Factories;
 
 use App\Enums\Roles;
 use App\Models\Role;
-use App\Models\User;
 use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<Role>
  */
 final class RoleFactory extends Factory
 {
+    /**
+     * @use RefreshOnCreate<Role>
+     */
     use RefreshOnCreate;
 
+    /**
+     * @var class-string<Role>
+     */
     protected $model = Role::class;
 
     /**

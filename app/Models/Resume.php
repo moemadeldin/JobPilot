@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\ResumeFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,20 +28,33 @@ use Illuminate\Support\Carbon;
  */
 final class Resume extends Model
 {
+    /** @use HasFactory<ResumeFactory> */
     use HasFactory;
+
     use HasUuids;
     use SoftDeletes;
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return HasMany<JobApplication, $this>
+     */
     public function applications(): HasMany
     {
         return $this->hasMany(JobApplication::class);
     }
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

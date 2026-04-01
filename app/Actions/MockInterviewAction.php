@@ -8,26 +8,43 @@ use App\Enums\MockInterviewStatus;
 use App\Models\JobApplication;
 use App\Models\MockInterviewQuestion;
 use App\Services\GenerateMockInterviewQAService;
-use Illuminate\Http\JsonResponse;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 final readonly class MockInterviewAction
 {
     public function __construct(private GenerateMockInterviewQAService $mockInterviewService) {}
 
-    public function handle(JobApplication $application): array|JsonResponse
+    /**
+     * @return array<array<string, mixed>>
+     */
+    public function handle(JobApplication $application): array
     {
         return DB::transaction(function () use ($application): array {
 
             $application->update(['mock_interview_status' => MockInterviewStatus::ACCEPTED->value]);
 
-            $resumeText = $application->resume->extracted_text;
-            $jobDescription = $application->jobVacancy->description;
+            $resume = $application->resume;
+            $jobVacancy = $application->jobVacancy;
+            throw_if($resume === null || $jobVacancy === null, Exception::class, 'Resume or Job Vacancy not found');
+
+            $resumeText = (string) $resume->extracted_text;
+            $jobDescription = (string) $jobVacancy->description;
             $qaList = $this->mockInterviewService->generate($resumeText, $jobDescription);
 
             $questions = [];
 
             foreach ($qaList as $index => $qa) {
+                if (! is_array($qa)) {
+                    continue;
+                }
+                if (! isset($qa['question'])) {
+                    continue;
+                }
+                if (! isset($qa['answer'])) {
+                    continue;
+                }
+
                 $question = MockInterviewQuestion::query()->create([
                     'job_application_id' => $application->id,
                     'question' => $qa['question'],

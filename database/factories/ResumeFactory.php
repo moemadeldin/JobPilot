@@ -10,12 +10,18 @@ use Database\Factories\Concerns\RefreshOnCreate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<Resume>
  */
 final class ResumeFactory extends Factory
 {
+    /**
+     * @use RefreshOnCreate<Resume>
+     */
     use RefreshOnCreate;
 
+    /**
+     * @var class-string<Resume>
+     */
     protected $model = Resume::class;
 
     /**

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\Status;
 use App\Traits\Sluggable;
+use Database\Factories\CompanyFactory;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,7 +36,9 @@ use Illuminate\Support\Carbon;
  */
 final class Company extends Model
 {
+    /** @use HasFactory<CompanyFactory> */
     use HasFactory;
+
     use HasUuids;
     use Sluggable;
     use SoftDeletes;
@@ -45,22 +48,36 @@ final class Company extends Model
         return 'slug';
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * @return HasMany<JobVacancy, $this>
+     */
     public function vacancies(): HasMany
     {
         return $this->hasMany(JobVacancy::class);
     }
 
+    /**
+     * @param  Builder<Company>  $query
+     * @return Builder<Company>
+     */
     #[Scope]
     protected function companies(Builder $query): Builder
     {
         return $query->with('owner');
     }
 
+    /**
+     * @param  Builder<Company>  $query
+     * @return Builder<Company>
+     */
     #[Scope]
     protected function companiesByOwner(Builder $query, #[CurrentUser] User $user): Builder
     {
@@ -68,6 +85,11 @@ final class Company extends Model
             ->where('user_id', $user->id);
     }
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

@@ -9,6 +9,9 @@ use SensitiveParameter;
 
 interface UserValidatorInterface
 {
+    /**
+     * @phpstan-assert User $user
+     */
     public function validateUser(?User $user): void;
 
     public function validateUserIsActive(User $user): void;

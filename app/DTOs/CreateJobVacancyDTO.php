@@ -23,8 +23,25 @@ final readonly class CreateJobVacancyDTO
         public ?string $nice_to_have,
     ) {}
 
+    /**
+     * @param  array<string, mixed>  $data
+     */
     public static function fromArray(array $data): self
     {
+        assert(is_string($data['title']));
+        assert(is_string($data['job_category_id']));
+        assert(is_string($data['company_id']));
+        assert(is_string($data['description']));
+        assert(is_string($data['location']));
+        assert(is_string($data['expected_salary']));
+        assert(is_string($data['employment_type']));
+        assert(is_string($data['status']));
+        assert(is_string($data['responsibilities']));
+        assert(is_string($data['requirements']));
+        assert(is_string($data['skills_required']));
+        assert(is_int($data['experience_years_min']));
+        assert(is_int($data['experience_years_max']));
+
         return new self(
             title: $data['title'],
             job_category_id: $data['job_category_id'],
@@ -39,10 +56,13 @@ final readonly class CreateJobVacancyDTO
             skills_required: $data['skills_required'],
             experience_years_min: $data['experience_years_min'],
             experience_years_max: $data['experience_years_max'],
-            nice_to_have: $data['nice_to_have'] ?? null,
+            nice_to_have: $data['nice_to_have'] ? (is_string($data['nice_to_have']) ? $data['nice_to_have'] : null) : null,
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [
