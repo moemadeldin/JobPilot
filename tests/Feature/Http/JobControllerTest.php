@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Models\JobVacancy;
-use App\Models\Resume;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 

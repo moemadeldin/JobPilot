@@ -36,7 +36,11 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-    'openai' => [
-        'key' => env('OPENAI_API_KEY'),
+    // 'openai' => [
+    //     'key' => env('OPENAI_API_KEY'),
+    // ],
+    'groq' => [
+        'api_key' => env('GROQ_API_KEY'),
+        'api_chat' => env('GROQ_API_CHAT'),
     ],
 ];

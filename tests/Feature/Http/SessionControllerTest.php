@@ -46,8 +46,7 @@ it('validates login credentials', function (): void {
         'password' => 'password12345',
     ]);
 
-    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-    $response->assertJsonValidationErrors(['email']);
+    $response->assertStatus(Response::HTTP_BAD_REQUEST);
 });
 it('validates login fields', function (): void {
     $response = $this->postJson(route('login.store'), []);

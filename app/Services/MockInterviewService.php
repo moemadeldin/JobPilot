@@ -4,31 +4,41 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use OpenAI\Laravel\Facades\OpenAI;
+use App\Services\Traits\HasAiPrompt;
+use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
 final readonly class MockInterviewService
 {
+    use HasAiPrompt;
+
+    private const MODEL = 'llama-3.3-70b-versatile';
+
     public function generate(string $resumeText, string $jobDescription): array
     {
-        $prompt = $this->getPrompt($resumeText, $jobDescription);
+        $prompt = $this->getPrompt($resumeText, $jobDescription, 'prompts.mock_interview');
 
-        $response = OpenAI::chat()->create([
-            'model' => 'gpt-4o-mini',
-            'messages' => [
-                [
-                    'role' => 'system',
-                    'content' => 'You are a structured evaluator. Always return only JSON — no text outside of JSON.',
+        $response = Http::withToken(config('services.groq.api_key'))
+            ->timeout(60)
+            ->post(config('services.groq.api_chat'), [
+                'model' => self::MODEL,
+                'messages' => [
+                    [
+                        'role' => 'system',
+                        'content' => 'You are a structured evaluator. Always return only valid JSON.',
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => $prompt,
+                    ],
                 ],
-                [
-                    'role' => 'user',
-                    'content' => $prompt,
-                ],
-            ],
-            'temperature' => 0.3,
-        ]);
+                'temperature' => 0.3,
+                'response_format' => ['type' => 'json_object'],
+            ]);
 
-        $content = $response->choices[0]->message->content ?? null;
+        $response->throw();
+
+        $content = $response->json('choices.0.message.content');
 
         throw_unless($content, RuntimeException::class, 'Empty response from AI');
 
@@ -38,29 +48,5 @@ final readonly class MockInterviewService
             'question' => $data['question'],
             'answer' => $data['answer'],
         ];
-    }
-
-    private function getPrompt(string $resumeText, string $jobDescription): string
-    {
-        return <<<PROMPT
-You are an AI HR assistant generating mock interview Q&A for a candidate based on their resume and the job description.
-
-Generate 10-15 highly relevant question-answer pairs commonly asked in interviews for this position. Keep answers concise yet informative.
-
-Respond strictly in valid JSON:
-{
-  "qa": [
-    {"question": "Question 1?", "answer": "Answer 1."},
-    {"question": "Question 2?", "answer": "Answer 2."},
-    ...
-  ]
-}
-
-RESUME:
-{$resumeText}
-
-JOB DESCRIPTION:
-{$jobDescription}
-PROMPT;
     }
 }

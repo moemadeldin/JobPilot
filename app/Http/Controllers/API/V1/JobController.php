@@ -49,7 +49,8 @@ final readonly class JobController
     {
         $resume = Resume::query()
             ->where('id', $request->safe()->resume_id)
-            ->first();
+            ->where('user_id', $user->id)
+            ->firstOrFail();
 
         $application = $action->handle(
             $user,

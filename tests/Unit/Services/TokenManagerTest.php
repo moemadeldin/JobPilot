@@ -50,3 +50,10 @@ test('email access token', function (): void {
         ->and($user->access_token)
         ->toBe($token);
 });
+
+test('createAccessToken throws exception for invalid type', function (): void {
+    $user = User::factory()->create();
+
+    expect(fn () => $this->service->createAccessToken($user, 'invalid-type'))
+        ->toThrow(InvalidArgumentException::class);
+});
