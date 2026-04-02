@@ -1,12 +1,12 @@
-# 🚀 JobPilot
+# JobPilot
 
-> A modern, AI-powered job application platform built with Laravel that intelligently matches candidates with job opportunities using OpenAI's GPT models.
+> A modern, AI-powered job application platform built with Laravel that intelligently matches candidates with job opportunities using Groq's Llama models.
 
 [![PHP Version](https://img.shields.io/badge/PHP-8.2+-blue.svg)](https://www.php.net/)
 [![Laravel Version](https://img.shields.io/badge/Laravel-12.0-red.svg)](https://laravel.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-## 📋 Table of Contents
+## Table of Contents
 
 -   [Overview](#overview)
 -   [Key Features](#key-features)
@@ -19,25 +19,29 @@
 -   [Notable Achievements](#notable-achievements)
 -   [Project Structure](#project-structure)
 
-## 🎯 Overview
+## Overview
 
 JobPilot is a comprehensive job application management system that leverages artificial intelligence to revolutionize the hiring process. The platform enables job seekers to upload their resumes, apply to positions, and receive AI-powered compatibility scores and feedback. Employers can post job vacancies, manage applications, and gain insights through detailed analytics.
 
 ### What Makes JobPilot Special?
 
--   **🤖 AI-Powered Resume Evaluation**: Automatically analyzes resume-to-job-description compatibility using OpenAI's GPT-4o-mini, providing instant feedback and improvement suggestions
--   **📄 Intelligent PDF Processing**: Extracts and processes text from PDF resumes using multiple parsing strategies
--   **🔐 Robust Authentication & Authorization**: Role-based access control (Admin, Owner, User) with secure token-based authentication
--   **📊 Comprehensive Analytics**: Tracks user engagement, job performance, and application metrics
--   **⚡ Modern Architecture**: Built with clean code principles, SOLID design patterns, and scalable architecture
+-   **AI-Powered Resume Evaluation**: Automatically analyzes resume-to-job-description compatibility using Groq's Llama models, providing instant feedback and improvement suggestions
+-   **AI Cover Letter Generator**: Generates tailored cover letters based on resume content and job descriptions
+-   **AI Mock Interview Generator**: Creates mock interview Q&A pairs based on resume and job requirements
+-   **Intelligent PDF Processing**: Extracts and processes text from PDF resumes using multiple parsing strategies
+-   **Robust Authentication & Authorization**: Role-based access control (Admin, Owner, User) with secure token-based authentication
+-   **Comprehensive Analytics**: Tracks user engagement, job performance, and application metrics
+-   **Modern Architecture**: Built with clean code principles, SOLID design patterns, and scalable architecture
 
-## ✨ Key Features
+## Key Features
 
 ### For Job Seekers
 
 -   **Resume Management**: Upload and manage PDF resumes with automatic text extraction
 -   **Smart Job Matching**: Browse and filter job listings by category, location, employment type, and more
 -   **AI Compatibility Scoring**: Get instant feedback on how well your resume matches job requirements
+-   **AI Cover Letter Generator**: Generate tailored cover letters for each job application
+-   **AI Mock Interview**: Practice with AI-generated interview questions based on your profile
 -   **Application Tracking**: Monitor application status and receive detailed compatibility reports
 -   **Profile Management**: Create and maintain professional profiles
 
@@ -55,7 +59,7 @@ JobPilot is a comprehensive job application management system that leverages art
 -   **Category Management**: Organize jobs by categories
 -   **System Analytics**: Monitor platform-wide metrics and performance
 
-## 🛠 Technology Stack
+## Technology Stack
 
 ### Backend
 
@@ -67,8 +71,9 @@ JobPilot is a comprehensive job application management system that leverages art
 
 ### AI & Processing
 
--   **OpenAI Integration**: `openai-php/laravel` for GPT-4o-mini powered resume evaluation
+-   **Groq API**: Llama 3.3-70b-versatile for AI-powered resume evaluation, cover letters, and mock interviews
 -   **PDF Processing**: `smalot/pdfparser` for intelligent resume text extraction
+-   **Text Truncation**: Automatic input truncation (~16,000 characters) for cost optimization
 
 ### Development Tools
 
@@ -86,7 +91,7 @@ JobPilot is a comprehensive job application management system that leverages art
 -   **Query Objects**: Reusable query builders
 -   **Event-Driven**: Laravel events for decoupled functionality
 
-## 🏗 Architecture Highlights
+## Architecture Highlights
 
 ### Clean Code Principles
 
@@ -100,10 +105,19 @@ JobPilot is a comprehensive job application management system that leverages art
 
 -   **Action Pattern**: Encapsulated business operations (`ApplyToJobAction`, `CreateResumeAction`)
 -   **DTO Pattern**: Type-safe data structures (`CreateResumeDTO`, `CreateJobVacancyDTO`)
--   **Service Pattern**: Business logic services (`EvaluateResumeWithAIService`, `ResumeTextExtractor`)
+-   **Service Pattern**: Business logic services (`EvaluateResumeWithAIService`, `GenerateCoverLetterService`)
 -   **Query Object Pattern**: Reusable query builders (`FilteredJobVacancyQuery`)
 -   **Factory Pattern**: Model factories for testing
 -   **Observer Pattern**: Event listeners for side effects
+-   **Trait Pattern**: Shared AI functionality via `HasAiPrompt` trait
+
+### AI Service Architecture
+
+-   **Centralized Configuration**: All AI settings in `config/ai_services.php`
+-   **Shared Prompt Logic**: Reusable `HasAiPrompt` trait for truncation and prompt generation
+-   **Modular Services**: Separate services for evaluation, cover letters, and mock interviews
+-   **Configurable Prompts**: All prompts in `config/prompts.php` for easy updates
+-   **Input Truncation**: Automatic text truncation to prevent token overuse
 
 ### Key Architectural Decisions
 
@@ -112,8 +126,9 @@ JobPilot is a comprehensive job application management system that leverages art
 -   **Scoped Queries**: Reusable query filters using Laravel's query scopes
 -   **Background Jobs**: Asynchronous resume text extraction for better performance
 -   **API-First Design**: RESTful API with versioning (`/api/v1`)
+-   **Invokable Controllers**: Single-purpose controllers for cleaner routing
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 
@@ -121,7 +136,7 @@ JobPilot is a comprehensive job application management system that leverages art
 -   Composer
 -   Node.js and npm
 -   MySQL/PostgreSQL database
--   OpenAI API key (for AI features)
+-   Groq API key (for AI features)
 
 ### Step 1: Clone the Repository
 
@@ -167,10 +182,10 @@ DB_DATABASE=jobpilot
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
 
-OPENAI_API_KEY=your_openai_api_key
-OPENAI_ORGANIZATION=your_org_id  # Optional
+GROQ_API_KEY=your_groq_api_key
+GROQ_API_CHAT=https://api.groq.com/openai/v1/chat/completions
 
-QUEUE_CONNECTION=database  # or redis for production
+QUEUE_CONNECTION=database
 ```
 
 ### Step 5: Run Database Migrations
@@ -205,19 +220,29 @@ php artisan queue:work
 npm run dev
 ```
 
-## ⚙️ Configuration
+## Configuration
 
-### OpenAI Configuration
+### Groq AI Configuration
 
-The AI evaluation service uses OpenAI's GPT-4o-mini model. Configure your API key in `.env`:
+The AI services use Groq's Llama 3.3-70b-versatile model. Configure your API key in `.env`:
 
 ```env
-OPENAI_API_KEY=sk-your-api-key-here
+GROQ_API_KEY=gsk-your-api-key-here
+```
+
+### AI Service Settings
+
+Configure AI behavior in `config/ai_services.php`:
+
+```php
+'model' => env('AI_MODEL', 'llama-3.3-70b-versatile'),
+'temperature' => env('AI_TEMPERATURE', 0.3),
+'cover_letter_temperature' => env('AI_COVER_LETTER_TEMPERATURE', 0.7),
 ```
 
 ### Queue Configuration
 
-Resume text extraction runs asynchronously. Ensure your queue worker is running:
+Resume text extraction and AI evaluation run via queues. Ensure your queue worker is running:
 
 ```bash
 php artisan queue:work
@@ -231,7 +256,7 @@ Resumes are stored in `storage/app/public/resumes`. Create a symbolic link:
 php artisan storage:link
 ```
 
-## 📚 API Documentation
+## API Documentation
 
 ### Authentication Endpoints
 
@@ -247,7 +272,14 @@ php artisan storage:link
 
 -   `GET /api/v1/jobs` - List jobs (with filtering)
 -   `GET /api/v1/jobs/{id}` - Get job details
--   `POST /api/v1/jobs/{id}` - Apply to job (requires authentication)
+-   `POST /api/v1/jobs/{id}/apply` - Apply to job (requires authentication)
+-   `POST /api/v1/jobs/{id}/cover-letter/{resume}` - Generate AI cover letter (requires authentication)
+
+### Mock Interview Endpoints
+
+-   `GET /api/v1/applications/{id}/mock` - Get mock interview status
+-   `POST /api/v1/applications/{id}/mock/accept` - Accept mock interview
+-   `DELETE /api/v1/applications/{id}/mock/decline` - Decline mock interview
 
 ### Resume Endpoints
 
@@ -275,7 +307,7 @@ Jobs can be filtered by:
 -   `location` - Filter by location (partial match)
 -   `status` - Filter by active status
 
-## 🧪 Testing
+## Testing
 
 The project uses [Pest PHP](https://pestphp.com/) for testing, providing a modern and expressive testing experience.
 
@@ -309,11 +341,11 @@ The project includes tests for:
 -   Middleware functionality
 -   Service layer logic
 
-## 🎖 Notable Achievements
+## Notable Achievements
 
 ### Technical Excellence
 
-1. **AI Integration**: Successfully integrated OpenAI's GPT-4o-mini for intelligent resume evaluation with structured JSON responses
+1. **AI Integration**: Successfully integrated Groq's Llama models for intelligent resume evaluation, cover letter generation, and mock interview creation
 2. **PDF Processing**: Implemented robust PDF text extraction with fallback strategies (PDF Parser library + pdftotext command)
 3. **Type Safety**: Maintained strict type declarations throughout the entire codebase
 4. **Clean Architecture**: Applied SOLID principles, design patterns, and clean code practices consistently
@@ -332,6 +364,7 @@ The project includes tests for:
 -   **Query Scopes**: Reusable, efficient query filters
 -   **Background Jobs**: Asynchronous processing for time-consuming operations
 -   **Database Indexing**: Proper indexes on frequently queried columns
+-   **Input Truncation**: Automatic text truncation to control AI costs
 
 ### Security Features
 
@@ -340,7 +373,7 @@ The project includes tests for:
 -   **Input Validation**: Comprehensive form request validation
 -   **Soft Deletes**: Data preservation and audit capabilities
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 JobPilot/
@@ -364,17 +397,22 @@ JobPilot/
 │   ├── Providers/            # Service providers
 │   ├── Queries/              # Query objects
 │   ├── Services/             # Business logic services
+│   │   └── Traits/           # AI service traits
 │   └── Traits/               # Reusable traits
+├── config/
+│   ├── ai_services.php       # AI model and temperature settings
+│   ├── prompts.php           # AI prompts configuration
+│   └── services.php          # Third-party service credentials
 ├── database/
 │   ├── factories/            # Model factories
 │   ├── migrations/           # Database migrations
 │   └── seeders/              # Database seeders
 ├── routes/                    # Route definitions
 ├── tests/                     # Test suite
-└── config/                    # Configuration files
+└── .env.example              # Environment variables template
 ```
 
-## 🤝 Contributing
+## Contributing
 
 This is a portfolio project, but suggestions and feedback are welcome! If you'd like to contribute:
 
@@ -384,14 +422,14 @@ This is a portfolio project, but suggestions and feedback are welcome! If you'd 
 4. Ensure tests pass
 5. Submit a pull request
 
-## 📄 License
+## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-## 👤 Author
+## Author
 
-Built with ❤️ as a showcase of modern Laravel development practices and AI integration.
+Built as a showcase of modern Laravel development practices and AI integration.
 
 ---
 
-**Note**: This project requires an OpenAI API key for full functionality. The AI evaluation features will not work without proper configuration.
+**Note**: This project requires a Groq API key for full functionality. The AI features will not work without proper configuration.
