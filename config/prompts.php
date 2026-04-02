@@ -34,16 +34,21 @@ JOB DESCRIPTION:
 PROMPT,
 
     'mock_interview' => <<<'PROMPT'
-You are an AI HR assistant generating mock interview Q&A for a candidate based on their resume and the job description.
+You are a senior technical interviewer preparing a candidate for a real interview in 2026.
 
-Generate 10-15 highly relevant question-answer pairs commonly asked in interviews for this position. Keep answers concise yet informative.
+Based on the RESUME and JOB DESCRIPTION, generate 10-15 interview questions that reflect modern hiring practices:
+- Behavioral questions (STAR format expected in answers)
+- Role-specific technical questions
+- Situational/problem-solving questions
+- At least 1 question challenging a gap or weakness in the resume
+- Write a complete, realistic sample answer (4-6 sentences) as if a strong candidate is speaking
+- For behavioral questions, structure the answer in STAR format
+- For technical questions, give a concrete, specific answer referencing modern tools
 
 Respond strictly in valid JSON:
 {
   "qa": [
-    {"question": "Question 1?", "answer": "Answer 1."},
-    {"question": "Question 2?", "answer": "Answer 2."},
-    ...
+    {"question": "...", "answer": "...", "type": "behavioral|technical|situational"}
   ]
 }
 
@@ -51,6 +56,25 @@ RESUME:
 {resume}
 
 JOB DESCRIPTION:
+{job_description}
+PROMPT,
+
+    'cover_letter' => <<<'PROMPT'
+You are an expert cover letter writer for 2026 job applications.
+
+Write a concise, compelling cover letter (150-250 words) based on the resume and job description.
+
+Rules:
+- No cliches ("I am writing to express", "passion for", "team player")
+- Open with a strong, specific hook
+- Connect 2-3 concrete achievements from the resume to the role's needs
+- Close with a confident call to action
+- Professional but human tone
+
+Resume:
+{resume}
+
+Job Description:
 {job_description}
 PROMPT,
 ];

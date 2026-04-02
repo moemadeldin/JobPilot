@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+use App\Traits\HasAiPrompt;
+
+final readonly class GenerateCoverLetterService
+{
+    use HasAiPrompt;
+
+    private const string SYSTEM_PROMPT = 'You are a professional cover letter writer.';
+
+    public function __construct(private GroqClient $client) {}
+
+    public function generate(string $resumeText, string $jobDescription): string
+    {
+        $prompt = $this->getPrompt($resumeText, $jobDescription, 'prompts.cover_letter');
+
+        $text = $this->client->requestText(self::SYSTEM_PROMPT, $prompt);
+
+        return $this->sanitizeText($text);
+    }
+
+    private function sanitizeText(?string $text): string
+    {
+        if ($text === null) {
+            return '';
+        }
+
+        $text = preg_replace('/(\r\n|\r|\n)+/', ' ', $text);
+
+        $text = preg_replace('/\\\\n+/', ' ', (string) $text);
+
+        $text = preg_replace('/\s+/', ' ', (string) $text);
+
+        return mb_trim($text);
+    }
+}

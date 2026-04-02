@@ -48,8 +48,7 @@ final readonly class JobController
         ApplyToJobAction $action): JsonResponse
     {
         $resume = Resume::query()
-            ->where('id', $request->safe()->resume_id)
-            ->where('user_id', $user->id)
+            ->forUser($request->safe()->resume_id, $user->id)
             ->firstOrFail();
 
         $application = $action->handle(
@@ -60,6 +59,5 @@ final readonly class JobController
         );
 
         return $this->success(new JobApplicationResource($application), SuccessMessages::APPLICATION_SUBMITTED->value, Response::HTTP_CREATED);
-
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\API\V1\Auth\PasswordResetController;
 use App\Http\Controllers\API\V1\Auth\SessionController;
+use App\Http\Controllers\API\V1\CoverLetterController;
 use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\MockInterviewController;
 use App\Http\Controllers\API\V1\ResumeController;
@@ -32,6 +33,9 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::post('jobs/{job}/apply', 'store')
             ->name('jobs.store');
     });
+
+    Route::post('jobs/{job}/cover-letter/{resume}', CoverLetterController::class)
+        ->name('jobs.cover-letter');
 
     Route::post('/resumes', ResumeController::class)
         ->name('resumes.store');

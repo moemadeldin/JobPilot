@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\DB;
 
 final readonly class MockInterviewAction
 {
-    public function __construct(private GenerateMockInterviewQAService $mockInterviewService) {}
+    public function __construct(
+        private GenerateMockInterviewQAService $mockInterviewService
+    ) {}
 
     /**
      * @return array<array<string, mixed>>
@@ -22,28 +24,28 @@ final readonly class MockInterviewAction
     {
         return DB::transaction(function () use ($application): array {
 
-            $application->update(['mock_interview_status' => MockInterviewStatus::ACCEPTED->value]);
+            $application->update([
+                'mock_interview_status' => MockInterviewStatus::ACCEPTED->value,
+            ]);
 
             $resume = $application->resume;
             $jobVacancy = $application->jobVacancy;
-            throw_if($resume === null || $jobVacancy === null, Exception::class, 'Resume or Job Vacancy not found');
+
+            throw_if(
+                $resume === null || $jobVacancy === null,
+                Exception::class,
+                'Resume or Job Vacancy not found'
+            );
 
             $resumeText = (string) $resume->extracted_text;
             $jobDescription = (string) $jobVacancy->description;
+
             $qaList = $this->mockInterviewService->generate($resumeText, $jobDescription);
 
             $questions = [];
 
             foreach ($qaList as $index => $qa) {
-                if (! is_array($qa)) {
-                    continue;
-                }
-
-                if (! isset($qa['question'])) {
-                    continue;
-                }
-
-                if (! isset($qa['answer'])) {
+                if (! isset($qa['question'], $qa['answer'])) {
                     continue;
                 }
 
@@ -53,6 +55,7 @@ final readonly class MockInterviewAction
                     'answer' => $qa['answer'],
                     'order' => $index + 1,
                 ]);
+
                 $questions[] = [
                     'order' => $question->order,
                     'question' => $question->question,
