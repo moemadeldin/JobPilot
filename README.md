@@ -397,7 +397,6 @@ JobPilot/
 │   ├── Providers/            # Service providers
 │   ├── Queries/              # Query objects
 │   ├── Services/             # Business logic services
-│   │   └── Traits/           # AI service traits
 │   └── Traits/               # Reusable traits
 ├── config/
 │   ├── ai_services.php       # AI model and temperature settings
