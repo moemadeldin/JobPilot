@@ -11,8 +11,24 @@ use App\Models\JobVacancy;
 use App\Models\Resume;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Http;
 
 beforeEach(function (): void {
+    Http::fake([
+        '*' => Http::response([
+            'choices' => [[
+                'message' => [
+                    'content' => json_encode([
+                        'qa' => [
+                            ['question' => 'Q1', 'answer' => 'A1'],
+                            ['question' => 'Q2', 'answer' => 'A2'],
+                        ],
+                    ]),
+                ],
+            ]],
+        ], 200),
+    ]);
+
     $this->user = User::factory()->create();
     $this->company = $this->user->companies()->create([
         'name' => 'Test Company',
@@ -52,6 +68,18 @@ describe('DeclineMockInterviewAction', function (): void {
 });
 
 describe('MockInterviewAction', function (): void {
+    it('generates mock interview questions successfully', function (): void {
+        $action = app(MockInterviewAction::class);
+        $result = $action->handle($this->application);
+
+        expect($result)->toHaveCount(2);
+        expect($result[0]['question'])->toBe('Q1');
+        expect($result[0]['answer'])->toBe('A1');
+        
+        $this->application->refresh();
+        expect($this->application->mock_interview_status)->toBe(MockInterviewStatus::ACCEPTED);
+    });
+
     it('throws exception when resume is null', function (): void {
         $application = JobApplication::factory()->for($this->user)->for($this->jobVacancy)->create([
             'resume_id' => null,
