@@ -9,7 +9,9 @@ use App\Models\JobApplication;
 use App\Models\JobVacancy;
 use App\Models\Resume;
 use App\Models\User;
+use App\Services\EvaluateResumeWithAIService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
 uses(RefreshDatabase::class);

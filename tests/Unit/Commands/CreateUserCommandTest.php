@@ -94,3 +94,14 @@ test('fails when role does not exist', function (): void {
 
     $this->assertDatabaseMissing('users', ['email' => 'johndoe@gmail.com']);
 });
+
+test('throws exception for invalid role', function (): void {
+    Role::factory()->create(['name' => Roles::ADMIN->value]);
+
+    $this->artisan(CreateUserCommand::class)
+        ->expectsQuestion('Name of the new user', 'john doe')
+        ->expectsQuestion('Email of the new user', 'johndoe@gmail.com')
+        ->expectsQuestion('Password of the new user', '0123456789Aa')
+        ->expectsChoice('Role of the new user', 'invalid_role', ['admin', 'owner', 'user'])
+        ->assertExitCode(1);
+})->throws(InvalidArgumentException::class);

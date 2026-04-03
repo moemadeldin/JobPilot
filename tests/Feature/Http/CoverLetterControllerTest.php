@@ -50,8 +50,8 @@ describe('CoverLetterController', function (): void {
     });
 
     it('fails when resume has no extracted text', function (): void {
-        $otherUser = User::factory()->create();
-        $resume = Resume::factory()->for($otherUser)->create([
+        $newUser = User::factory()->create();
+        $resume = Resume::factory()->for($newUser)->create([
             'extracted_text' => null,
         ]);
 
