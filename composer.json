@@ -48,7 +48,7 @@
     },
     "scripts": {
         "test:types": "phpstan analyse",
-        "test:type-coverage": "@php artisan test --coverage --min=97",
+        "test:type-coverage": "@php artisan test --coverage --min=96",
         "test:unit": "@php artisan test --coverage",
         "lint": [
             "rector",

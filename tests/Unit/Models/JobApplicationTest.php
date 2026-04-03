@@ -41,3 +41,12 @@ test('job application belongs to resume', function (): void {
     expect($jobApplication->resume)->toBeInstanceOf(Resume::class);
     expect($jobApplication->resume_id)->toBe($resume->id);
 });
+
+test('job application has many mock interviews', function (): void {
+    $jobApplication = JobApplication::factory()->create();
+
+    $mockInterview = \App\Models\MockInterviewQuestion::factory()->for($jobApplication)->create();
+
+    expect($jobApplication->mockInterviews)->toHaveCount(1);
+    expect($jobApplication->mockInterviews->first()->id)->toBe($mockInterview->id);
+});

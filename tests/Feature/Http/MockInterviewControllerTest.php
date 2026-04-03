@@ -9,9 +9,23 @@ use App\Models\JobVacancy;
 use App\Models\MockInterviewQuestion;
 use App\Models\Resume;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Laravel\Sanctum\Sanctum;
 
 beforeEach(function (): void {
+    Http::fake([
+        '*' => Http::response([
+            'choices' => [[
+                'message' => [
+                    'content' => json_encode([
+                        ['question' => 'Q1', 'answer' => 'A1'],
+                        ['question' => 'Q2', 'answer' => 'A2'],
+                    ]),
+                ],
+            ]],
+        ], 200),
+    ]);
+
     $this->user = User::factory()->create();
     $this->company = $this->user->companies()->create([
         'name' => 'Test Company',

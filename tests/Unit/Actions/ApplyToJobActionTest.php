@@ -10,10 +10,25 @@ use App\Models\JobApplication;
 use App\Models\JobVacancy;
 use App\Models\Resume;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Queue;
 
 beforeEach(function (): void {
+    Http::fake([
+        '*' => Http::response([
+            'choices' => [[
+                'message' => [
+                    'content' => json_encode([
+                        'score' => 85,
+                        'feedback' => ['strengths' => ['PHP'], 'weaknesses' => []],
+                        'suggestions' => 'Keep learning',
+                    ]),
+                ],
+            ]],
+        ], 200),
+    ]);
+
     $this->user = User::factory()->create();
     $this->company = $this->user->companies()->create([
         'name' => 'Test Company',

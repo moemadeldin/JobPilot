@@ -6,7 +6,24 @@ use App\Models\JobApplication;
 use App\Models\JobVacancy;
 use App\Models\Resume;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 use Laravel\Sanctum\Sanctum;
+
+beforeEach(function (): void {
+    Http::fake([
+        '*' => Http::response([
+            'choices' => [[
+                'message' => [
+                    'content' => json_encode([
+                        'score' => 85,
+                        'feedback' => ['strengths' => ['PHP'], 'weaknesses' => []],
+                        'suggestions' => 'Good fit',
+                    ]),
+                ],
+            ]],
+        ], 200),
+    ]);
+});
 
 it('can see listing of jobs', function (): void {
     $user = User::factory()->create();

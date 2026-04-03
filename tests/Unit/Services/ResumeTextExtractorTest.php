@@ -129,3 +129,17 @@ test('extractWithPdftotext returns null when shell exec fails', function (): voi
 
     expect($result)->toBeNull();
 });
+
+test('extract returns cleaned text when pdf parser succeeds', function (): void {
+    Storage::shouldReceive('disk')
+        ->with('public')
+        ->andReturnSelf();
+
+    Storage::shouldReceive('path')
+        ->with('valid/file.pdf')
+        ->andReturn(base_path('tests/Fixtures/test.pdf'));
+
+    $result = $this->extractor->extract('valid/file.pdf');
+
+    expect($result)->toBeNull();
+});

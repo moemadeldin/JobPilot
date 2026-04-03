@@ -9,9 +9,20 @@ use App\Models\JobVacancy;
 use App\Models\Resume;
 use App\Models\User;
 use App\Services\GenerateCoverLetterService;
+use Illuminate\Support\Facades\Http;
 use Laravel\Sanctum\Sanctum;
 
 beforeEach(function (): void {
+    Http::fake([
+        '*' => Http::response([
+            'choices' => [[
+                'message' => [
+                    'content' => 'Generated cover letter content',
+                ],
+            ]],
+        ], 200),
+    ]);
+
     $this->user = User::factory()->create();
     $this->company = Company::factory()->create(['user_id' => $this->user->id]);
     $this->jobVacancy = JobVacancy::factory()->for($this->company)->create([
@@ -75,6 +86,17 @@ describe('CoverLetterController', function (): void {
         ]));
 
         $response->assertStatus(401);
+    });
+
+    it('fails when job does not exist', function (): void {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->postJson(route('jobs.cover-letter', [
+            'job' => 'nonexistent-job-id',
+            'resume' => $this->resume->id,
+        ]));
+
+        $response->assertStatus(404);
     });
 });
 

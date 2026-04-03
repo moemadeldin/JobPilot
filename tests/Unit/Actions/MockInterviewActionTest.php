@@ -10,6 +10,7 @@ use App\Models\JobApplication;
 use App\Models\JobVacancy;
 use App\Models\Resume;
 use App\Models\User;
+use Exception;
 
 beforeEach(function (): void {
     $this->user = User::factory()->create();
@@ -48,4 +49,24 @@ describe('DeclineMockInterviewAction', function (): void {
         expect($result)->toBeInstanceOf(JobApplication::class);
         expect($result->mock_interview_status)->toBe(MockInterviewStatus::DECLINED);
     });
+});
+
+describe('MockInterviewAction', function (): void {
+    it('throws exception when resume is null', function (): void {
+        $application = JobApplication::factory()->for($this->user)->for($this->jobVacancy)->create([
+            'resume_id' => null,
+        ]);
+
+        $action = app(MockInterviewAction::class);
+        $action->handle($application);
+    })->throws(Exception::class);
+
+    it('throws exception when job vacancy is null', function (): void {
+        $application = JobApplication::factory()->for($this->user)->for($this->resume)->create([
+            'job_vacancy_id' => null,
+        ]);
+
+        $action = app(MockInterviewAction::class);
+        $action->handle($application);
+    })->throws(Exception::class);
 });

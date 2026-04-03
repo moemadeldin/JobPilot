@@ -57,3 +57,25 @@ describe('CreateResumeAction', function (): void {
         Queue::assertPushed(\App\Jobs\ExtractResumeTextJob::class);
     });
 });
+
+describe('CreateResumeDTO', function (): void {
+    it('creates from array with uploaded file', function (): void {
+        $file = UploadedFile::fake()->create('resume.pdf', 1024);
+        $dto = CreateResumeDTO::fromArray(['path' => $file]);
+
+        expect($dto->path)->toBeInstanceOf(UploadedFile::class);
+    });
+
+    it('creates from array with string path', function (): void {
+        $dto = CreateResumeDTO::fromArray(['path' => 'resumes/test.pdf']);
+
+        expect($dto->path)->toBe('resumes/test.pdf');
+    });
+
+    it('converts to array', function (): void {
+        $dto = new CreateResumeDTO(path: 'resumes/test.pdf');
+        $array = $dto->toArray();
+
+        expect($array)->toBe(['path' => 'resumes/test.pdf']);
+    });
+});
