@@ -45,14 +45,18 @@ final readonly class MockInterviewAction
             $questions = [];
 
             foreach ($qaList as $index => $qa) {
-                if (! isset($qa['question'], $qa['answer'])) {
+                /** @var mixed $qa */
+                if (! is_array($qa) || ! array_key_exists('question', $qa) || ! array_key_exists('answer', $qa)) {
                     continue;
                 }
 
+                $questionText = is_string($qa['question']) ? $qa['question'] : '';
+                $answerText = is_string($qa['answer']) ? $qa['answer'] : '';
+
                 $question = MockInterviewQuestion::query()->create([
                     'job_application_id' => $application->id,
-                    'question' => $qa['question'],
-                    'answer' => $qa['answer'],
+                    'question' => $questionText,
+                    'answer' => $answerText,
                     'order' => $index + 1,
                 ]);
 

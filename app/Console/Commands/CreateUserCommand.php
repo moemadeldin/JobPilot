@@ -34,9 +34,13 @@ final class CreateUserCommand extends Command
      */
     public function handle(): void
     {
-        $user['username'] = $this->ask('Name of the new user');
-        $user['email'] = $this->ask('Email of the new user');
-        $user['password'] = $this->secret('Password of the new user');
+        /** @var array{username: string, email: string, password: string} $user */
+        $user = [
+            'username' => $this->ask('Name of the new user'),
+            'email' => $this->ask('Email of the new user'),
+            'password' => $this->secret('Password of the new user'),
+        ];
+        /** @var string $roleName */
         $roleName = $this->choice('Role of the new user', ['admin', 'owner', 'user'], 1);
 
         $validator = Validator::make($user, [
@@ -70,11 +74,11 @@ final class CreateUserCommand extends Command
             $newUser = User::query()->create([
                 'username' => $user['username'],
                 'email' => $user['email'],
-                'password' => bcrypt((string) $user['password']),
+                'password' => bcrypt($user['password']),
             ]);
             $newUser->roles()->attach($role->id);
         });
 
-        $this->info('User '.($user['email']).' created successfully');
+        $this->info('User '.$user['email'].' created successfully');
     }
 }

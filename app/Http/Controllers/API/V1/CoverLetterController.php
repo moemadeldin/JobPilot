@@ -37,6 +37,6 @@ final readonly class CoverLetterController
             (string) $job->description
         );
 
-        return $this->success([$coverLetter], 'Cover letter generated successfully', Response::HTTP_CREATED);
+        return $this->success(['cover_letter' => $coverLetter], 'Cover letter generated successfully', Response::HTTP_CREATED);
     }
 }

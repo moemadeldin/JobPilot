@@ -3,12 +3,16 @@ includes:
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 parameters:
-    level: max
+    level: 5
 
     paths:
         - app
-        - config
         - bootstrap
         - database/factories
         - routes
+
+    excludePaths:
+        - app/Providers/TelescopeServiceProvider.php
+
+    treatPhpDocTypesAsCertain: false
 

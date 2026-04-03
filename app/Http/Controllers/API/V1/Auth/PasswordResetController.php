@@ -22,22 +22,33 @@ final readonly class PasswordResetController
 
     public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
     {
+        /** @var string $email */
+        $email = $request->input('email');
+
         return $this->success(
-            $this->passwordResetService->forgot((string) $request->validated('email')), SuccessMessages::CODE_SENT->value
+            $this->passwordResetService->forgot($email), SuccessMessages::CODE_SENT->value
         );
     }
 
     public function checkCode(VerificationCodeRequest $request): JsonResponse
     {
+        /** @var string $email */
+        $email = $request->input('email');
+        /** @var string $code */
+        $code = $request->input('code');
+
         return $this->success(
-            $this->passwordResetService->checkCode((string) $request->validated('email'), (string) $request->validated('code')), SuccessMessages::CODE_IS_CORRECT->value
+            $this->passwordResetService->checkCode($email, $code), SuccessMessages::CODE_IS_CORRECT->value
         );
     }
 
     public function resetPassword(#[CurrentUser] User $user, ResetPasswordRequest $request): JsonResponse
     {
+        /** @var string $newPassword */
+        $newPassword = $request->input('new_password');
+
         return $this->success(
-            $this->passwordResetService->reset($user, (string) $request->validated('new_password')), SuccessMessages::PASSWORD_RECOVERED->value
+            $this->passwordResetService->reset($user, $newPassword), SuccessMessages::PASSWORD_RECOVERED->value
         );
     }
 }

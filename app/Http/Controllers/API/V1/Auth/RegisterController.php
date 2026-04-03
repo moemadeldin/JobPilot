@@ -21,8 +21,10 @@ final readonly class RegisterController
      */
     public function __invoke(StoreUserRequest $request, RegisterAction $action): JsonResponse
     {
+        /** @var array<string, string> $data */
+        $data = $request->validated();
+
         return $this->success(
-            $action->handle(
-                RegisterDTO::fromArray($request->validated())), SuccessMessages::REGISTERED->value, Response::HTTP_CREATED);
+            $action->handle(RegisterDTO::fromArray($data)), SuccessMessages::REGISTERED->value, Response::HTTP_CREATED);
     }
 }

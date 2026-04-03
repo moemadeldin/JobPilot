@@ -32,11 +32,12 @@ final readonly class SessionController
     public function store(LoginRequest $request, LoginAction $action): JsonResponse
     {
         try {
+            /** @var array<string, string> $data */
+            $data = $request->validated();
+
             return $this->success(
                 new LoginResource(
-                    $action->handle(
-                        LoginDTO::fromArray($request->validated())
-                    ),
+                    $action->handle(LoginDTO::fromArray($data))
                 ),
                 SuccessMessages::LOGGED_IN->value
             );

@@ -47,15 +47,20 @@ final readonly class JobController
         StoreJobApplicationRequest $request,
         ApplyToJobAction $action): JsonResponse
     {
+        /** @var string $resumeId */
+        $resumeId = $request->input('resume_id');
+        /** @var string|null $coverLetter */
+        $coverLetter = $request->input('cover_letter');
+
         $resume = Resume::query()
-            ->forUser($request->safe()->resume_id, $user->id)
+            ->forUser($resumeId, $user->id)
             ->firstOrFail();
 
         $application = $action->handle(
             $user,
             $job,
             $resume,
-            $request->safe()->cover_letter
+            $coverLetter
         );
 
         return $this->success(new JobApplicationResource($application), SuccessMessages::APPLICATION_SUBMITTED->value, Response::HTTP_CREATED);

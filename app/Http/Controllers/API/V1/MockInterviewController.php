@@ -46,7 +46,7 @@ final readonly class MockInterviewController
 
         $mockInterview = $action->handle($application);
 
-        return $this->success($mockInterview, 'Mock interview accepted and questions generated.', Response::HTTP_CREATED);
+        return $this->success(['questions' => $mockInterview], 'Mock interview accepted and questions generated.', Response::HTTP_CREATED);
     }
 
     public function destroy(MockInterviewRequest $request, JobApplication $application, DeclineMockInterviewAction $action): JsonResponse|Response

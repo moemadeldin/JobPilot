@@ -109,7 +109,9 @@ describe('MockInterviewController', function (): void {
         $response->assertCreated();
         $response->assertJsonStructure([
             'data' => [
-                '*' => ['order', 'question', 'answer'],
+                'questions' => [
+                    '*' => ['order', 'question', 'answer'],
+                ],
             ],
         ]);
 
