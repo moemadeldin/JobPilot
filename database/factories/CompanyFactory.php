@@ -38,7 +38,7 @@ final class CompanyFactory extends Factory
         return [
             'user_id' => User::factory(),
             'name' => $name,
-            'slug' => Str::slug($name),
+            'slug' => Str::slug($name).'-'.$this->faker->unique()->uuid(),
             'industry' => $this->faker->name(),
             'address' => $this->faker->address(),
             'website' => $this->faker->url(),

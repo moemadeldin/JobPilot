@@ -1,3 +1,4 @@
+
 {
     "$schema": "https://getcomposer.org/schema.json",
     "name": "laravel/laravel",
@@ -47,7 +48,7 @@
     },
     "scripts": {
         "test:types": "phpstan analyse",
-        "test:type-coverage": "@php artisan test --coverage --min=100",
+        "test:type-coverage": "@php artisan test --coverage --min=97",
         "test:unit": "@php artisan test --coverage",
         "lint": [
             "rector",

@@ -31,11 +31,11 @@ final class JobCategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->name();
+        $name = $this->faker->unique()->company();
 
         return [
             'name' => $name,
-            'slug' => Str::slug($name),
+            'slug' => Str::slug($name).'-'.$this->faker->unique()->uuid(),
         ];
     }
 }
