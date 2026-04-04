@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Actions\CreateResumeAction;
 use App\DTOs\CreateResumeDTO;
+use App\Jobs\ExtractResumeTextJob;
 use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -21,7 +22,7 @@ describe('CreateResumeAction', function (): void {
         $file = UploadedFile::fake()->create('resume.pdf', 1024);
 
         $dto = new CreateResumeDTO(path: $file);
-        $action = app(CreateResumeAction::class);
+        $action = resolve(CreateResumeAction::class);
 
         $resume = $action->handle($user, $dto);
 
@@ -36,7 +37,7 @@ describe('CreateResumeAction', function (): void {
         $filePath = 'resumes/test.pdf';
 
         $dto = new CreateResumeDTO(path: $filePath);
-        $action = app(CreateResumeAction::class);
+        $action = resolve(CreateResumeAction::class);
 
         $resume = $action->handle($user, $dto);
 
@@ -50,11 +51,11 @@ describe('CreateResumeAction', function (): void {
         $file = UploadedFile::fake()->create('resume.pdf', 1024);
 
         $dto = new CreateResumeDTO(path: $file);
-        $action = app(CreateResumeAction::class);
+        $action = resolve(CreateResumeAction::class);
 
         $resume = $action->handle($user, $dto);
 
-        Queue::assertPushed(\App\Jobs\ExtractResumeTextJob::class);
+        Queue::assertPushed(ExtractResumeTextJob::class);
     });
 });
 

@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 use App\Actions\ApplyToJobAction;
 use App\Enums\JobApplicationStatus;
-use App\Enums\MockInterviewStatus;
-use App\Jobs\EvaluateJobApplicationJob;
 use App\Models\JobApplication;
 use App\Models\JobVacancy;
 use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Queue;
 
 beforeEach(function (): void {
     Http::fake([
@@ -47,7 +44,7 @@ beforeEach(function (): void {
 
 describe('ApplyToJobAction', function (): void {
     it('creates a job application with pending status', function (): void {
-        $action = app(ApplyToJobAction::class);
+        $action = resolve(ApplyToJobAction::class);
 
         $application = $action->handle($this->user, $this->jobVacancy, $this->resume);
 
@@ -60,7 +57,7 @@ describe('ApplyToJobAction', function (): void {
     });
 
     it('creates application with cover letter', function (): void {
-        $action = app(ApplyToJobAction::class);
+        $action = resolve(ApplyToJobAction::class);
 
         $application = $action->handle($this->user, $this->jobVacancy, $this->resume, 'My cover letter');
 
@@ -68,7 +65,7 @@ describe('ApplyToJobAction', function (): void {
     });
 
     it('creates application without cover letter', function (): void {
-        $action = app(ApplyToJobAction::class);
+        $action = resolve(ApplyToJobAction::class);
 
         $application = $action->handle($this->user, $this->jobVacancy, $this->resume);
 
@@ -76,7 +73,7 @@ describe('ApplyToJobAction', function (): void {
     });
 
     it('sets compatibility score from AI evaluation', function (): void {
-        $action = app(ApplyToJobAction::class);
+        $action = resolve(ApplyToJobAction::class);
 
         $application = $action->handle($this->user, $this->jobVacancy, $this->resume);
 
@@ -85,7 +82,7 @@ describe('ApplyToJobAction', function (): void {
     });
 
     it('sets mock interview status based on score', function (): void {
-        $action = app(ApplyToJobAction::class);
+        $action = resolve(ApplyToJobAction::class);
 
         $application = $action->handle($this->user, $this->jobVacancy, $this->resume);
 
@@ -95,14 +92,14 @@ describe('ApplyToJobAction', function (): void {
     it('logs application creation', function (): void {
         Log::shouldReceive('info')
             ->once()
-            ->with('About to dispatch job for application', \Mockery::on(fn ($data): bool => isset($data['id'])));
+            ->with('About to dispatch job for application', Mockery::on(fn ($data): bool => isset($data['id'])));
 
-        $action = app(ApplyToJobAction::class);
+        $action = resolve(ApplyToJobAction::class);
         $action->handle($this->user, $this->jobVacancy, $this->resume);
     });
 
     it('sets reviewed_at after evaluation', function (): void {
-        $action = app(ApplyToJobAction::class);
+        $action = resolve(ApplyToJobAction::class);
 
         $application = $action->handle($this->user, $this->jobVacancy, $this->resume);
 

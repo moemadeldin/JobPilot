@@ -42,6 +42,7 @@ return new class extends Migration
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->unique(['user_id', 'job_vacancy_id', 'deleted_at']);
         });
     }
 };

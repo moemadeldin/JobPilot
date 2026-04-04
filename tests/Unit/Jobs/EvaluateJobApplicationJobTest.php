@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Enums\JobApplicationStatus;
-use App\Enums\MockInterviewStatus;
 use App\Jobs\EvaluateJobApplicationJob;
 use App\Models\JobApplication;
 use App\Models\JobVacancy;
@@ -11,7 +10,6 @@ use App\Models\Resume;
 use App\Models\User;
 use App\Services\EvaluateResumeWithAIService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
 uses(RefreshDatabase::class);
@@ -41,6 +39,6 @@ describe('EvaluateJobApplicationJob', function (): void {
         $this->resume->update(['extracted_text' => null]);
         $job = new EvaluateJobApplicationJob($this->application);
 
-        $job->handle(app(\App\Services\EvaluateResumeWithAIService::class));
+        $job->handle(resolve(EvaluateResumeWithAIService::class));
     })->throws(RuntimeException::class);
 });

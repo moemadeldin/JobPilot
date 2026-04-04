@@ -8,11 +8,14 @@ trait HasAiPrompt
 {
     protected function getPrompt(string $resumeText, string $jobDescription, string $configKey): string
     {
+        /** @var string $template */
         $template = config($configKey);
+
+        $truncatedResume = $this->truncate($resumeText);
 
         return str_replace(
             ['{resume}', '{job_description}'],
-            [$this->truncate($resumeText), $jobDescription],
+            [$truncatedResume, $jobDescription],
             $template
         );
     }

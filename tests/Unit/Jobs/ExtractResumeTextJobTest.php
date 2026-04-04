@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Jobs\ExtractResumeTextJob;
 use App\Models\Resume;
 use App\Models\User;
+use App\Services\ResumeTextExtractor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,7 +24,7 @@ describe('ExtractResumeTextJob', function (): void {
         ]);
 
         $job = new ExtractResumeTextJob($resume);
-        $job->handle(app(\App\Services\ResumeTextExtractor::class));
+        $job->handle(resolve(ResumeTextExtractor::class));
 
         $resume->refresh();
         expect($resume->extracted_text)->toBeNull();
@@ -38,7 +39,7 @@ describe('ExtractResumeTextJob', function (): void {
         Storage::disk('public')->put('resumes/test.pdf', 'fake pdf content');
 
         $job = new ExtractResumeTextJob($resume);
-        $job->handle(app(\App\Services\ResumeTextExtractor::class));
+        $job->handle(resolve(ResumeTextExtractor::class));
 
         $resume->refresh();
         expect($resume->extracted_text)->toBeNull();

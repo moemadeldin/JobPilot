@@ -6,6 +6,8 @@ namespace App\Jobs;
 
 use App\Enums\MockInterviewStatus;
 use App\Models\JobApplication;
+use App\Models\JobVacancy;
+use App\Models\Resume;
 use App\Services\EvaluateResumeWithAIService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,7 +33,9 @@ final class EvaluateJobApplicationJob implements ShouldQueue
     {
         $application = $this->application->load(['resume', 'jobVacancy']);
 
+        /** @var Resume $resume */
         $resume = $application->resume;
+        /** @var JobVacancy $job */
         $job = $application->jobVacancy;
 
         if (empty($resume->extracted_text)) {

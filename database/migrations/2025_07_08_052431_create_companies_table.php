@@ -16,25 +16,15 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table): void {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')
-                ->nullable()
+            $table->foreignUuid('user_id')->nullable()
                 ->constrained('users')
                 ->cascadeOnDelete();
-            $table->string('name')
-                ->index()
-                ->nullable();
-            $table->string('slug')
-                ->nullable()
-                ->index()
-                ->unique();
-            $table->string('industry')
-                ->index()
-                ->nullable();
+            $table->string('name')->index()->nullable();
+            $table->string('slug')->unique()->nullable();
+            $table->string('industry')->index()->nullable();
             $table->string('address')->nullable();
             $table->string('website')->nullable();
-            $table->string('status')
-                ->index()
-                ->default(Status::ACTIVE->value);
+            $table->string('status')->index()->default(Status::ACTIVE->value);
             $table->timestamps();
             $table->softDeletes();
         });

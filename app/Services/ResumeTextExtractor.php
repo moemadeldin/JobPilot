@@ -60,7 +60,7 @@ final class ResumeTextExtractor implements ResumeTextExtractorInterface
     {
         $text = str_replace(['•', '◦', '▪', '▫', '–', '—'], ['-', '-', '-', '-', '-', '-'], $text);
         $text = mb_convert_encoding($text, 'UTF-8', 'UTF-8');
-        $text = preg_replace('/\s+/', ' ', $text);
+        $text = preg_replace('/\s+/', ' ', $text) ?? $text;
 
         return mb_trim($text);
     }

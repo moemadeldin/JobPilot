@@ -132,8 +132,8 @@ final class JobVacancy extends Model
     #[Scope]
     protected function filterLocation(Builder $query, mixed $location): void
     {
-        if (! empty($location)) {
-            $query->where('location', 'LIKE', sprintf('%%%s%%', (string) $location));
+        if (! empty($location) && is_string($location)) {
+            $query->where('location', 'LIKE', sprintf('%%%s%%', $location));
         }
     }
 

@@ -75,7 +75,7 @@ it('resets password successfully', function (): void {
     $response->assertOk();
 
     $user->refresh();
-    expect(password_verify('NewPassword123', $user->password))->toBeTrue();
+    expect(password_verify('NewPassword123', (string) $user->password))->toBeTrue();
 });
 
 it('validates new password requirements', function (): void {

@@ -4,29 +4,29 @@ declare(strict_types=1);
 
 use App\Console\Commands\ClearExpiredVerificationCodes;
 use App\Models\User;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Date;
 
 it('clears expired verification codes', function (): void {
     User::factory()->create([
         'verification_code' => '123456',
-        'verification_code_expire_at' => Carbon::now()->subHour(),
+        'verification_code_expire_at' => Date::now()->subHour(),
     ]);
 
     User::factory()->create([
         'verification_code' => '654321',
-        'verification_code_expire_at' => Carbon::now()->addHour(),
+        'verification_code_expire_at' => Date::now()->addHour(),
     ]);
 
-    $command = app(ClearExpiredVerificationCodes::class);
+    $command = resolve(ClearExpiredVerificationCodes::class);
     $command->handle();
 
-    $expiredUser = User::whereNotNull('verification_code')
+    $expiredUser = User::query()->whereNotNull('verification_code')
         ->where('verification_code', '123456')
         ->first();
 
     expect($expiredUser)->toBeNull();
 
-    $validUser = User::whereNotNull('verification_code')
+    $validUser = User::query()->whereNotNull('verification_code')
         ->where('verification_code', '654321')
         ->first();
 
@@ -36,12 +36,12 @@ it('clears expired verification codes', function (): void {
 it('does nothing when no expired codes exist', function (): void {
     User::factory()->create([
         'verification_code' => '123456',
-        'verification_code_expire_at' => Carbon::now()->addHour(),
+        'verification_code_expire_at' => Date::now()->addHour(),
     ]);
 
     $beforeCount = User::query()->count();
 
-    $command = app(ClearExpiredVerificationCodes::class);
+    $command = resolve(ClearExpiredVerificationCodes::class);
     $command->handle();
 
     expect(User::query()->count())->toBe($beforeCount);
@@ -53,8 +53,8 @@ it('handles users with no verification code', function (): void {
         'verification_code_expire_at' => null,
     ]);
 
-    $command = app(ClearExpiredVerificationCodes::class);
+    $command = resolve(ClearExpiredVerificationCodes::class);
     $command->handle();
 
-    expect(User::whereNull('verification_code')->exists())->toBeTrue();
+    expect(User::query()->whereNull('verification_code')->exists())->toBeTrue();
 });

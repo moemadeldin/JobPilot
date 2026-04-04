@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
-use App\Enums\JobApplicationStatus;
-use App\Enums\MockInterviewStatus;
 use App\Http\Resources\JobApplicationResource;
 use App\Models\Company;
 use App\Models\JobApplication;

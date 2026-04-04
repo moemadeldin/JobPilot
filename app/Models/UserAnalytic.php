@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\UserAnalyticFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +23,9 @@ use Illuminate\Support\Carbon;
  */
 final class UserAnalytic extends Model
 {
+    /** @use HasFactory<UserAnalyticFactory> */
     use HasFactory;
+
     use HasUuids;
     use SoftDeletes;
 

@@ -35,7 +35,10 @@ final class UserValidator implements UserValidatorInterface
 
     public function validateUserCredentials(User $user, #[SensitiveParameter] string $password): void
     {
-        if (! Hash::check($password, $user->password)) {
+        /** @var string $hashedPassword */
+        $hashedPassword = $user->password;
+
+        if (! Hash::check($password, $hashedPassword)) {
             throw new AuthException(
                 ValidateMessages::INVALID_CREDENTIALS->value, Response::HTTP_BAD_REQUEST
             );

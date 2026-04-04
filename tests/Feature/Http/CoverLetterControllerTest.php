@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
-use App\Enums\EmploymentType;
-use App\Enums\Status;
 use App\Models\Company;
 use App\Models\JobVacancy;
 use App\Models\Resume;
@@ -102,7 +99,7 @@ describe('CoverLetterController', function (): void {
 
 describe('GenerateCoverLetterService', function (): void {
     it('generates cover letter from resume and job description', function (): void {
-        $service = app(GenerateCoverLetterService::class);
+        $service = resolve(GenerateCoverLetterService::class);
 
         $result = $service->generate(
             'Experienced Laravel developer',
@@ -114,11 +111,10 @@ describe('GenerateCoverLetterService', function (): void {
     });
 
     it('sanitizes text by removing newlines', function (): void {
-        $service = app(GenerateCoverLetterService::class);
+        $service = resolve(GenerateCoverLetterService::class);
 
         $reflection = new ReflectionClass($service);
         $method = $reflection->getMethod('sanitizeText');
-        $method->setAccessible(true);
 
         $result = $method->invoke($service, "Line 1\nLine 2\r\nLine 3");
 
@@ -127,11 +123,10 @@ describe('GenerateCoverLetterService', function (): void {
     });
 
     it('returns empty string for null input', function (): void {
-        $service = app(GenerateCoverLetterService::class);
+        $service = resolve(GenerateCoverLetterService::class);
 
         $reflection = new ReflectionClass($service);
         $method = $reflection->getMethod('sanitizeText');
-        $method->setAccessible(true);
 
         $result = $method->invoke($service, null);
 
@@ -139,13 +134,12 @@ describe('GenerateCoverLetterService', function (): void {
     });
 
     it('trims whitespace from result', function (): void {
-        $service = app(GenerateCoverLetterService::class);
+        $service = resolve(GenerateCoverLetterService::class);
 
         $reflection = new ReflectionClass($service);
         $method = $reflection->getMethod('sanitizeText');
-        $method->setAccessible(true);
 
-        $result = $method->invoke($service, "  Hello World  ");
+        $result = $method->invoke($service, '  Hello World  ');
 
         expect($result)->toBe('Hello World');
     });

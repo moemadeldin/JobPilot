@@ -21,7 +21,8 @@ final readonly class PasswordResetService implements PasswordResetInterface
     public function forgot(string $email): User
     {
         return DB::transaction(function () use ($email): User {
-            $user = User::getUserByEmail($email)->first();
+            /** @var User $user */
+            $user = User::getUserByEmail($email)->firstOrFail();
 
             $this->validateStatusAndUpdateUserWithCodeAndToken($user);
 
@@ -32,7 +33,8 @@ final readonly class PasswordResetService implements PasswordResetInterface
     public function checkCode(string $email, string $verificationCode): User
     {
         return DB::transaction(function () use ($email, $verificationCode): User {
-            $user = User::getUserByEmail($email)->first();
+            /** @var User $user */
+            $user = User::getUserByEmail($email)->firstOrFail();
 
             $this->validateCodeAndUpdateUserWithToken($user, $verificationCode);
 
@@ -62,7 +64,12 @@ final readonly class PasswordResetService implements PasswordResetInterface
             'verification_code_expire_at' => Date::now()->addMinutes(Constants::EXPIRATION_VERIFICATION_CODE_TIME_IN_MINUTES),
         ]);
         $this->tokenManagerService->createAccessToken($user, Constants::PASSWORD_RESET_TOKEN_TYPE);
-        event(new PasswordVerificationCodeSent($user->email, $user->verification_code));
+
+        /** @var string $email */
+        $email = $user->email;
+        $code = (string) $user->verification_code;
+
+        event(new PasswordVerificationCodeSent($email, $code));
     }
 
     private function validateCodeAndUpdateUserWithToken(User $user, string $verificationCode): void

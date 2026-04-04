@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Actions\MockInterviewAction;
 use App\Actions\DeclineMockInterviewAction;
+use App\Actions\MockInterviewAction;
 use App\Enums\JobApplicationStatus;
 use App\Enums\MockInterviewStatus;
 use App\Models\JobApplication;
@@ -51,7 +51,7 @@ beforeEach(function (): void {
 
 describe('DeclineMockInterviewAction', function (): void {
     it('updates application status to declined', function (): void {
-        $action = app(DeclineMockInterviewAction::class);
+        $action = resolve(DeclineMockInterviewAction::class);
         $action->handle($this->application);
 
         $this->application->refresh();
@@ -59,7 +59,7 @@ describe('DeclineMockInterviewAction', function (): void {
     });
 
     it('returns the updated application', function (): void {
-        $action = app(DeclineMockInterviewAction::class);
+        $action = resolve(DeclineMockInterviewAction::class);
         $result = $action->handle($this->application);
 
         expect($result)->toBeInstanceOf(JobApplication::class);
@@ -69,13 +69,13 @@ describe('DeclineMockInterviewAction', function (): void {
 
 describe('MockInterviewAction', function (): void {
     it('generates mock interview questions successfully', function (): void {
-        $action = app(MockInterviewAction::class);
+        $action = resolve(MockInterviewAction::class);
         $result = $action->handle($this->application);
 
         expect($result)->toHaveCount(2);
         expect($result[0]['question'])->toBe('Q1');
         expect($result[0]['answer'])->toBe('A1');
-        
+
         $this->application->refresh();
         expect($this->application->mock_interview_status)->toBe(MockInterviewStatus::ACCEPTED);
     });
@@ -85,7 +85,7 @@ describe('MockInterviewAction', function (): void {
             'resume_id' => null,
         ]);
 
-        $action = app(MockInterviewAction::class);
+        $action = resolve(MockInterviewAction::class);
         $action->handle($application);
     })->throws(Exception::class);
 
@@ -94,7 +94,7 @@ describe('MockInterviewAction', function (): void {
             'job_vacancy_id' => null,
         ]);
 
-        $action = app(MockInterviewAction::class);
+        $action = resolve(MockInterviewAction::class);
         $action->handle($application);
     })->throws(Exception::class);
 });

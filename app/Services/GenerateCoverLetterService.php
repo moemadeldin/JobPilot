@@ -29,11 +29,9 @@ final readonly class GenerateCoverLetterService
             return '';
         }
 
-        $text = preg_replace('/(\r\n|\r|\n)+/', ' ', $text);
-
-        $text = preg_replace('/\\\\n+/', ' ', (string) $text);
-
-        $text = preg_replace('/\s+/', ' ', (string) $text);
+        $text = preg_replace('/(\r\n|\r|\n)+/', ' ', $text) ?? $text;
+        $text = preg_replace('/\\\\n+/', ' ', $text) ?? $text;
+        $text = preg_replace('/\s+/', ' ', $text) ?? $text;
 
         return mb_trim($text);
     }

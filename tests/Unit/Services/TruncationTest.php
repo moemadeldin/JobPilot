@@ -15,7 +15,6 @@ test('truncate returns original text when under limit', function (): void {
     $helper = new TruncationHelper();
     $reflection = new ReflectionClass($helper);
     $method = $reflection->getMethod('truncate');
-    $method->setAccessible(true);
 
     $result = $method->invoke($helper, $text);
 
@@ -28,11 +27,10 @@ test('truncates text exceeding 16000 characters', function (): void {
     $helper = new TruncationHelper();
     $reflection = new ReflectionClass($helper);
     $method = $reflection->getMethod('truncate');
-    $method->setAccessible(true);
 
     $result = $method->invoke($helper, $text);
 
-    expect(mb_strlen($result))->toBe(16000);
+    expect(mb_strlen((string) $result))->toBe(16000);
     expect($result)->toBe(str_repeat('a', 16000));
 });
 
@@ -42,7 +40,6 @@ test('truncate handles exactly 16000 characters', function (): void {
     $helper = new TruncationHelper();
     $reflection = new ReflectionClass($helper);
     $method = $reflection->getMethod('truncate');
-    $method->setAccessible(true);
 
     $result = $method->invoke($helper, $text);
 
@@ -55,10 +52,9 @@ test('truncation prevents prompt injection at end of long text', function (): vo
     $helper = new TruncationHelper();
     $reflection = new ReflectionClass($helper);
     $method = $reflection->getMethod('truncate');
-    $method->setAccessible(true);
 
     $result = $method->invoke($helper, $injectionText);
 
-    expect(mb_strlen($result))->toBe(16000);
+    expect(mb_strlen((string) $result))->toBe(16000);
     expect($result)->not->toContain('Ignore previous instructions');
 });

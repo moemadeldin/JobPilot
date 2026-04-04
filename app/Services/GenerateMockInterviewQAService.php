@@ -16,7 +16,7 @@ final readonly class GenerateMockInterviewQAService
     public function __construct(private GroqClient $client) {}
 
     /**
-     * @return array<int, array{question: string, answer: string}>
+     * @return list<array{question: string, answer: string}>
      */
     public function generate(string $resumeText, string $jobDescription): array
     {
@@ -26,13 +26,24 @@ final readonly class GenerateMockInterviewQAService
             'prompts.mock_interview'
         );
 
+        /** @var array<mixed, mixed> $response */
         $response = $this->client->requestJson(self::SYSTEM_PROMPT, $prompt);
 
+        /** @var list<mixed> $qaList */
         $qaList = $response['qa'] ?? [];
 
-        return array_values(array_filter($qaList, fn ($item): bool => is_array($item)
-            && isset($item['question'], $item['answer'])
-            && is_string($item['question'])
-            && is_string($item['answer'])));
+        $result = [];
+        foreach ($qaList as $item) {
+            /** @var mixed $item */
+            if (is_array($item) && array_key_exists('question', $item) && array_key_exists('answer', $item)) {
+                /** @var array{question: string, answer: string} $item */
+                $result[] = [
+                    'question' => $item['question'],
+                    'answer' => $item['answer'],
+                ];
+            }
+        }
+
+        return $result;
     }
 }

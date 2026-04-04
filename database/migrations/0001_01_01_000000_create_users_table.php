@@ -16,17 +16,11 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table): void {
             $table->uuid('id')->primary();
-            $table->string('username')
-                ->index()
-                ->nullable();
-            $table->string('email')
-                ->index()
-                ->nullable();
+            $table->string('username')->index()->nullable();
+            $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
-            $table->string('status')
-                ->index()
-                ->default(value: Status::ACTIVE->value);
+            $table->string('status')->index()->default(value: Status::ACTIVE->value);
             $table->string('verification_code')->index()->nullable();
             $table->timestamp('verification_code_expire_at')->index()->nullable();
             $table->rememberToken();
@@ -42,7 +36,7 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table): void {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignUuid('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

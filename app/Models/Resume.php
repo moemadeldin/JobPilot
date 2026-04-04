@@ -52,6 +52,10 @@ final class Resume extends Model
         return $this->hasMany(JobApplication::class);
     }
 
+    /**
+     * @param  Builder<Resume>  $query
+     * @return Builder<Resume>
+     */
     #[Scope]
     protected function forUser(Builder $query, string $resumeId, string $userId): Builder
     {

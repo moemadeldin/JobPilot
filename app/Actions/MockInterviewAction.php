@@ -46,7 +46,15 @@ final readonly class MockInterviewAction
 
             foreach ($qaList as $index => $qa) {
                 /** @var mixed $qa */
-                if (! is_array($qa) || ! array_key_exists('question', $qa) || ! array_key_exists('answer', $qa)) {
+                if (! is_array($qa)) {
+                    continue;
+                }
+
+                if (! array_key_exists('question', $qa)) {
+                    continue;
+                }
+
+                if (! array_key_exists('answer', $qa)) {
                     continue;
                 }
 

@@ -14,19 +14,28 @@ final readonly class EvaluateResumeWithAIService
 
     public function __construct(private GroqClient $client) {}
 
+    /**
+     * @return array{score: int, feedback: array{strengths: list<string>, weaknesses: list<string>}, suggestions: string}
+     */
     public function evaluate(string $resumeText, string $jobDescription): array
     {
         $prompt = $this->getPrompt($resumeText, $jobDescription, 'prompts.evaluation');
 
+        /** @var array<mixed, mixed> $data */
         $data = $this->client->requestJson(self::SYSTEM_PROMPT, $prompt);
 
+        /** @var array{strengths: list<string>, weaknesses: list<string>} $feedback */
+        $feedback = $data['feedback'] ?? ['strengths' => [], 'weaknesses' => []];
+
+        /** @var int $score */
+        $score = $data['score'] ?? 0;
+        /** @var string $suggestions */
+        $suggestions = $data['suggestions'] ?? 'No suggestions available.';
+
         return [
-            'score' => $data['score'] ?? 0,
-            'feedback' => [
-                'strengths' => $data['feedback']['strengths'] ?? [],
-                'weaknesses' => $data['feedback']['weaknesses'] ?? [],
-            ],
-            'suggestions' => $data['suggestions'] ?? 'No suggestions available.',
+            'score' => $score,
+            'feedback' => $feedback,
+            'suggestions' => $suggestions,
         ];
     }
 }

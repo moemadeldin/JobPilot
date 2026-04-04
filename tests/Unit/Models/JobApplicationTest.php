@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\JobApplication;
 use App\Models\JobVacancy;
+use App\Models\MockInterviewQuestion;
 use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -45,7 +46,7 @@ test('job application belongs to resume', function (): void {
 test('job application has many mock interviews', function (): void {
     $jobApplication = JobApplication::factory()->create();
 
-    $mockInterview = \App\Models\MockInterviewQuestion::factory()->for($jobApplication)->create();
+    $mockInterview = MockInterviewQuestion::factory()->for($jobApplication)->create();
 
     expect($jobApplication->mockInterviews)->toHaveCount(1);
     expect($jobApplication->mockInterviews->first()->id)->toBe($mockInterview->id);
