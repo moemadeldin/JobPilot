@@ -10,14 +10,6 @@ use Illuminate\Foundation\Http\FormRequest;
 final class StoreResumeRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, ValidationRule|array<mixed>|string>
@@ -25,7 +17,7 @@ final class StoreResumeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'path' => ['required', 'file'],
+            'path' => ['required', 'file', 'mimes:pdf'],
         ];
     }
 }

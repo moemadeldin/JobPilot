@@ -47,14 +47,15 @@ final readonly class JobController
         StoreJobApplicationRequest $request,
         ApplyToJobAction $action): JsonResponse
     {
-        /** @var string $resumeId */
-        $resumeId = $request->input('resume_id');
+        /** @var Resume|null $resume */
+        $resume = $user->resume;
+
+        if (! $resume) {
+            return $this->fail('Please upload your resume first', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         /** @var string|null $coverLetter */
         $coverLetter = $request->input('cover_letter');
-
-        $resume = Resume::query()
-            ->forUser($resumeId, $user->id)
-            ->firstOrFail();
 
         $application = $action->handle(
             $user,

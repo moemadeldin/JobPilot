@@ -31,4 +31,6 @@ final readonly class Constants
     public const int MAX_VERIFICATION_CODE = 999_999;
 
     public const int EXPIRATION_VERIFICATION_CODE_TIME_IN_MINUTES = 5;
+
+    public const int NUMBER_OF_PAGINATED_JOB_APPLICATIONS = 10;
 }

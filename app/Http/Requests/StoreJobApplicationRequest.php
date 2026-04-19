@@ -25,7 +25,6 @@ final class StoreJobApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'resume_id' => ['required', 'exists:resumes,id'],
             'cover_letter' => ['nullable', 'string'],
         ];
     }

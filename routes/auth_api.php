@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\API\V1\ApplicationController;
 use App\Http\Controllers\API\V1\Auth\PasswordResetController;
 use App\Http\Controllers\API\V1\Auth\SessionController;
 use App\Http\Controllers\API\V1\CoverLetterController;
@@ -34,11 +35,23 @@ Route::middleware('auth:sanctum')->group(function (): void {
             ->name('jobs.store');
     });
 
-    Route::post('jobs/{job}/cover-letter/{resume}', CoverLetterController::class)
+    Route::controller(ApplicationController::class)->group(function (): void {
+        Route::get('applications', 'index')
+            ->name('applications.index');
+        Route::get('applications/{application}', 'show')
+            ->name('applications.show');
+    });
+
+    Route::post('jobs/{job}/cover-letter', CoverLetterController::class)
         ->name('jobs.cover-letter');
 
-    Route::post('/resumes', ResumeController::class)
-        ->name('resumes.store');
+    Route::controller(ResumeController::class)->group(function (): void {
+        Route::get('/resumes', 'index')
+            ->name('resumes.index');
+
+        Route::post('/resumes', 'store')
+            ->name('resumes.store');
+    });
 
     Route::controller(MockInterviewController::class)->group(function (): void {
         Route::get('applications/{application}/mock', 'show')

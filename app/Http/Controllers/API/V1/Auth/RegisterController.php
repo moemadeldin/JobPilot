@@ -8,6 +8,7 @@ use App\Actions\Auth\RegisterAction;
 use App\DTOs\Auth\RegisterDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Requests\Auth\StoreUserRequest;
+use App\Http\Resources\LoginResource;
 use App\Traits\APIResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -25,6 +26,9 @@ final readonly class RegisterController
         $data = $request->validated();
 
         return $this->success(
-            $action->handle(RegisterDTO::fromArray($data)), SuccessMessages::REGISTERED->value, Response::HTTP_CREATED);
+            new LoginResource($action->handle(RegisterDTO::fromArray($data))),
+            SuccessMessages::REGISTERED->value,
+            Response::HTTP_CREATED
+        );
     }
 }
