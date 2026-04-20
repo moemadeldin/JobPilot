@@ -8,6 +8,8 @@ use App\Http\Controllers\API\V1\Auth\SessionController;
 use App\Http\Controllers\API\V1\CoverLetterController;
 use App\Http\Controllers\API\V1\JobController;
 use App\Http\Controllers\API\V1\MockInterviewController;
+use App\Http\Controllers\API\V1\ProfileController;
+use App\Http\Controllers\API\V1\ProfilePasswordController;
 use App\Http\Controllers\API\V1\ResumeController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +27,20 @@ Route::middleware('auth:sanctum')->group(function (): void {
         Route::post('/reset-password', 'resetPassword')
             ->name('reset.password');
     });
+
+    Route::controller(ProfileController::class)->group(function (): void {
+        Route::get('/profile', 'index')
+            ->name('profile.index');
+        Route::post('/profile', 'store')
+            ->name('profile.store');
+        Route::put('/profile', 'update')
+            ->name('profile.update');
+        Route::delete('/profile', 'destroy')
+            ->name('profile.destroy');
+    });
+
+    Route::post('/profile/password', ProfilePasswordController::class)
+        ->name('profile.password');
 
     Route::controller(JobController::class)->group(function (): void {
         Route::get('jobs', 'index')

@@ -6,19 +6,10 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 
 final class StoreUserRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return Auth::guest();
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -27,6 +18,10 @@ final class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'digits:11'],
+            'country' => ['required', 'string', 'max:60'],
             'email' => ['required', 'email:rfc,dns', 'unique:users,email'],
             'password' => ['required', 'confirmed', Password::defaults()],
         ];

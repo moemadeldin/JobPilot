@@ -28,6 +28,10 @@ final class LoginResource extends JsonResource
         return [
             'user' => [
                 'id' => $this->resource->id,
+                'first_name' => $this->resource->profile->first_name,
+                'last_name' => $this->resource->profile->last_name,
+                'phone' => $this->resource->profile->phone,
+                'country' => $this->resource->profile->country,
                 'email' => $this->resource->email,
             ],
             'access_token' => $this->resource->access_token,

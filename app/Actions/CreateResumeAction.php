@@ -9,6 +9,7 @@ use App\Jobs\ExtractResumeTextJob;
 use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 final readonly class CreateResumeAction
@@ -16,6 +17,11 @@ final readonly class CreateResumeAction
     public function handle(User $user, CreateResumeDTO $dto): Resume
     {
         $resume = DB::transaction(function () use ($user, $dto): Resume {
+            if ($user->resume) {
+                Storage::disk('public')->delete($user->resume->path);
+                $user->resume->delete();
+            }
+
             $filePath = is_string($dto->path)
                 ? $dto->path
                 : $dto->path->storeAs(

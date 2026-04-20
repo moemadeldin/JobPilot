@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**
  * @property string $id
@@ -45,7 +46,18 @@ final class Profile extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    protected function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => "{$this->first_name} {$this->last_name}"
+        );
+    }
+    protected function country(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => ucfirst($value)
+        );
+    }
     /**
      * Get the attributes that should be cast.
      *

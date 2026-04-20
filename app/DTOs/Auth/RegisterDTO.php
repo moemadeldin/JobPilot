@@ -9,6 +9,10 @@ use SensitiveParameter;
 final readonly class RegisterDTO
 {
     public function __construct(
+        public string $firstName,
+        public string $lastName,
+        public string $phone,
+        public string $country,
         public string $email,
         #[SensitiveParameter] public string $password,
     ) {}
@@ -19,6 +23,10 @@ final readonly class RegisterDTO
     public static function fromArray(array $data): self
     {
         return new self(
+            firstName: $data['first_name'],
+            lastName: $data['last_name'],
+            phone: $data['phone'],
+            country: $data['country'],
             email: $data['email'],
             password: $data['password'],
         );
@@ -30,6 +38,10 @@ final readonly class RegisterDTO
     public function toArray(): array
     {
         return [
+            'first_name' => $this->firstName,
+            'last_name' => $this->lastName,
+            'phone' => $this->phone,
+            'country' => $this->country,
             'email' => $this->email,
             'password' => $this->password,
         ];

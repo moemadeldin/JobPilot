@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-final class LoginRequest extends FormRequest
+final class ChangePasswordRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -18,8 +18,9 @@ final class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email:rfc,dns'],
-            'password' => ['required', Password::defaults()],
+            'current_password' => ['required', 'string'],
+            'new_password' => ['required', 'string', 'confirmed', Password::defaults()],
+            'new_password_confirmation' => ['required', 'string'],
         ];
     }
 }

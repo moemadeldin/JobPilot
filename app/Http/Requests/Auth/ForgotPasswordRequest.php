@@ -6,18 +6,9 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 final class ForgotPasswordRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return Auth::guest();
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,7 +17,7 @@ final class ForgotPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'exists:users,email'],
+            'email' => ['required', 'string'],
         ];
     }
 }
