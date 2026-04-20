@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use Illuminate\Http\Response;
 use Laravel\Sanctum\Sanctum;
 
 it('sends verification code for valid email', function (): void {
@@ -20,7 +21,7 @@ it('validates email format for forgot password', function (): void {
         'email' => 'invalid-email',
     ]);
 
-    $response->assertStatus(422);
+    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     $response->assertJsonValidationErrors(['email']);
 });
 
@@ -55,7 +56,7 @@ it('fails with invalid code', function (): void {
         'code' => '000000',
     ]);
 
-    $response->assertStatus(422);
+    $response->assertStatus(Response::HTTP_BAD_REQUEST);
 });
 
 it('resets password successfully', function (): void {

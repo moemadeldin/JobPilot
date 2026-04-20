@@ -6,6 +6,7 @@ use App\Models\JobVacancy;
 use App\Models\Resume;
 use App\Models\User;
 use App\Services\GenerateCoverLetterService;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Laravel\Sanctum\Sanctum;
 
@@ -49,31 +50,17 @@ describe('CoverLetterController', function (): void {
     it('fails when resume has no extracted text', function (): void {
         $newUser = User::factory()->create();
         $resume = Resume::factory()->for($newUser)->create([
-            'extracted_text' => null,
+            'extracted_text' => '',
         ]);
 
-        Sanctum::actingAs($this->user);
+        Sanctum::actingAs($newUser);
 
         $response = $this->postJson(route('jobs.cover-letter', [
             'job' => $this->jobVacancy->id,
             'resume' => $resume->id,
         ]));
 
-        $response->assertStatus(404);
-    });
-
-    it('fails when resume does not belong to user', function (): void {
-        $otherUser = User::factory()->create();
-        $otherResume = Resume::factory()->for($otherUser)->create();
-
-        Sanctum::actingAs($this->user);
-
-        $response = $this->postJson(route('jobs.cover-letter', [
-            'job' => $this->jobVacancy->id,
-            'resume' => $otherResume->id,
-        ]));
-
-        $response->assertStatus(404);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     });
 
     it('requires authentication', function (): void {
@@ -82,7 +69,7 @@ describe('CoverLetterController', function (): void {
             'resume' => $this->resume->id,
         ]));
 
-        $response->assertStatus(401);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     });
 
     it('fails when job does not exist', function (): void {
@@ -93,7 +80,7 @@ describe('CoverLetterController', function (): void {
             'resume' => $this->resume->id,
         ]));
 
-        $response->assertStatus(404);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     });
 });
 

@@ -14,12 +14,12 @@ final readonly class UpdateProfileAction
         if ($dto->email) {
             $user->update(['email' => $dto->email]);
         }
+
         $user->profile()->update([
-            'first_name' => $dto->firstName,
-            'last_name' => $dto->lastName,
             'phone' => $dto->phone,
             'country' => $dto->country,
         ]);
+
         return $user;
     }
 }

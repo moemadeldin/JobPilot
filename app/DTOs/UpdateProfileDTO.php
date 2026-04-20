@@ -23,12 +23,13 @@ final readonly class UpdateProfileDTO
             country: array_key_exists('country', $data) ? (string) $data['country'] : null,
         );
     }
+
     public function toArray(): array
     {
         return [
             'email' => $this->email,
             'phone' => $this->phone,
-            'country' => $this->country
+            'country' => $this->country,
         ];
     }
 }

@@ -18,6 +18,7 @@ use App\Traits\APIResponses;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 
 final readonly class ProfileController
 {
@@ -33,7 +34,7 @@ final readonly class ProfileController
         CreateAvatarAction $action,
         #[CurrentUser] User $user,
     ): JsonResponse {
-        /** @var \Illuminate\Http\UploadedFile $avatar */
+        /** @var UploadedFile $avatar */
         $avatar = $request->file('avatar');
 
         $user = $action->handle($user, $avatar);

@@ -78,15 +78,15 @@ test('job vacancy scope filter by job_category_id', function (): void {
 });
 test('job vacancy scope filter by employment_type', function (): void {
 
-    JobVacancy::factory()->count(3)->create(['employment_type' => EmploymentType::REMOTELY->value]);
-    JobVacancy::factory()->count(2)->create(['employment_type' => EmploymentType::HYBRID->value]);
+    JobVacancy::factory()->count(3)->create(['employment_type' => EmploymentType::FULL_TIME->value]);
+    JobVacancy::factory()->count(2)->create(['employment_type' => EmploymentType::PART_TIME->value]);
 
     $result = JobVacancy::query()
-        ->filterEmploymentType(EmploymentType::REMOTELY->value)
+        ->filterEmploymentType(EmploymentType::FULL_TIME->value)
         ->get();
 
     expect($result)->toHaveCount(3);
-    expect($result->pluck('employment_type')->unique()->first())->toBe(EmploymentType::REMOTELY);
+    expect($result->pluck('employment_type')->unique()->first())->toBe(EmploymentType::FULL_TIME);
 });
 test('job vacancy scope filter by status', function (): void {
 

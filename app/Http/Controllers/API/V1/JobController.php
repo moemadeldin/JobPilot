@@ -47,6 +47,12 @@ final readonly class JobController
         StoreJobApplicationRequest $request,
         ApplyToJobAction $action): JsonResponse
     {
+        if ($user->applications()
+            ->where('job_vacancy_id', $job->id)
+            ->exists()) {
+            return $this->fail('Already applied to this job.', Response::HTTP_CONFLICT);
+        }
+
         /** @var Resume|null $resume */
         $resume = $user->resume;
 

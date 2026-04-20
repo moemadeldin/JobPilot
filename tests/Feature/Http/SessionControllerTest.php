@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 use App\Enums\Status;
+use App\Http\Resources\LoginResource;
+use App\Http\Resources\ProfileResource;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Laravel\Sanctum\Sanctum;
@@ -14,25 +17,21 @@ it('can login user', function (): void {
         'email' => 'johndoe@gmail.com',
         'password' => 'password123456',
     ]);
-
+    $user->profile()->save(Profile::factory()->make());
     $response = $this->postJson(route('login.store'), [
         'email' => 'johndoe@gmail.com',
         'password' => 'password123456',
     ]);
     $response->assertOk();
-    $response->assertJsonStructure([
-        'data' => [
-            'user' => [
-                'id',
-                'email',
-            ],
-            'access_token',
-        ],
-    ]);
+    $response->assertJsonStructure(['data' => LoginResource::JSON_STRUCTURE]);
     $response->assertJson([
         'data' => [
             'user' => [
                 'id' => $user->id,
+                'first_name' => $user->profile->first_name,
+                'last_name' => $user->profile->last_name,
+                'phone' => $user->profile->phone,
+                'country' => $user->profile->country,
                 'email' => $user->email,
             ],
         ],
@@ -83,31 +82,28 @@ it('returns unauthenticated when not logged in', function (): void {
 });
 it('returns user details', function (): void {
     $user = User::factory()->create();
+    $user->profile()->save(Profile::factory()->make());
 
     Sanctum::actingAs($user, ['*']);
 
     $response = $this->getJson(route('me.show'));
 
     $response->assertOk();
-    $response->assertJsonStructure([
-        'data' => [
-            'authenticated',
-            'user' => [
-                'id',
-                'username',
-                'email',
-                'status',
-            ],
-        ],
-    ]);
+    $response->assertJsonStructure(['data' => ProfileResource::JSON_STRUCTURE]);
     $response->assertJson([
         'data' => [
             'authenticated' => true,
             'user' => [
                 'id' => $user->id,
-                'username' => $user->profile?->username,
+                'full_name' => $user->profile->fullName,
+                'first_name' => $user->profile->first_name,
+                'last_name' => $user->profile->last_name,
                 'email' => $user->email,
+                'avatar' => $user->profile->avatar,
+                'phone' => $user->profile->phone,
+                'country' => $user->profile->country,
                 'status' => $user->status->label(),
+                'resume' => $user->resume?->path,
             ],
         ],
     ]);

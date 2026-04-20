@@ -26,7 +26,6 @@ final readonly class CoverLetterController
         if (empty($user->resume->extracted_text)) {
             return $this->fail('Resume has no extracted text', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-
         $coverLetter = $this->service->generate(
             (string) $user->resume->extracted_text,
             (string) $job->description

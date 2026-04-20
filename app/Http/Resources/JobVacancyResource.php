@@ -13,6 +13,23 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 final class JobVacancyResource extends JsonResource
 {
+    public const array JSON_STRUCTURE = [
+            'id',
+            'category',
+            'company',
+            'title',
+            'description',
+            'location',
+            'expected_salary',
+            'employment_type',
+            'status',
+            'responsibilities',
+            'requirements',
+            'skills_required',
+            'experience_years_min',
+            'experience_years_max',
+            'nice_to_have',
+    ];
     /**
      * Transform the resource into an array.
      *

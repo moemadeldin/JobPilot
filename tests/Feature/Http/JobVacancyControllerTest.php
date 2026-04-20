@@ -407,17 +407,17 @@ it('return all jobs filtered by employment type', function (): void {
     JobVacancy::factory()->count(6)->create([
         'job_category_id' => $jobCategory->id,
         'company_id' => $company->id,
-        'employment_type' => EmploymentType::REMOTELY,
+        'employment_type' => EmploymentType::FULL_TIME,
     ]);
     JobVacancy::factory()->count(6)->create([
         'job_category_id' => $jobCategory->id,
         'company_id' => $company->id,
-        'employment_type' => EmploymentType::HYBRID,
+        'employment_type' => EmploymentType::PART_TIME,
     ]);
     Sanctum::actingAs($user, ['*']);
 
     $response = $this->getJson(route('admin.job-vacancies.index', [
-        'type' => EmploymentType::REMOTELY->value,
+        'type' => EmploymentType::FULL_TIME->value,
     ]));
 
     $response->assertOk()
@@ -448,7 +448,7 @@ it('return all jobs filtered by employment type', function (): void {
         ->values();
 
     expect($returnedStatuses)->toHaveCount(6);
-    expect($returnedStatuses->first())->toBe('Remote');
+    expect($returnedStatuses->first())->toBe('Full-time');
 });
 it('return all jobs filtered by location', function (): void {
     $user = User::factory()->create();

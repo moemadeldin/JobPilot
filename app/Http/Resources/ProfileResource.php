@@ -13,6 +13,21 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 final class ProfileResource extends JsonResource
 {
+    public const array JSON_STRUCTURE = [
+        'authenticated',
+        'user' => [
+            'id',
+            'full_name',
+            'first_name',
+            'last_name',
+            'email',
+            'avatar',
+            'phone',
+            'country',
+            'status',
+            'resume',
+            ],
+    ];
     /**
      * Transform the resource into an array.
      *

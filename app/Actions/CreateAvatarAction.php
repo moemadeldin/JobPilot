@@ -12,13 +12,13 @@ final readonly class CreateAvatarAction
 {
     public function handle(User $user, UploadedFile $avatar): User
     {
-        if ($user->avatar) {
+        if ($user->profile->avatar) {
             Storage::disk('public')->delete($user->avatar);
         }
 
         $path = $avatar->store('avatars', 'public');
 
-        $user->update(['avatar' => $path]);
+        $user->profile()->update(['avatar' => $path]);
 
         return $user;
     }

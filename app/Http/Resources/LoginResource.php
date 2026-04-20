@@ -14,6 +14,18 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 final class LoginResource extends JsonResource
 {
+    public const array JSON_STRUCTURE = [
+        'user' => [
+            'id',
+            'first_name',
+            'last_name',
+            'phone',
+            'country',
+            'email',
+        ],
+        'access_token',
+        'needs_resume',
+    ];
     /**
      * Transform the resource into an array.
      *
