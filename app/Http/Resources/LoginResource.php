@@ -21,7 +21,9 @@ final class LoginResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $hasResume = Resume::query()->where('user_id', $this->resource->id)->exists();
+        $hasResume = Resume::query()
+            ->where('user_id', $this->resource->id)
+            ->exists();
 
         return [
             'user' => [

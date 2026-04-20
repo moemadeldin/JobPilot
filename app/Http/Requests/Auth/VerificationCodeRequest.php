@@ -25,7 +25,7 @@ final class VerificationCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'exists:users,email'],
+            'email' => ['required', 'email'],
             'code' => ['required', 'exists:users,verification_code'],
         ];
     }
