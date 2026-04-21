@@ -26,6 +26,7 @@ final class LoginResource extends JsonResource
         'access_token',
         'needs_resume',
     ];
+
     /**
      * Transform the resource into an array.
      *

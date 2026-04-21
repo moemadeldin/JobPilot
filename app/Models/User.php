@@ -119,6 +119,21 @@ final class User extends Authenticatable
         return $this->hasMany(UserAnalytic::class);
     }
 
+    /**
+     * @return HasMany<CustomJobVacancy, $this>
+     */
+    public function customJobVacancies(): HasMany
+    {
+        return $this->hasMany(CustomJobVacancy::class);
+    }
+    /**
+     * @return HasMany<CustomJobApplication, $this>
+     */
+    public function customJobApplications(): HasMany
+    {
+        return $this->hasMany(CustomJobApplication::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->roles->contains('name', Roles::ADMIN);

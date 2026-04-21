@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('mock_interview_questions', function (Blueprint $table): void {
             $table->uuid('id')->primary();
-            $table->foreignUuid('job_application_id')->nullable()
-                ->constrained('job_applications')
+            $table->foreignUuid('mock_interview_id')
+                ->constrained('mock_interviews')
                 ->cascadeOnDelete();
             $table->longText('question')->nullable();
             $table->longText('answer')->nullable();

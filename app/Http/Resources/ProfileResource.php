@@ -26,8 +26,9 @@ final class ProfileResource extends JsonResource
             'country',
             'status',
             'resume',
-            ],
+        ],
     ];
+
     /**
      * Transform the resource into an array.
      *

@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Models\JobVacancy;
+use App\Models\CustomJobVacancy;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property-read JobVacancy $resource
+ * @property-read CustomJobVacancy $resource
  */
-final class JobVacancyResource extends JsonResource
+final class CustomJobVacancyResource extends JsonResource
 {
     public const array JSON_STRUCTURE = [
         'id',
         'category',
-        'company',
         'title',
         'description',
         'location',
         'expected_salary',
         'employment_type',
-        'status',
         'responsibilities',
         'requirements',
         'skills_required',
@@ -31,23 +29,16 @@ final class JobVacancyResource extends JsonResource
         'nice_to_have',
     ];
 
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->resource->id,
-            'category' => $this->resource->category?->name,
-            'company' => $this->resource->company?->name,
+            'category' => $this->resource->category,
             'title' => $this->resource->title,
             'description' => $this->resource->description,
             'location' => $this->resource->location,
             'expected_salary' => $this->resource->expected_salary,
             'employment_type' => $this->resource->employment_type->label(),
-            'status' => $this->resource->status->label(),
             'responsibilities' => $this->resource->responsibilities,
             'requirements' => $this->resource->requirements,
             'skills_required' => $this->resource->skills_required,
