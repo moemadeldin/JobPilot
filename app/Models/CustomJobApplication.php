@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\MockInterviewStatus;
 use Database\Factories\CustomJobApplicationFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property array|null $feedback
  * @property array|null $improvement_suggestions
  * @property string|null $cover_letter
+ * @property MockInterviewStatus $mock_interview_status
  * @property-read User $user
  * @property-read CustomJobVacancy $customJobVacancy
  * @property-read MockInterview|null $mockInterview
@@ -56,6 +58,7 @@ final class CustomJobApplication extends Model
     protected function casts(): array
     {
         return [
+            'mock_interview_status' => MockInterviewStatus::class,
             'compatibility_score' => 'integer',
             'feedback' => 'array',
             'improvement_suggestions' => 'array',

@@ -126,6 +126,7 @@ final class User extends Authenticatable
     {
         return $this->hasMany(CustomJobVacancy::class);
     }
+
     /**
      * @return HasMany<CustomJobApplication, $this>
      */

@@ -54,6 +54,12 @@ final class JobVacancyResource extends JsonResource
             'experience_years_min' => $this->resource->experience_years_min,
             'experience_years_max' => $this->resource->experience_years_max,
             'nice_to_have' => $this->resource->nice_to_have,
+            'has_applied' => $this->when(
+                $request->user(),
+                fn () => $this->resource->applications()
+                    ->where('user_id', $request->user()->id)
+                    ->exists()
+            ),
         ];
     }
 }

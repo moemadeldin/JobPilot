@@ -34,5 +34,7 @@ final readonly class Constants
 
     public const int NUMBER_OF_PAGINATED_JOB_APPLICATIONS = 10;
 
+    public const int MINIMUM_SCORE = 70;
+
     public const string DEFAULT_PROFILE_PICTURE_PATH = 'profile_pictures/default_pfp.png';
 }

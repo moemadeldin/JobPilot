@@ -9,6 +9,7 @@ use App\Models\CustomJobVacancy;
 use App\Models\MockInterview;
 use App\Models\MockInterviewQuestion;
 use App\Services\GenerateMockInterviewQAService;
+use Illuminate\Http\Response;
 
 final readonly class GenerateCustomMockInterviewAction
 {
@@ -24,7 +25,7 @@ final readonly class GenerateCustomMockInterviewAction
         $resume = $user->resume;
         $vacancy = $application->customJobVacancy;
 
-        abort_if(! $resume || ! $resume->extracted_text, 422, 'Resume not found or has no extracted text.');
+        abort_if(! $resume || ! $resume->extracted_text, Response::HTTP_UNPROCESSABLE_ENTITY, 'Resume not found or has no extracted text.');
 
         $jobDescription = $this->buildJobDescription($vacancy);
 

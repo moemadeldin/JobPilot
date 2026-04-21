@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\API\V1;
 
 use App\Actions\CustomJobVacancy\CreateCustomJobApplicationAction;
-use App\DTOs\CreateCustomJobApplicationDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomJobApplicationResource;
@@ -23,9 +22,11 @@ use Illuminate\Http\Response;
 final class CustomApplicationController extends Controller
 {
     use APIResponses;
+
     public function __construct(
         private UserCustomApplicationQuery $query
     ) {}
+
     public function index(#[CurrentUser] User $user, Request $request): JsonResponse
     {
         $perPage = (int) $request->query('per_page', Constants::NUMBER_OF_PAGINATED_JOB_APPLICATIONS);
@@ -37,11 +38,11 @@ final class CustomApplicationController extends Controller
             'Applications retrieved successfully'
         );
     }
+
     public function show(
         #[CurrentUser] User $user,
         CustomJobApplication $customApplication
     ): JsonResponse {
-
 
         if ($customApplication->user_id !== $user->id) {
             return $this->fail('Application not found', Response::HTTP_NOT_FOUND);
@@ -52,26 +53,19 @@ final class CustomApplicationController extends Controller
             'Application details retrieved successfully'
         );
     }
+
     public function store(
         Request $request,
         CreateCustomJobApplicationAction $action,
         CustomJobVacancy $customJobVacancy,
         #[CurrentUser] User $user
     ): JsonResponse {
-        $application = $customJobVacancy->customJobApplications()
-            ->where('user_id', $user->id)
-            ->first();
-
-        if ($application) {
-            return $this->success(
-                new CustomJobApplicationResource($application),
-                'Application already exists.',
-            );
-        }
+        /** @var string|null $coverLetter */
+        $coverLetter = $request->input('cover_letter');
 
         return $this->success(
             new CustomJobApplicationResource($action->handle(
-                CreateCustomJobApplicationDTO::fromArray($request->all()),
+                $coverLetter,
                 $customJobVacancy,
                 $user
             )),

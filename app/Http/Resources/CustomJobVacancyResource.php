@@ -16,6 +16,7 @@ final class CustomJobVacancyResource extends JsonResource
     public const array JSON_STRUCTURE = [
         'id',
         'category',
+        'company',
         'title',
         'description',
         'location',
@@ -34,6 +35,7 @@ final class CustomJobVacancyResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'category' => $this->resource->category,
+            'company' => $this->resource->company,
             'title' => $this->resource->title,
             'description' => $this->resource->description,
             'location' => $this->resource->location,
@@ -45,6 +47,7 @@ final class CustomJobVacancyResource extends JsonResource
             'experience_years_min' => $this->resource->experience_years_min,
             'experience_years_max' => $this->resource->experience_years_max,
             'nice_to_have' => $this->resource->nice_to_have,
+            'created_at' => $this->resource->created_at,
         ];
     }
 }

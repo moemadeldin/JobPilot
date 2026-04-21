@@ -27,7 +27,7 @@ final readonly class MockInterviewController
         }
 
         $questions = MockInterviewQuestion::query()
-            ->where('job_application_id', $application->id)
+            ->whereHas('mockInterview', fn ($q) => $q->where('interviewable_id', $application->id))
             ->orderBy('order')
             ->get();
 

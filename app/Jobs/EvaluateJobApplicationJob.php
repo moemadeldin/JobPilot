@@ -9,6 +9,7 @@ use App\Models\JobApplication;
 use App\Models\JobVacancy;
 use App\Models\Resume;
 use App\Services\EvaluateResumeWithAIService;
+use App\Utilities\Constants;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -47,7 +48,7 @@ final class EvaluateJobApplicationJob implements ShouldQueue
             (string) $job->description
         );
 
-        $mockInterviewStatus = $evaluation['score'] >= 70
+        $mockInterviewStatus = $evaluation['score'] >= Constants::MINIMUM_SCORE
             ? MockInterviewStatus::SUGGESTED->value
             : MockInterviewStatus::DISQUALIFIED->value;
 

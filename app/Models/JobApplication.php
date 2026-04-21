@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
@@ -65,14 +64,6 @@ final class JobApplication extends Model
     public function resume(): BelongsTo
     {
         return $this->belongsTo(Resume::class);
-    }
-
-    /**
-     * @return HasMany<MockInterviewQuestion, $this>
-     */
-    public function mockInterviews(): HasMany
-    {
-        return $this->hasMany(MockInterviewQuestion::class);
     }
 
     /**

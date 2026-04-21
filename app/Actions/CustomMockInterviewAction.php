@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Enums\MockInterviewStatus;
-use App\Models\JobApplication;
+use App\Models\CustomJobApplication;
 use App\Models\MockInterview;
 use App\Models\MockInterviewQuestion;
 use App\Services\GenerateMockInterviewQAService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-final readonly class MockInterviewAction
+final readonly class CustomMockInterviewAction
 {
     public function __construct(
         private GenerateMockInterviewQAService $mockInterviewService
@@ -21,7 +21,7 @@ final readonly class MockInterviewAction
     /**
      * @return array<array<string, mixed>>
      */
-    public function handle(JobApplication $application): array
+    public function handle(CustomJobApplication $application): array
     {
         return DB::transaction(function () use ($application): array {
 
@@ -29,17 +29,17 @@ final readonly class MockInterviewAction
                 'mock_interview_status' => MockInterviewStatus::ACCEPTED->value,
             ]);
 
-            $resume = $application->resume;
-            $jobVacancy = $application->jobVacancy;
+            $resume = $application->user->resume;
+            $customJobVacancy = $application->customJobVacancy;
 
             throw_if(
-                $resume === null || $jobVacancy === null,
+                $resume === null || $customJobVacancy === null,
                 Exception::class,
                 'Resume or Job Vacancy not found'
             );
 
             $resumeText = (string) $resume->extracted_text;
-            $jobDescription = (string) $jobVacancy->description;
+            $jobDescription = (string) $customJobVacancy->description;
 
             $qaList = $this->mockInterviewService->generate($resumeText, $jobDescription);
 

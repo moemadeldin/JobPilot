@@ -4,30 +4,27 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Actions\CustomJobVacancy\GenerateCustomMockInterviewAction;
+use App\Actions\CustomMockInterviewAction;
+use App\Actions\DeclineMockInterviewAction;
 use App\Enums\Messages\Auth\SuccessMessages;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\MockInterviewRequest;
+use App\Enums\MockInterviewStatus;
+use App\Http\Requests\CustomMockInterviewRequest;
 use App\Http\Resources\InterviewQuestionResource;
-use App\Http\Resources\MockInterviewResource;
 use App\Models\CustomJobApplication;
-use App\Models\CustomJobVacancy;
 use App\Models\MockInterviewQuestion;
-use App\Models\User;
 use App\Traits\APIResponses;
-use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-final class CustomMockInterviewController extends Controller
+final readonly class CustomMockInterviewController
 {
     use APIResponses;
 
-    public function show(MockInterviewRequest $request, CustomJobApplication $application): JsonResponse
+    public function show(CustomMockInterviewRequest $request, CustomJobApplication $customApplication): JsonResponse
     {
 
         $questions = MockInterviewQuestion::query()
-            ->where('job_application_id', $application->id)
+            ->whereHas('mockInterview', fn ($q) => $q->where('interviewable_id', $customApplication->id))
             ->orderBy('order')
             ->get();
 
@@ -36,5 +33,27 @@ final class CustomMockInterviewController extends Controller
         }
 
         return $this->success(InterviewQuestionResource::collection($questions), SuccessMessages::MOCK_INTERVIEW_EXPECTED_QUESTIONS->value);
+    }
+
+    public function store(CustomMockInterviewRequest $request, CustomJobApplication $customApplication, CustomMockInterviewAction $action): JsonResponse
+    {
+        if ($customApplication->mock_interview_status === MockInterviewStatus::ACCEPTED) {
+            return $this->fail('Mock interview already accepted for this application.', Response::HTTP_CONFLICT);
+        }
+
+        $mockInterview = $action->handle($customApplication);
+
+        return $this->success(['questions' => $mockInterview], 'Mock interview accepted and questions generated.', Response::HTTP_CREATED);
+    }
+
+    public function destroy(CustomMockInterviewRequest $request, CustomJobApplication $customApplication, DeclineMockInterviewAction $action): JsonResponse|Response
+    {
+        if ($customApplication->mock_interview_status !== MockInterviewStatus::SUGGESTED) {
+            return $this->fail('Mock interview already accepted for this application.', Response::HTTP_CONFLICT);
+        }
+
+        $action->handle($customApplication);
+
+        return $this->noContent();
     }
 }

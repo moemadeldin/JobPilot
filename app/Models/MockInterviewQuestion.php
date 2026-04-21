@@ -15,7 +15,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property string $id
- * @property string|null $job_application_id
+ * @property string|null $mock_interview_id
  * @property string|null $question
  * @property string|null $answer
  * @property string|null $order
@@ -33,11 +33,11 @@ final class MockInterviewQuestion extends Model
     use SoftDeletes;
 
     /**
-     * @return BelongsTo<JobApplication, $this>
+     * @return BelongsTo<MockInterview, $this>
      */
-    public function jobApplication(): BelongsTo
+    public function mockInterview(): BelongsTo
     {
-        return $this->belongsTo(JobApplication::class);
+        return $this->belongsTo(MockInterview::class, 'mock_interview_id');
     }
 
     /**
@@ -48,7 +48,7 @@ final class MockInterviewQuestion extends Model
     protected function casts(): array
     {
         return [
-            'job_application_id' => 'string',
+            'mock_interview_id' => 'string',
             'question' => 'string',
             'answer' => 'string',
             'order' => 'integer',

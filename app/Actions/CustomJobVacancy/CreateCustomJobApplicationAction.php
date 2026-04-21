@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Actions\CustomJobVacancy;
 
-use App\DTOs\CreateCustomJobApplicationDTO;
 use App\Models\CustomJobApplication;
 use App\Models\CustomJobVacancy;
 use App\Models\User;
 use App\Services\EvaluateResumeWithAIService;
+use Illuminate\Http\Response;
 
 final readonly class CreateCustomJobApplicationAction
 {
@@ -17,7 +17,7 @@ final readonly class CreateCustomJobApplicationAction
     ) {}
 
     public function handle(
-        CreateCustomJobApplicationDTO $dto,
+        string $coverLetter,
         CustomJobVacancy $customJobVacancy,
         User $user
     ): CustomJobApplication {
@@ -25,7 +25,7 @@ final readonly class CreateCustomJobApplicationAction
 
         $resume = $user->resume;
 
-        abort_if(! $resume || ! $resume->extracted_text, 422, 'Resume not found or has no extracted text.');
+        abort_if(! $resume || ! $resume->extracted_text, Response::HTTP_UNPROCESSABLE_ENTITY, 'Resume not found or has no extracted text.');
 
         $jobDescription = $this->buildJobDescription($customJobVacancy);
 
@@ -40,7 +40,7 @@ final readonly class CreateCustomJobApplicationAction
             'compatibility_score' => $evaluation['score'],
             'feedback' => $evaluation['feedback'],
             'improvement_suggestions' => $evaluation['suggestions'],
-            ...$dto->toArray(),
+            'cover_letter' => $coverLetter,
         ]);
     }
 
