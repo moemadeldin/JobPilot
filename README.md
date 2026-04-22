@@ -39,6 +39,7 @@ ApplyAI is a comprehensive job application management system that leverages arti
 
 -   **Resume Management**: Upload and manage PDF resumes with automatic text extraction
 -   **Smart Job Matching**: Browse and filter job listings by category, location, employment type, and more
+-   **Custom Job Vacancies**: Create and manage custom job applications for positions not listed on the platform
 -   **AI Compatibility Scoring**: Get instant feedback on how well your resume matches job requirements
 -   **AI Cover Letter Generator**: Generate tailored cover letters for each job application
 -   **AI Mock Interview**: Practice with AI-generated interview questions based on your profile
@@ -274,6 +275,20 @@ php artisan storage:link
 -   `GET /api/v1/jobs/{id}` - Get job details
 -   `POST /api/v1/jobs/{id}/apply` - Apply to job (requires authentication)
 -   `POST /api/v1/jobs/{id}/cover-letter/{resume}` - Generate AI cover letter (requires authentication)
+
+### Custom Job Vacancy Endpoints
+
+-   `GET /api/v1/custom-vacancies` - List custom job vacancies (requires authentication)
+-   `POST /api/v1/custom-vacancies` - Create custom job vacancy (requires authentication)
+-   `GET /api/v1/custom-vacancies/{id}` - Get custom job vacancy details (requires authentication)
+-   `DELETE /api/v1/custom-vacancies/{id}` - Delete custom job vacancy (requires authentication)
+-   `POST /api/v1/custom-vacancies/{id}/apply` - Apply to custom job (requires authentication)
+
+### Custom Application Endpoints
+
+-   `GET /api/v1/custom-applications` - List custom applications (requires authentication)
+-   `GET /api/v1/custom-applications/{id}` - Get custom application details (requires authentication)
+-   `GET /api/v1/custom-applications?status={status}` - Filter custom applications by status
 
 ### Mock Interview Endpoints
 
