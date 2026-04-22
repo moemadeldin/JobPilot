@@ -37,4 +37,9 @@ final readonly class Constants
     public const int MINIMUM_SCORE = 70;
 
     public const string DEFAULT_PROFILE_PICTURE_PATH = 'profile_pictures/default_pfp.png';
+
+    public const string PROFILE_PICTURE_PATH = 'profile_pictures';
+
+    public const string RESUMES_PATH = 'resumes';
+    
 }

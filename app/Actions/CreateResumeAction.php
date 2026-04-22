@@ -8,6 +8,7 @@ use App\DTOs\CreateResumeDTO;
 use App\Jobs\ExtractResumeTextJob;
 use App\Models\Resume;
 use App\Models\User;
+use App\Utilities\Constants;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -24,9 +25,10 @@ final readonly class CreateResumeAction
             $filePath = is_string($dto->path)
                 ? $dto->path
                 : $dto->path->storeAs(
-                    'resumes/'.$user->id,
+                    Constants::RESUMES_PATH.'/'.$user->id,
                     Str::slug(pathinfo($dto->path->getClientOriginalName(), PATHINFO_FILENAME))
-.'.'.$dto->path->getClientOriginalExtension()
+.'.'.$dto->path->getClientOriginalExtension(), 
+'public'
                 );
 
             return Resume::query()->updateOrCreate([

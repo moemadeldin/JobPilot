@@ -5,21 +5,34 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Models\User;
+use App\Utilities\Constants;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 final readonly class CreateAvatarAction
 {
     public function handle(User $user, UploadedFile $avatar): User
     {
-        if ($user->profile->avatar) {
-            Storage::disk('public')->delete($user->avatar);
-        }
+        return DB::transaction(function () use ($user, $avatar): User {
+            if ($user->profile?->avatar) {
+                Storage::disk('public')->delete($user->profile->avatar);
+            }
 
-        $path = $avatar->store('avatars', 'public');
+            $path = $avatar->storeAs(
+                Constants::PROFILE_PICTURE_PATH.'/'.$user->id,
+                Str::slug(pathinfo($avatar->getClientOriginalName(), PATHINFO_FILENAME))
+                .'.'.$avatar->getClientOriginalExtension(),
+                'public'
+            );
 
-        $user->profile()->update(['avatar' => $path]);
+            $user->profile()->updateOrCreate(
+                ['user_id' => $user->id],
+                ['avatar' => $path]
+            );
 
-        return $user;
+            return $user;
+        });
     }
 }
