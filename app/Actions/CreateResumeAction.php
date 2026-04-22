@@ -19,7 +19,6 @@ final readonly class CreateResumeAction
         $resume = DB::transaction(function () use ($user, $dto): Resume {
             if ($user->resume) {
                 Storage::disk('public')->delete($user->resume->path);
-                $user->resume->delete();
             }
 
             $filePath = is_string($dto->path)
@@ -30,8 +29,10 @@ final readonly class CreateResumeAction
                     'public'
                 );
 
-            return Resume::query()->create([
+            return Resume::query()->updateOrCreate([
                 'user_id' => $user->id,
+            ],
+            [
                 'name' => is_string($dto->path)
                     ? basename($dto->path)
                     : $dto->path->getClientOriginalName(),
