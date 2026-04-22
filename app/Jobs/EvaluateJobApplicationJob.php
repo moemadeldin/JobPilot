@@ -47,8 +47,9 @@ final class EvaluateJobApplicationJob implements ShouldQueue
             (string) $resume->extracted_text,
             (string) $job->description
         );
+        $score = (int) ($evaluation['score'] ?? 0);
 
-        $mockInterviewStatus = $evaluation['score'] >= Constants::MINIMUM_SCORE
+        $mockInterviewStatus = $score >= Constants::MINIMUM_SCORE
             ? MockInterviewStatus::SUGGESTED->value
             : MockInterviewStatus::DISQUALIFIED->value;
 
@@ -57,6 +58,7 @@ final class EvaluateJobApplicationJob implements ShouldQueue
             'feedback' => $evaluation['feedback'],
             'improvement_suggestions' => $evaluation['suggestions'],
             'mock_interview_status' => $mockInterviewStatus,
+            'applied_at' => now(),
             'reviewed_at' => now(),
         ]);
     }

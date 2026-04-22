@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Queries;
 
 use App\Models\CustomJobApplication;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 final readonly class UserCustomApplicationQuery
@@ -13,14 +12,10 @@ final readonly class UserCustomApplicationQuery
     /**
      * @return Builder<CustomJobApplication>
      */
-    public function builder(array $data, User $user): Builder
+    public function builder(array $data): Builder
     {
-        $status = $data['status'] ?? null;
-
         return CustomJobApplication::query()
-            ->where('user_id', $user->id)
             ->with(['customJobVacancy'])
-            ->filterStatus(is_string($status) ? $status : null)
-            ->latest();
+            ->filterStatus($data['status'] ?? null);
     }
 }

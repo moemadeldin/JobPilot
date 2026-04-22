@@ -25,7 +25,6 @@ final class CustomJobApplicationResource extends JsonResource
             'improvement_suggestions' => $this->resource->improvement_suggestions,
             'cover_letter' => $this->resource->cover_letter,
             'mock_interview_status' => $this->resource->mock_interview_status?->label(),
-            'applied_at' => $this->resource->applied_at?->toIso8601String(),
             'created_at' => $this->resource->created_at?->toIso8601String(),
             'updated_at' => $this->resource->updated_at?->toIso8601String(),
         ];

@@ -1,4 +1,4 @@
-# JobPilot
+# ApplyAI
 
 > A modern, AI-powered job application platform built with Laravel that intelligently matches candidates with job opportunities using Groq's Llama models.
 
@@ -21,9 +21,9 @@
 
 ## Overview
 
-JobPilot is a comprehensive job application management system that leverages artificial intelligence to revolutionize the hiring process. The platform enables job seekers to upload their resumes, apply to positions, and receive AI-powered compatibility scores and feedback. Employers can post job vacancies, manage applications, and gain insights through detailed analytics.
+ApplyAI is a comprehensive job application management system that leverages artificial intelligence to revolutionize the hiring process. The platform enables job seekers to upload their resumes, apply to positions, and receive AI-powered compatibility scores and feedback. Employers can post job vacancies, manage applications, and gain insights through detailed analytics.
 
-### What Makes JobPilot Special?
+### What Makes ApplyAI Special?
 
 -   **AI-Powered Resume Evaluation**: Automatically analyzes resume-to-job-description compatibility using Groq's Llama models, providing instant feedback and improvement suggestions
 -   **AI Cover Letter Generator**: Generates tailored cover letters based on resume content and job descriptions
@@ -141,8 +141,8 @@ JobPilot is a comprehensive job application management system that leverages art
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/JobPilot.git
-cd JobPilot
+git clone https://github.com/yourusername/ApplyAI.git
+cd ApplyAI
 ```
 
 ### Step 2: Install Dependencies
@@ -170,7 +170,7 @@ php artisan key:generate
 Edit `.env` file and configure:
 
 ```env
-APP_NAME=JobPilot
+APP_NAME=ApplyAI
 APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost:8000
@@ -178,7 +178,7 @@ APP_URL=http://localhost:8000
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=jobpilot
+DB_DATABASE=applyai
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
 
@@ -376,7 +376,7 @@ The project includes tests for:
 ## Project Structure
 
 ```
-JobPilot/
+ApplyAI/
 ├── app/
 │   ├── Actions/              # Business action handlers
 │   ├── Console/              # Artisan commands

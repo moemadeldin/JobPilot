@@ -27,8 +27,7 @@ final readonly class EvaluateResumeWithAIService
         /** @var array{strengths: list<string>, weaknesses: list<string>} $feedback */
         $feedback = $data['feedback'] ?? ['strengths' => [], 'weaknesses' => []];
 
-        /** @var int $score */
-        $score = $data['score'] ?? 0;
+        $score = (int) ($data['score'] ?? 0);
         /** @var string $suggestions */
         $suggestions = $data['suggestions'] ?? 'No suggestions available.';
 

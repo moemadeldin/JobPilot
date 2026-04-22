@@ -8,7 +8,6 @@ use App\Actions\CustomJobVacancy\CreateCustomJobVacancyAction;
 use App\Actions\CustomJobVacancy\DeleteCustomJobVacancyAction;
 use App\DTOs\CreateCustomJobVacancyDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteCustomJobVacancyRequest;
 use App\Http\Requests\StoreCustomJobVacancyRequest;
 use App\Http\Resources\CustomJobVacancyResource;
@@ -20,17 +19,17 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-final class CustomJobVacancyController extends Controller
+final readonly class CustomJobVacancyController
 {
     use APIResponses;
 
-    public function index(#[CurrentUser] User $user): JsonResponse
+    public function index(#[CurrentUser] User $user)
     {
         $vacancies = $user->customJobVacancies()
             ->latest()
             ->paginate(Constants::NUMBER_OF_PAGINATED_JOB_VACANCIES);
 
-        return $this->success(CustomJobVacancyResource::collection($vacancies), '');
+        return CustomJobVacancyResource::collection($vacancies);
     }
 
     public function store(
@@ -48,7 +47,7 @@ final class CustomJobVacancyController extends Controller
         );
     }
 
-    public function show(CustomJobVacancy $customJobVacancy, #[CurrentUser] User $user): JsonResponse
+    public function show(CustomJobVacancy $customJobVacancy): JsonResponse
     {
 
         return $this->success($customJobVacancy, '');

@@ -34,7 +34,7 @@ final class ApplicationListResource extends JsonResource
                 ? (float) $this->resource->compatibility_score
                 : null,
             'reviewed_at' => $this->resource->reviewed_at?->toIso8601String(),
-            'mock_interview_status' => $this->resource->mock_interview_status->label(),
+            'mock_interview_status' => $this->resource->mock_interview_status?->label(),
         ];
     }
 }

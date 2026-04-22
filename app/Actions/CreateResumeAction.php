@@ -25,19 +25,19 @@ final readonly class CreateResumeAction
                 ? $dto->path
                 : $dto->path->storeAs(
                     'resumes/'.$user->id,
-                    Str::uuid().'.'.$dto->path->getClientOriginalExtension(),
-                    'public'
+                    Str::slug(pathinfo($dto->path->getClientOriginalName(), PATHINFO_FILENAME))
+.'.'.$dto->path->getClientOriginalExtension()
                 );
 
             return Resume::query()->updateOrCreate([
                 'user_id' => $user->id,
             ],
-            [
-                'name' => is_string($dto->path)
-                    ? basename($dto->path)
-                    : $dto->path->getClientOriginalName(),
-                'path' => $filePath,
-            ]);
+                [
+                    'name' => is_string($dto->path)
+                        ? basename($dto->path)
+                        : $dto->path->getClientOriginalName(),
+                    'path' => $filePath,
+                ]);
         });
 
         dispatch_sync(new ExtractResumeTextJob($resume));

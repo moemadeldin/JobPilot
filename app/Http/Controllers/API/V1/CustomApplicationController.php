@@ -6,7 +6,6 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Actions\CustomJobVacancy\CreateCustomJobApplicationAction;
 use App\Enums\Messages\Auth\SuccessMessages;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomJobApplicationResource;
 use App\Models\CustomJobApplication;
 use App\Models\CustomJobVacancy;
@@ -19,7 +18,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-final class CustomApplicationController extends Controller
+final readonly class CustomApplicationController
 {
     use APIResponses;
 
@@ -27,16 +26,15 @@ final class CustomApplicationController extends Controller
         private UserCustomApplicationQuery $query
     ) {}
 
-    public function index(#[CurrentUser] User $user, Request $request): JsonResponse
+    public function index(#[CurrentUser] User $user, Request $request)
     {
         $perPage = (int) $request->query('per_page', Constants::NUMBER_OF_PAGINATED_JOB_APPLICATIONS);
 
-        $applications = $this->query->builder([], $user)->paginate($perPage);
+        $filters = $request->only(['status']);
 
-        return $this->success(
-            CustomJobApplicationResource::collection($applications),
-            'Applications retrieved successfully'
-        );
+        $applications = $this->query->builder($filters, $user)->paginate($perPage);
+
+        return CustomJobApplicationResource::collection($applications);
     }
 
     public function show(

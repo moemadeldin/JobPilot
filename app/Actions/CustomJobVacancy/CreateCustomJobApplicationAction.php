@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Actions\CustomJobVacancy;
 
+use App\Enums\MockInterviewStatus;
 use App\Models\CustomJobApplication;
 use App\Models\CustomJobVacancy;
 use App\Models\User;
 use App\Services\EvaluateResumeWithAIService;
+use App\Utilities\Constants;
 use Illuminate\Http\Response;
 
 final readonly class CreateCustomJobApplicationAction
@@ -34,13 +36,19 @@ final readonly class CreateCustomJobApplicationAction
             $jobDescription
         );
 
+        $score = (int) ($evaluation['score'] ?? 0);
+        $mockInterviewStatus = $score >= Constants::MINIMUM_SCORE
+            ? MockInterviewStatus::SUGGESTED->value
+            : MockInterviewStatus::DISQUALIFIED->value;
+
         return CustomJobApplication::query()->create([
             'user_id' => $user->id,
             'custom_job_vacancy_id' => $customJobVacancy->id,
-            'compatibility_score' => $evaluation['score'],
+            'compatibility_score' => $score,
             'feedback' => $evaluation['feedback'],
             'improvement_suggestions' => $evaluation['suggestions'],
             'cover_letter' => $coverLetter,
+            'mock_interview_status' => $mockInterviewStatus,
         ]);
     }
 

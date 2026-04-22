@@ -6,6 +6,8 @@ namespace App\Models;
 
 use App\Enums\MockInterviewStatus;
 use Database\Factories\CustomJobApplicationFactory;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -50,9 +52,15 @@ final class CustomJobApplication extends Model
             ->where('interviewable_type', self::class);
     }
 
-    protected static function newFactory(): CustomJobApplicationFactory
+    /**
+     * @param  Builder<CustomJobApplication>  $query
+     */
+    #[Scope]
+    protected function filterStatus(Builder $query, ?string $status): void
     {
-        return CustomJobApplicationFactory::new();
+        if (! in_array($status, [null, '', '0'], true)) {
+            $query->where('mock_interview_status', $status);
+        }
     }
 
     protected function casts(): array
