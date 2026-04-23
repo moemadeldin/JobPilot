@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('resumes', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')
-                ->unique()
                 ->nullable()
                 ->constrained('users')
                 ->cascadeOnDelete();

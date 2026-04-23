@@ -26,6 +26,6 @@ final readonly class ResumeController
 
     public function store(#[CurrentUser] User $user, StoreResumeRequest $request, CreateResumeAction $action): JsonResponse
     {
-        return $this->success($action->handle($user, CreateResumeDTO::fromArray($request->validated())), SuccessMessages::RESUME_UPLOADED->value, Response::HTTP_CREATED);
+        return $this->success($action->handle($request->validated(), $user), SuccessMessages::RESUME_UPLOADED->value, Response::HTTP_CREATED);
     }
 }

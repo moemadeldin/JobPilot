@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Models\CustomJobVacancy;
 use App\Models\JobVacancy;
 use App\Models\User;
 use App\Services\GenerateCoverLetterService;
@@ -20,7 +21,7 @@ final readonly class CoverLetterController
 
     public function __invoke(
         #[CurrentUser] User $user,
-        JobVacancy $job,
+        CustomJobVacancy $job,
     ): JsonResponse {
 
         if (empty($user->resume->extracted_text)) {

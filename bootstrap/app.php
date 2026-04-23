@@ -23,8 +23,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(function (): void {
                     require __DIR__.'/../routes/public_api.php';
                     require __DIR__.'/../routes/auth_api.php';
-                    require __DIR__.'/../routes/admin_api.php';
-                    require __DIR__.'/../routes/owner_api.php';
                 });
         }
     )

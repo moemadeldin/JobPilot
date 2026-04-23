@@ -32,7 +32,7 @@ return new class extends Migration
             $table->decimal('expected_salary', 10, 2)->nullable();
             $table->string('employment_type')
                 ->index()
-                ->default(EmploymentType::FULL_TIME);
+                ->default(EmploymentType::FULL_TIME->value);
             $table->timestamps();
             $table->softDeletes();
         });

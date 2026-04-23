@@ -10,7 +10,9 @@ use App\DTOs\CreateCustomJobVacancyDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Requests\DeleteCustomJobVacancyRequest;
 use App\Http\Requests\StoreCustomJobVacancyRequest;
+use App\Http\Resources\CustomJobApplicationResource;
 use App\Http\Resources\CustomJobVacancyResource;
+use App\Http\Resources\MockInterviewResource;
 use App\Models\CustomJobVacancy;
 use App\Models\User;
 use App\Traits\APIResponses;
@@ -37,19 +39,19 @@ final readonly class CustomJobVacancyController
         CreateCustomJobVacancyAction $action,
         #[CurrentUser] User $user
     ): JsonResponse {
-        return $this->success(
-            new CustomJobVacancyResource($action->handle(
-                CreateCustomJobVacancyDTO::fromArray($request->validated()),
-                $user
-            )),
-            SuccessMessages::JOB_VACANCY_CREATED->value,
-            Response::HTTP_CREATED
-        );
+        $result = $action->handle($request->safe()->job_text, $user);
+
+        return $this->success([
+            'vacancy' => new CustomJobVacancyResource($result['vacancy']),
+            'application' => new CustomJobApplicationResource($result['application']),
+            'mock_interview' => $result['mock_interview']
+                ? new MockInterviewResource($result['mock_interview'])
+                : null,
+        ], SuccessMessages::JOB_VACANCY_CREATED->value, Response::HTTP_CREATED);
     }
 
     public function show(CustomJobVacancy $customJobVacancy): JsonResponse
     {
-
         return $this->success($customJobVacancy, '');
     }
 

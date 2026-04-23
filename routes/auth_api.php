@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\API\V1\ApplicationController;
 use App\Http\Controllers\API\V1\Auth\PasswordResetController;
 use App\Http\Controllers\API\V1\Auth\SessionController;
 use App\Http\Controllers\API\V1\CoverLetterController;
 use App\Http\Controllers\API\V1\CustomApplicationController;
 use App\Http\Controllers\API\V1\CustomJobVacancyController;
 use App\Http\Controllers\API\V1\CustomMockInterviewController;
-use App\Http\Controllers\API\V1\JobController;
-use App\Http\Controllers\API\V1\MockInterviewController;
 use App\Http\Controllers\API\V1\ProfileController;
 use App\Http\Controllers\API\V1\ProfilePasswordController;
 use App\Http\Controllers\API\V1\ResumeController;
@@ -76,24 +73,6 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('custom-vacancies/{customJobVacancy}/cover-letter', CoverLetterController::class)
         ->name('custom-vacancies.cover-letter');
 
-    Route::controller(JobController::class)->group(function (): void {
-        Route::get('jobs', 'index')
-            ->name('jobs.index');
-        Route::get('jobs/{job}', 'show')
-            ->name('jobs.show');
-        Route::post('jobs/{job}/apply', 'store')
-            ->name('jobs.store');
-    });
-
-    Route::controller(ApplicationController::class)->group(function (): void {
-        Route::get('applications', 'index')
-            ->name('applications.index');
-        Route::get('applications/{application}', 'show')
-            ->name('applications.show');
-    });
-
-    Route::post('jobs/{job}/cover-letter', CoverLetterController::class)
-        ->name('jobs.cover-letter');
 
     Route::controller(ResumeController::class)->group(function (): void {
         Route::get('/resumes', 'index')
@@ -101,14 +80,5 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
         Route::post('/resumes', 'store')
             ->name('resumes.store');
-    });
-
-    Route::controller(MockInterviewController::class)->group(function (): void {
-        Route::get('applications/{application}/mock', 'show')
-            ->name('mock.show');
-        Route::post('applications/{application}/mock/accept', 'store')
-            ->name('mock.store');
-        Route::delete('applications/{application}/mock/decline', 'destroy')
-            ->name('mock.destroy');
     });
 });

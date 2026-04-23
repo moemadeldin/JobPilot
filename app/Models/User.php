@@ -72,14 +72,6 @@ final class User extends Authenticatable
     ];
 
     /**
-     * @return BelongsToMany<Role, $this>
-     */
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
-    /**
      * @return HasOne<Profile, $this>
      */
     public function profile(): HasOne
@@ -93,30 +85,6 @@ final class User extends Authenticatable
     public function resume(): HasOne
     {
         return $this->hasOne(Resume::class);
-    }
-
-    /**
-     * @return HasMany<Company, $this>
-     */
-    public function companies(): HasMany
-    {
-        return $this->hasMany(Company::class);
-    }
-
-    /**
-     * @return HasMany<JobApplication, $this>
-     */
-    public function applications(): HasMany
-    {
-        return $this->hasMany(JobApplication::class);
-    }
-
-    /**
-     * @return HasMany<UserAnalytic, $this>
-     */
-    public function analytics(): HasMany
-    {
-        return $this->hasMany(UserAnalytic::class);
     }
 
     /**
@@ -134,22 +102,6 @@ final class User extends Authenticatable
     {
         return $this->hasMany(CustomJobApplication::class);
     }
-
-    public function isAdmin(): bool
-    {
-        return $this->roles->contains('name', Roles::ADMIN);
-    }
-
-    public function isOwner(): bool
-    {
-        return $this->roles->contains('name', Roles::OWNER);
-    }
-
-    public function isActive(): bool
-    {
-        return $this->status === Status::ACTIVE;
-    }
-
     /**
      * @param  Builder<User>  $query
      * @return Builder<User>
@@ -168,7 +120,6 @@ final class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'username' => 'string',
             'email' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',

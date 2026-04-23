@@ -22,8 +22,6 @@ final readonly class Constants
 
     public const string EMAIL_VERIFICATION_TOKEN_NAME = 'Email Verification Token';
 
-    public const int NUMBER_OF_COMPANIES = 3;
-
     public const int NUMBER_OF_PAGINATED_JOB_VACANCIES = 6;
 
     public const int MIN_VERIFICATION_CODE = 100_000;
