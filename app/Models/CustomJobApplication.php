@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property array|null $feedback
  * @property array|null $improvement_suggestions
  * @property string|null $cover_letter
+ * @property string|null $optimized_resume
  * @property-read User $user
  * @property-read CustomJobVacancy $customJobVacancy
  * @property-read MockInterview|null $mockInterview
@@ -71,6 +72,7 @@ final class CustomJobApplication extends Model
             'feedback' => 'array',
             'improvement_suggestions' => 'array',
             'cover_letter' => 'string',
+            'optimized_resume' => 'string',
         ];
     }
 }

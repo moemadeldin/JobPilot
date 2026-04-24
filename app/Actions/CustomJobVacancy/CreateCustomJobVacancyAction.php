@@ -11,7 +11,9 @@ use App\Models\MockInterview;
 use App\Models\MockInterviewQuestion;
 use App\Models\User;
 use App\Services\EvaluateResumeWithAIService;
+use App\Services\GenerateCoverLetterService;
 use App\Services\GenerateMockInterviewQAService;
+use App\Services\OptimizeResumeService;
 use App\Services\ParseJobVacancyService;
 use App\Utilities\Constants;
 use Illuminate\Http\Response;
@@ -23,6 +25,8 @@ final readonly class CreateCustomJobVacancyAction
         private ParseJobVacancyService $parseService,
         private EvaluateResumeWithAIService $evaluateService,
         private GenerateMockInterviewQAService $generateService,
+        private OptimizeResumeService $optimizeService,
+        private GenerateCoverLetterService $coverLetterService,
     ) {}
 
     /**
@@ -47,11 +51,16 @@ final readonly class CreateCustomJobVacancyAction
             $evaluation = $this->evaluateService->evaluate($resumeText, $jobText);
             $score = (int) ($evaluation['score'] ?? 0);
 
+            $optimizedResume = $this->optimizeService->optimize($resumeText, $jobText);
+            $coverLetter = $this->coverLetterService->generate($optimizedResume, $jobText);
+
             $application = $this->createApplication(
                 $user,
                 $vacancy,
                 $evaluation,
-                $score
+                $score,
+                $optimizedResume,
+                $coverLetter
             );
 
             $mockInterview = $this->createMockInterview(
@@ -92,7 +101,9 @@ final readonly class CreateCustomJobVacancyAction
         User $user,
         CustomJobVacancy $vacancy,
         array $evaluation,
-        int $score
+        int $score,
+        string $optimizedResume,
+        string $coverLetter
     ): CustomJobApplication {
         return CustomJobApplication::query()->create([
             'user_id' => $user->id,
@@ -100,6 +111,8 @@ final readonly class CreateCustomJobVacancyAction
             'compatibility_score' => $score,
             'feedback' => $evaluation['feedback'],
             'improvement_suggestions' => $evaluation['suggestions'],
+            'optimized_resume' => $optimizedResume,
+            'cover_letter' => $coverLetter,
         ]);
     }
 
@@ -117,7 +130,7 @@ final readonly class CreateCustomJobVacancyAction
 
         $mockInterview = MockInterview::query()->create([
             'application_id' => $application->id,
-            'status' => MockInterviewStatus::SUGGESTED->value,
+            'status' => MockInterviewStatus::QUALIFIED->value,
         ]);
 
         foreach ($qaList as $index => $qa) {

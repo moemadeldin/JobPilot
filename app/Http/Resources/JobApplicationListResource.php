@@ -11,7 +11,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property-read CustomJobApplication $resource
  */
-final class CustomJobApplicationResource extends JsonResource
+final class JobApplicationListResource extends JsonResource
 {
     public const array JSON_STRUCTURE = [
         'id',
@@ -19,11 +19,7 @@ final class CustomJobApplicationResource extends JsonResource
         'custom_job_vacancy_title',
         'custom_job_vacancy_company',
         'compatibility_score',
-        'feedback',
-        'improvement_suggestions',
-        'cover_letter',
-        'optimized_resume',
-        'mock_interview',
+        'mock_interview_status',
         'created_at',
         'updated_at',
     ];
@@ -36,11 +32,7 @@ final class CustomJobApplicationResource extends JsonResource
             'custom_job_vacancy_title' => $this->resource->customJobVacancy->title,
             'custom_job_vacancy_company' => $this->resource->customJobVacancy->company,
             'compatibility_score' => $this->resource->compatibility_score,
-            'feedback' => $this->resource->feedback,
-            'improvement_suggestions' => $this->resource->improvement_suggestions,
-            'mock_interview' => $this->whenLoaded('mockInterview', fn (): MockInterviewResource => new MockInterviewResource($this->resource->mockInterview)),
-            'cover_letter' => $this->resource->cover_letter,
-            'optimized_resume' => $this->resource->optimized_resume,
+            'mock_interview_status' => $this->whenLoaded('mockInterview', fn () => $this->resource->mockInterview->status->label()),
             'created_at' => $this->resource->created_at?->toIso8601String(),
             'updated_at' => $this->resource->updated_at?->toIso8601String(),
         ];

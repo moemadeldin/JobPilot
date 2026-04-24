@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Http\Controllers\API\V1\Auth\PasswordResetController;
 use App\Http\Controllers\API\V1\Auth\SessionController;
-use App\Http\Controllers\API\V1\CoverLetterController;
 use App\Http\Controllers\API\V1\CustomApplicationController;
 use App\Http\Controllers\API\V1\CustomJobVacancyController;
 use App\Http\Controllers\API\V1\CustomMockInterviewController;
@@ -58,20 +57,9 @@ Route::middleware('auth:sanctum')->group(function (): void {
             ->name('custom-vacancies.apply');
         Route::get('custom-applications/{customApplication}', 'show')
             ->name('custom-vacancies.show');
-        Route::post('custom-vacancies/{customJobVacancy}/apply', 'store')
-            ->name('custom-vacancies.apply');
+    });
 
-    });
-    Route::controller(CustomMockInterviewController::class)->group(function (): void {
-        Route::post('custom-applications/{customApplication}/mock/accept', 'store')
-            ->name('custom-applications.mock.store');
-        Route::delete('custom-applications/{customApplication}/mock/decline', 'destroy')
-            ->name('custom-applications.mock.destroy');
-        Route::get('custom-applications/{customApplication}/mock', 'show')
-            ->name('custom-applications.mock.show');
-    });
-    Route::post('custom-vacancies/{customJobVacancy}/cover-letter', CoverLetterController::class)
-        ->name('custom-vacancies.cover-letter');
+    Route::get('custom-applications/{customApplication}/mock', CustomMockInterviewController::class)->name('mock.interview');
 
     Route::controller(ResumeController::class)->group(function (): void {
         Route::get('/resumes', 'index')

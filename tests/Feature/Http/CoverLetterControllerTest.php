@@ -1,90 +1,23 @@
 <?php
 
 declare(strict_types=1);
-use App\Models\Company;
-use App\Models\JobVacancy;
-use App\Models\Resume;
-use App\Models\User;
+
 use App\Services\GenerateCoverLetterService;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
-use Laravel\Sanctum\Sanctum;
-
-beforeEach(function (): void {
-    Http::fake([
-        '*' => Http::response([
-            'choices' => [[
-                'message' => [
-                    'content' => 'Generated cover letter content',
-                ],
-            ]],
-        ], 200),
-    ]);
-
-    $this->user = User::factory()->create();
-    $this->company = Company::factory()->create(['user_id' => $this->user->id]);
-    $this->jobVacancy = JobVacancy::factory()->for($this->company)->create([
-        'description' => 'We are looking for a Laravel developer with experience in API development.',
-    ]);
-    $this->resume = Resume::factory()->for($this->user)->create([
-        'extracted_text' => 'Experienced Laravel developer with 5 years of API development.',
-    ]);
-});
-
-describe('CoverLetterController', function (): void {
-    it('generates cover letter successfully', function (): void {
-        Sanctum::actingAs($this->user);
-
-        $response = $this->postJson(route('jobs.cover-letter', [
-            'job' => $this->jobVacancy->id,
-            'resume' => $this->resume->id,
-        ]));
-
-        $response->assertCreated();
-        $response->assertJsonStructure([
-            'data',
-            'message',
-        ]);
-    });
-
-    it('fails when resume has no extracted text', function (): void {
-        $newUser = User::factory()->create();
-        $resume = Resume::factory()->for($newUser)->create([
-            'extracted_text' => '',
-        ]);
-
-        Sanctum::actingAs($newUser);
-
-        $response = $this->postJson(route('jobs.cover-letter', [
-            'job' => $this->jobVacancy->id,
-            'resume' => $resume->id,
-        ]));
-
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-    });
-
-    it('requires authentication', function (): void {
-        $response = $this->postJson(route('jobs.cover-letter', [
-            'job' => $this->jobVacancy->id,
-            'resume' => $this->resume->id,
-        ]));
-
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
-    });
-
-    it('fails when job does not exist', function (): void {
-        Sanctum::actingAs($this->user);
-
-        $response = $this->postJson(route('jobs.cover-letter', [
-            'job' => 'nonexistent-job-id',
-            'resume' => $this->resume->id,
-        ]));
-
-        $response->assertStatus(Response::HTTP_NOT_FOUND);
-    });
-});
 
 describe('GenerateCoverLetterService', function (): void {
+    beforeEach(function (): void {
+        Http::fake([
+            '*' => Http::response([
+                'choices' => [[
+                    'message' => [
+                        'content' => 'Generated cover letter content',
+                    ],
+                ]],
+            ], 200),
+        ]);
+    });
+
     it('generates cover letter from resume and job description', function (): void {
         $service = resolve(GenerateCoverLetterService::class);
 

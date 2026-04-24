@@ -19,7 +19,7 @@ final readonly class LoginAction
 
     public function handle(LoginDTO $dto): User
     {
-        $user = User::getUserByEmail($dto->email)->first();
+        $user = User::whereEmail($dto->email)->first();
 
         $this->userValidator->validateUser($user);
         $this->userValidator->validateUserCredentials($user, $dto->password);

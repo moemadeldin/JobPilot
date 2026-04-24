@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Actions\CustomJobVacancy\CreateCustomJobApplicationAction;
-use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Resources\CustomJobApplicationResource;
+use App\Http\Resources\JobApplicationListResource;
 use App\Models\CustomJobApplication;
-use App\Models\CustomJobVacancy;
 use App\Models\User;
 use App\Queries\UserCustomApplicationQuery;
 use App\Traits\APIResponses;
@@ -34,7 +32,7 @@ final readonly class CustomApplicationController
 
         $applications = $this->query->builder($filters, $user)->paginate($perPage);
 
-        return CustomJobApplicationResource::collection($applications);
+        return JobApplicationListResource::collection($applications);
     }
 
     public function show(
@@ -46,31 +44,11 @@ final readonly class CustomApplicationController
             return $this->fail('Application not found', Response::HTTP_NOT_FOUND);
         }
 
-        $customApplication->load('mockInterview');
+        $customApplication->load(['mockInterview']);
 
         return $this->success(
             new CustomJobApplicationResource($customApplication),
             'Application details retrieved successfully'
-        );
-    }
-
-    public function store(
-        Request $request,
-        CreateCustomJobApplicationAction $action,
-        CustomJobVacancy $customJobVacancy,
-        #[CurrentUser] User $user
-    ): JsonResponse {
-        /** @var string|null $coverLetter */
-        $coverLetter = $request->input('cover_letter');
-
-        return $this->success(
-            new CustomJobApplicationResource($action->handle(
-                $coverLetter,
-                $customJobVacancy,
-                $user
-            )),
-            SuccessMessages::APPLICATION_SUBMITTED->value,
-            Response::HTTP_CREATED
         );
     }
 }

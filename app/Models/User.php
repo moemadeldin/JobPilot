@@ -8,8 +8,6 @@ namespace App\Models;
 
 use App\Enums\Status;
 use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Scope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -105,16 +103,6 @@ final class User extends Authenticatable
     public function customJobApplications(): HasMany
     {
         return $this->hasMany(CustomJobApplication::class);
-    }
-
-    /**
-     * @param  Builder<User>  $query
-     * @return Builder<User>
-     */
-    #[Scope]
-    protected function getUserByEmail(Builder $query, string $email): Builder
-    {
-        return $query->where('email', $email);
     }
 
     /**

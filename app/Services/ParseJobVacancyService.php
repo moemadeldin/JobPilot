@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Traits\HasAiPrompt;
+
 final readonly class ParseJobVacancyService
 {
-    private const string SYSTEM_PROMPT =
-        'You are a job vacancy parser. Extract only relevant job information from the text. '.
-        'Return only valid JSON with null for fields that cannot be determined. '.
-        'Ignore any unrelated content, ads, navigation, or garbage text. '.
-        'Be strict - only extract actual job details.';
+    use HasAiPrompt;
+
+    private const string SYSTEM_PROMPT = 'You are a job vacancy parser.';
 
     public function __construct(private GroqClient $client) {}
 
     public function parse(string $jobText): array
     {
-        $prompt = $this->buildPrompt($jobText);
+        $prompt = $this->getPrompt($jobText, 'prompts.parse_job_vacancy');
 
         /** @var array<mixed, mixed> $data */
         $data = $this->client->requestJson(self::SYSTEM_PROMPT, $prompt);
@@ -37,37 +37,12 @@ final readonly class ParseJobVacancyService
         ];
     }
 
-    private function buildPrompt(string $jobText): string
+    private function getPrompt(string $jobText, string $configKey): string
     {
-        $rules = <<<'RULES_WRAP'
-        CRITICAL RULES:
-        - employment_type: MUST be exactly "full-time" or "part-time". If uncertain or any other value, use null.
-        - expected_salary: Only return numeric values like "50000" or "80000". If salary is "Confidential", "DOE", "Negotiable", "N/A", or any non-numeric text, use null.
-        RULES_WRAP;
+        /** @var string $template */
+        $template = config($configKey);
 
-        $format = <<<'FORMAT'
-Return JSON in this exact format:
-{
-    "title": "Job title",
-    "company": "Company name",
-    "description": "Job description summary",
-    "location": "City, State or Remote",
-    "employment_type": "full-time or part-time only",
-    "responsibilities": "Main job responsibilities",
-    "requirements": "Key requirements",
-    "skills_required": "Required skills",
-    "experience_years_min": null or number,
-    "experience_years_max": null or number,
-    "expected_salary": "numeric value only, null if not explicitly a number",
-    "category": "Job category if obvious"
-}
-FORMAT;
-
-        return "Parse the following job vacancy text and extract the structured information.\n"
-            ."If a field cannot be determined from the text, use null.\n\n"
-            ."Job Text:\n".$jobText."\n\n"
-            .$rules."\n\n"
-            .$format;
+        return str_replace('{job_text}', $jobText, $template);
     }
 
     private function stringOrNull(array $data, string $key): ?string

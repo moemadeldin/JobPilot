@@ -21,6 +21,7 @@ return new class extends Migration
             $table->json('feedback')->nullable();
             $table->json('improvement_suggestions')->nullable();
             $table->longText('cover_letter')->nullable();
+            $table->longText('optimized_resume')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

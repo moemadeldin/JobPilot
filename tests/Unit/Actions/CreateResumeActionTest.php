@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Actions\CreateResumeAction;
-use App\DTOs\CreateResumeDTO;
 use App\Jobs\ExtractResumeTextJob;
 use App\Models\Resume;
 use App\Models\User;
@@ -21,10 +20,9 @@ describe('CreateResumeAction', function (): void {
         $user = User::factory()->create();
         $file = UploadedFile::fake()->create('resume.pdf', 1024);
 
-        $dto = new CreateResumeDTO(path: $file);
         $action = resolve(CreateResumeAction::class);
 
-        $resume = $action->handle($user, $dto);
+        $resume = $action->handle(['path' => $file], $user);
 
         expect($resume)->toBeInstanceOf(Resume::class);
         expect($resume->user_id)->toBe($user->id);
@@ -36,10 +34,9 @@ describe('CreateResumeAction', function (): void {
         $user = User::factory()->create();
         $filePath = 'resumes/test.pdf';
 
-        $dto = new CreateResumeDTO(path: $filePath);
         $action = resolve(CreateResumeAction::class);
 
-        $resume = $action->handle($user, $dto);
+        $resume = $action->handle(['path' => $filePath], $user);
 
         expect($resume)->toBeInstanceOf(Resume::class);
         expect($resume->path)->toBe($filePath);
@@ -50,33 +47,10 @@ describe('CreateResumeAction', function (): void {
         $user = User::factory()->create();
         $file = UploadedFile::fake()->create('resume.pdf', 1024);
 
-        $dto = new CreateResumeDTO(path: $file);
         $action = resolve(CreateResumeAction::class);
 
-        $resume = $action->handle($user, $dto);
+        $resume = $action->handle(['path' => $file], $user);
 
         Queue::assertPushed(ExtractResumeTextJob::class);
-    });
-});
-
-describe('CreateResumeDTO', function (): void {
-    it('creates from array with uploaded file', function (): void {
-        $file = UploadedFile::fake()->create('resume.pdf', 1024);
-        $dto = CreateResumeDTO::fromArray(['path' => $file]);
-
-        expect($data['path'])->toBeInstanceOf(UploadedFile::class);
-    });
-
-    it('creates from array with string path', function (): void {
-        $dto = CreateResumeDTO::fromArray(['path' => 'resumes/test.pdf']);
-
-        expect($data['path'])->toBe('resumes/test.pdf');
-    });
-
-    it('converts to array', function (): void {
-        $dto = new CreateResumeDTO(path: 'resumes/test.pdf');
-        $array = $dto->toArray();
-
-        expect($array)->toBe(['path' => 'resumes/test.pdf']);
     });
 });

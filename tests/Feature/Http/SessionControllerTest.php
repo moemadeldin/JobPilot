@@ -79,6 +79,11 @@ it('returns unauthenticated when not logged in', function (): void {
 it('returns user details', function (): void {
     $user = User::factory()->create();
     $user->profile()->save(Profile::factory()->make());
+    $user->resume()->create([
+        'name' => 'test-resume.pdf',
+        'path' => 'resumes/test-resume.pdf',
+        'extracted_text' => 'Test resume content',
+    ]);
 
     Sanctum::actingAs($user, ['*']);
 

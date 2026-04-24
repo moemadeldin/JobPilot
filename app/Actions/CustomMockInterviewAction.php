@@ -26,7 +26,7 @@ final readonly class CustomMockInterviewAction
         return DB::transaction(function () use ($application): array {
 
             $application->mockInterview->update([
-                'status' => MockInterviewStatus::ACCEPTED->value,
+                'status' => MockInterviewStatus::QUALIFIED->value,
             ]);
 
             $resume = $application->user->resume;

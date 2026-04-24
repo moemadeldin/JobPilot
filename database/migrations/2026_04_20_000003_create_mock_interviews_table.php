@@ -17,7 +17,7 @@ return new class extends Migration
                 ->constrained('custom_job_applications')
                 ->cascadeOnDelete();
             $table->string('status')
-                ->default(MockInterviewStatus::SUGGESTED->value);
+                ->default(MockInterviewStatus::QUALIFIED->value);
             $table->timestamps();
             $table->softDeletes();
         });

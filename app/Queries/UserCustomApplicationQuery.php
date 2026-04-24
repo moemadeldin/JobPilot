@@ -19,7 +19,7 @@ final readonly class UserCustomApplicationQuery
 
         return CustomJobApplication::query()
             ->where('user_id', $user->id)
-            ->with(['customJobVacancy', 'mockInterview'])
+            ->with(['customJobVacancy', 'mockInterview', 'mockInterview.questions'])
             ->filterStatus(is_string($status) ? $status : null)
             ->latest();
     }

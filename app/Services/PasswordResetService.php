@@ -22,7 +22,7 @@ final readonly class PasswordResetService implements PasswordResetInterface
     {
         return DB::transaction(function () use ($email): User {
             /** @var User $user */
-            $user = User::getUserByEmail($email)->firstOrFail();
+            $user = User::whereEmail($email)->firstOrFail();
 
             $this->validateStatusAndUpdateUserWithCodeAndToken($user);
 
@@ -34,7 +34,7 @@ final readonly class PasswordResetService implements PasswordResetInterface
     {
         return DB::transaction(function () use ($email, $verificationCode): User {
             /** @var User $user */
-            $user = User::getUserByEmail($email)->firstOrFail();
+            $user = User::whereEmail($email)->firstOrFail();
 
             $this->validateCodeAndUpdateUserWithToken($user, $verificationCode);
 

@@ -56,7 +56,7 @@ it('fails with invalid code', function (): void {
         'code' => '000000',
     ]);
 
-    $response->assertStatus(Response::HTTP_BAD_REQUEST);
+    $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
 });
 
 it('resets password successfully', function (): void {

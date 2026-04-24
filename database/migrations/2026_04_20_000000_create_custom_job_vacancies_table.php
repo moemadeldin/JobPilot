@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('company')->nullable();
             $table->string('title')->nullable();
             $table->longText('description')->nullable();
+            $table->longText('job_text')->nullable();
             $table->text('responsibilities')->nullable();
             $table->text('requirements')->nullable();
             $table->text('skills_required')->nullable();
