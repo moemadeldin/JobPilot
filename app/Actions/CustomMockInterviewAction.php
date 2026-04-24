@@ -25,8 +25,8 @@ final readonly class CustomMockInterviewAction
     {
         return DB::transaction(function () use ($application): array {
 
-            $application->update([
-                'mock_interview_status' => MockInterviewStatus::ACCEPTED->value,
+            $application->mockInterview->update([
+                'status' => MockInterviewStatus::ACCEPTED->value,
             ]);
 
             $resume = $application->user->resume;
@@ -44,9 +44,7 @@ final readonly class CustomMockInterviewAction
             $qaList = $this->mockInterviewService->generate($resumeText, $jobDescription);
 
             $mockInterview = MockInterview::query()->create([
-                'user_id' => $application->user->id,
-                'interviewable_id' => $application->id,
-                'interviewable_type' => $application instanceof CustomJobApplication,
+                'application_id' => $application->id,
             ]);
             $questions = [];
 

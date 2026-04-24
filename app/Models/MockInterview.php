@@ -16,10 +16,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $id
- * @property string $user_id
+ * @property string $application_id
  * @property MockInterviewStatus $status
- * @property-read User $user
- * @property-read Model|null $interviewable
+ * @property-read CustomJobApplication $application
  * @property-read Collection<int, MockInterviewQuestion> $questions
  */
 final class MockInterview extends Model
@@ -30,9 +29,9 @@ final class MockInterview extends Model
     use HasUuids;
     use SoftDeletes;
 
-    public function user(): BelongsTo
+    public function application(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(CustomJobApplication::class, 'application_id');
     }
 
     public function questions(): HasMany
@@ -43,7 +42,7 @@ final class MockInterview extends Model
     protected function casts(): array
     {
         return [
-            'user_id' => 'string',
+            'application_id' => 'string',
             'status' => MockInterviewStatus::class,
         ];
     }

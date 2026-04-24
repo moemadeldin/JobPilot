@@ -15,6 +15,7 @@ use App\Services\GenerateMockInterviewQAService;
 use App\Services\ParseJobVacancyService;
 use App\Utilities\Constants;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 final readonly class CreateCustomJobVacancyAction
 {
@@ -29,9 +30,49 @@ final readonly class CreateCustomJobVacancyAction
      */
     public function handle(string $jobText, User $user): array
     {
-        $parsed = $this->parseService->parse($jobText);
+        return DB::transaction(function () use ($jobText, $user) {
 
-        $vacancy = CustomJobVacancy::query()->create([
+            $parsed = $this->parseService->parse($jobText);
+            $vacancy = $this->createVacancy($user, $parsed);
+
+            $user->load('resume');
+            abort_if(
+                ! $user->resume || ! $user->resume->extracted_text,
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+                'Resume not found or has no extracted text.'
+            );
+
+            $resumeText = $user->resume->extracted_text;
+
+            $evaluation = $this->evaluateService->evaluate($resumeText, $jobText);
+            $score = (int) ($evaluation['score'] ?? 0);
+
+            $application = $this->createApplication(
+                $user,
+                $vacancy,
+                $evaluation,
+                $score
+            );
+
+            $mockInterview = $this->createMockInterview(
+                $score,
+                $resumeText,
+                $jobText,
+                $user,
+                $application
+            );
+
+            return [
+                'vacancy' => $vacancy,
+                'application' => $application,
+                'mock_interview' => $mockInterview,
+            ];
+        });
+    }
+
+    private function createVacancy(User $user, array $parsed): CustomJobVacancy
+    {
+        return CustomJobVacancy::create([
             'title' => $parsed['title'],
             'company' => $parsed['company'],
             'description' => $parsed['description'],
@@ -46,61 +87,50 @@ final readonly class CreateCustomJobVacancyAction
             'category' => $parsed['category'],
             'user_id' => $user->id,
         ]);
+    }
 
-        $user->load('resume');
-        $resume = $user->resume;
-
-        abort_if(! $resume || ! $resume->extracted_text, Response::HTTP_UNPROCESSABLE_ENTITY, 'Resume not found or has no extracted text.');
-
-        $evaluation = $this->evaluateService->evaluate(
-            $resume->extracted_text,
-            $jobText
-        );
-
-        $score = (int) ($evaluation['score'] ?? 0);
-        $mockInterviewStatus = $score >= Constants::MINIMUM_SCORE
-            ? MockInterviewStatus::SUGGESTED->value
-            : MockInterviewStatus::DISQUALIFIED->value;
-
-        $application = CustomJobApplication::query()->create([
+    private function createApplication(
+        User $user,
+        CustomJobVacancy $vacancy,
+        array $evaluation,
+        int $score
+    ): CustomJobApplication {
+        return CustomJobApplication::create([
             'user_id' => $user->id,
             'custom_job_vacancy_id' => $vacancy->id,
             'compatibility_score' => $score,
             'feedback' => $evaluation['feedback'],
             'improvement_suggestions' => $evaluation['suggestions'],
-            'mock_interview_status' => $mockInterviewStatus,
         ]);
+    }
 
-        $mockInterview = null;
-        if ($score >= Constants::MINIMUM_SCORE) {
-            $qaList = $this->generateService->generate(
-                $resume->extracted_text,
-                $jobText
-            );
-
-            $mockInterview = MockInterview::query()->create([
-                'user_id' => $user->id,
-                'interviewable_id' => $application->id,
-                'interviewable_type' => CustomJobApplication::class,
-            ]);
-
-            $order = 1;
-            foreach ($qaList as $qa) {
-                MockInterviewQuestion::query()->create([
-                    'mock_interview_id' => $mockInterview->id,
-                    'question' => $qa['question'],
-                    'answer' => $qa['answer'],
-                    'order' => $order++,
-                ]);
-            }
-
-            $mockInterview->load('questions');
+    private function createMockInterview(
+        int $score,
+        string $resumeText,
+        string $jobText,
+        User $user,
+        CustomJobApplication $application
+    ): ?MockInterview {
+        if ($score < Constants::MINIMUM_SCORE) {
+            return null;
         }
 
-        return [
-            'vacancy' => $vacancy,
-            'application' => $application,
-            'mock_interview' => $mockInterview,
-        ];
+        $qaList = $this->generateService->generate($resumeText, $jobText);
+
+        $mockInterview = MockInterview::create([
+            'application_id' => $application->id,
+            'status' => MockInterviewStatus::SUGGESTED->value,
+        ]);
+
+        foreach ($qaList as $index => $qa) {
+            MockInterviewQuestion::create([
+                'mock_interview_id' => $mockInterview->id,
+                'question' => $qa['question'],
+                'answer' => $qa['answer'],
+                'order' => $index + 1,
+            ]);
+        }
+
+        return $mockInterview->load('questions');
     }
 }

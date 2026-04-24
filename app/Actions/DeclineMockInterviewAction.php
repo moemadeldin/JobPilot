@@ -11,7 +11,7 @@ final readonly class DeclineMockInterviewAction
 {
     public function handle(CustomJobApplication $job): CustomJobApplication
     {
-        $job->update(['mock_interview_status' => MockInterviewStatus::DECLINED->value]);
+        $job->mockInterview->update(['status' => MockInterviewStatus::DECLINED->value]);
 
         return $job;
     }

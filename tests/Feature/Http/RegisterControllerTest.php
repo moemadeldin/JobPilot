@@ -7,10 +7,6 @@ use Illuminate\Http\Response;
 
 it('can register a user', function (): void {
     $response = $this->postJson(route('register.store'), [
-        'first_name' => 'john',
-        'last_name' => 'doe',
-        'country' => 'usa',
-        'phone' => '01234567891',
         'email' => 'johndoe@gmail.com',
         'password' => 'password123456',
         'password_confirmation' => 'password123456',

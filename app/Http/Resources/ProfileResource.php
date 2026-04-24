@@ -17,14 +17,10 @@ final class ProfileResource extends JsonResource
         'authenticated',
         'user' => [
             'id',
-            'full_name',
-            'first_name',
-            'last_name',
             'email',
             'avatar',
-            'phone',
-            'country',
             'status',
+            'name',
             'resume',
         ],
     ];
@@ -40,14 +36,10 @@ final class ProfileResource extends JsonResource
             'authenticated' => true,
             'user' => [
                 'id' => $this->resource->id,
-                'full_name' => $this->resource->profile?->fullName,
-                'first_name' => $this->resource->profile?->first_name,
-                'last_name' => $this->resource->profile?->last_name,
                 'email' => $this->resource->email,
                 'avatar' => $this->resource->profile?->avatar,
-                'phone' => $this->resource->profile?->phone,
-                'country' => $this->resource->profile?->country,
                 'status' => $this->resource->status->label(),
+                'name' => $this->resource->resume->name,
                 'resume' => $this->resource->resume?->path,
             ],
         ];

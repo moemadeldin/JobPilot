@@ -48,7 +48,6 @@ final readonly class CreateCustomJobApplicationAction
             'feedback' => $evaluation['feedback'],
             'improvement_suggestions' => $evaluation['suggestions'],
             'cover_letter' => $coverLetter,
-            'mock_interview_status' => $mockInterviewStatus,
         ]);
     }
 

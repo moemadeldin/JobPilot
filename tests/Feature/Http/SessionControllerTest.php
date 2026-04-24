@@ -28,10 +28,6 @@ it('can login user', function (): void {
         'data' => [
             'user' => [
                 'id' => $user->id,
-                'first_name' => $user->profile->first_name,
-                'last_name' => $user->profile->last_name,
-                'phone' => $user->profile->phone,
-                'country' => $user->profile->country,
                 'email' => $user->email,
             ],
         ],
@@ -95,13 +91,8 @@ it('returns user details', function (): void {
             'authenticated' => true,
             'user' => [
                 'id' => $user->id,
-                'full_name' => $user->profile->fullName,
-                'first_name' => $user->profile->first_name,
-                'last_name' => $user->profile->last_name,
                 'email' => $user->email,
                 'avatar' => $user->profile->avatar,
-                'phone' => $user->profile->phone,
-                'country' => $user->profile->country,
                 'status' => $user->status->label(),
                 'resume' => $user->resume?->path,
             ],

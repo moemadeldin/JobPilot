@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Enums\MockInterviewStatus;
+use App\Models\CustomJobApplication;
+use App\Models\CustomJobVacancy;
 use App\Models\JobApplication;
 use App\Models\JobVacancy;
 use App\Models\Resume;
@@ -28,7 +30,7 @@ final class EvaluateJobApplicationJob implements ShouldQueue
 
     public int $backoff = 30;
 
-    public function __construct(private readonly JobApplication $application) {}
+    public function __construct(private readonly CustomJobApplication $application) {}
 
     public function handle(EvaluateResumeWithAIService $aiEvaluator): void
     {
@@ -36,7 +38,7 @@ final class EvaluateJobApplicationJob implements ShouldQueue
 
         /** @var Resume $resume */
         $resume = $application->resume;
-        /** @var JobVacancy $job */
+        /** @var CustomJobVacancy $job */
         $job = $application->jobVacancy;
 
         if (empty($resume->extracted_text)) {
@@ -57,7 +59,6 @@ final class EvaluateJobApplicationJob implements ShouldQueue
             'compatibility_score' => $evaluation['score'],
             'feedback' => $evaluation['feedback'],
             'improvement_suggestions' => $evaluation['suggestions'],
-            'mock_interview_status' => $mockInterviewStatus,
             'applied_at' => now(),
             'reviewed_at' => now(),
         ]);

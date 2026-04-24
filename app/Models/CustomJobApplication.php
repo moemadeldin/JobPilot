@@ -46,8 +46,7 @@ final class CustomJobApplication extends Model
 
     public function mockInterview(): HasOne
     {
-        return $this->hasOne(MockInterview::class, 'interviewable_id')
-            ->where('interviewable_type', self::class);
+        return $this->hasOne(MockInterview::class, 'application_id');
     }
 
     /**

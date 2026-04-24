@@ -26,10 +26,6 @@ final readonly class RegisterAction
                 'password' => $dto->password,
             ]);
             $user->profile()->create([
-                'first_name' => $dto->firstName,
-                'last_name' => $dto->lastName,
-                'phone' => $dto->phone,
-                'country' => $dto->country,
                 'avatar' => Constants::DEFAULT_PROFILE_PICTURE_PATH,
             ]);
             $this->tokenManager->createAccessToken($user, Constants::REGISTER_TOKEN_TYPE);

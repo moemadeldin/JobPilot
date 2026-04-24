@@ -23,10 +23,9 @@ final readonly class CustomMockInterviewController
     public function show(CustomMockInterviewRequest $request, CustomJobApplication $customApplication): JsonResponse
     {
 
-        $questions = MockInterviewQuestion::query()
-            ->whereHas('mockInterview', fn ($q) => $q->where('interviewable_id', $customApplication->id))
-            ->orderBy('order')
-            ->get();
+    $questions = $customApplication->mockInterview 
+        ? $customApplication->mockInterview->questions()->orderBy('order')->get() 
+        : collect([]);
 
         if ($questions->isEmpty()) {
             return $this->success([], 'No mock interview questions available.');
@@ -37,7 +36,7 @@ final readonly class CustomMockInterviewController
 
     public function store(CustomMockInterviewRequest $request, CustomJobApplication $customApplication, CustomMockInterviewAction $action): JsonResponse
     {
-        if ($customApplication->mock_interview_status === MockInterviewStatus::ACCEPTED) {
+        if ($customApplication->mockInterview->status === MockInterviewStatus::ACCEPTED) {
             return $this->fail('Mock interview already accepted for this application.', Response::HTTP_CONFLICT);
         }
 
@@ -48,7 +47,7 @@ final readonly class CustomMockInterviewController
 
     public function destroy(CustomMockInterviewRequest $request, CustomJobApplication $customApplication, DeclineMockInterviewAction $action): JsonResponse|Response
     {
-        if ($customApplication->mock_interview_status !== MockInterviewStatus::SUGGESTED) {
+        if ($customApplication->mockInterview->status !== MockInterviewStatus::SUGGESTED) {
             return $this->fail('Mock interview already accepted for this application.', Response::HTTP_CONFLICT);
         }
 

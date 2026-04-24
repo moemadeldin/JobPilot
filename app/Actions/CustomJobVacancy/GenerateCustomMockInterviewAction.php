@@ -35,9 +35,7 @@ final readonly class GenerateCustomMockInterviewAction
         );
 
         $mockInterview = MockInterview::query()->create([
-            'user_id' => $user->id,
-            'interviewable_id' => $application->id,
-            'interviewable_type' => CustomJobApplication::class,
+            'application_id' => $application->id,
         ]);
 
         $order = 1;

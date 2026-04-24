@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('mock_interviews', function (Blueprint $table): void {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')
-                ->constrained('users')
+            $table->foreignUuid('application_id')
+                ->constrained('custom_job_applications')
                 ->cascadeOnDelete();
             $table->string('status')
                 ->default(MockInterviewStatus::SUGGESTED->value);

@@ -33,11 +33,7 @@ final class ProfileFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
             'avatar' => $this->faker->image(),
-            'phone' => $this->faker->phoneNumber(),
-            'country' => $this->faker->country(),
         ];
     }
 }
