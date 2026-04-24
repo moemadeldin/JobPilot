@@ -13,6 +13,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 final class MockInterviewResource extends JsonResource
 {
+    public const array JSON_STRUCTURE = [
+        'id',
+        'questions' => [
+            'order',
+            'question',
+            'answer',
+        ],
+        'created_at',
+    ];
+
     public function toArray(Request $request): array
     {
         return [

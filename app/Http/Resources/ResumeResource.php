@@ -4,15 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Models\JobVacancy;
+use App\Models\Resume;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property-read JobVacancy $resource
+ * @property-read Resume $resource
  */
 final class ResumeResource extends JsonResource
 {
+    public const array JSON_STRUCTURE = [
+        'id',
+        'user_id',
+        'name',
+        'path',
+    ];
+
     /**
      * Transform the resource into an array.
      *

@@ -12,7 +12,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use SensitiveParameter;
 
-final class UserValidator implements UserValidatorInterface
+final readonly class UserValidator implements UserValidatorInterface
 {
     public function validateUser(?User $user): void
     {

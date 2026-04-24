@@ -46,8 +46,10 @@ final class CreateUserCommand extends Command
             foreach ($validator->errors()->all() as $error) {
                 $this->error($error);
             }
+
             return;
         }
+
         User::query()->create([
             'username' => $user['username'],
             'email' => $user['email'],

@@ -73,7 +73,6 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('custom-vacancies/{customJobVacancy}/cover-letter', CoverLetterController::class)
         ->name('custom-vacancies.cover-letter');
 
-
     Route::controller(ResumeController::class)->group(function (): void {
         Route::get('/resumes', 'index')
             ->name('resumes.index');

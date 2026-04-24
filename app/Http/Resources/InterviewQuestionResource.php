@@ -13,6 +13,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 final class InterviewQuestionResource extends JsonResource
 {
+    public const array JSON_STRUCTURE = [
+        'order',
+        'question',
+        'answer',
+    ];
+
     /**
      * Transform the resource into an array.
      *

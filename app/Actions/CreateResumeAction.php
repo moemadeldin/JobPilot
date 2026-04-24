@@ -25,9 +25,9 @@ final readonly class CreateResumeAction
                 ? $data['path']
                 : $data['path']->storeAs(
                     Constants::RESUMES_PATH.'/'.$user->id,
-                    Str::slug(pathinfo($data['path']->getClientOriginalName(), PATHINFO_FILENAME))
-.'.'.$data['path']->getClientOriginalExtension(), 
-'public'
+                    Str::slug(pathinfo((string) $data['path']->getClientOriginalName(), PATHINFO_FILENAME))
+.'.'.$data['path']->getClientOriginalExtension(),
+                    'public'
                 );
 
             return Resume::query()->updateOrCreate([

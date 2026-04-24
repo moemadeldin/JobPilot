@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Database\Factories\ResumeFactory;
-use Illuminate\Database\Eloquent\Attributes\Scope;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
@@ -41,24 +37,6 @@ final class Resume extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return HasMany<JobApplication, $this>
-     */
-    public function applications(): HasMany
-    {
-        return $this->hasMany(JobApplication::class);
-    }
-
-    /**
-     * @param  Builder<Resume>  $query
-     * @return Builder<Resume>
-     */
-    #[Scope]
-    protected function forUser(Builder $query, string $resumeId, string $userId): Builder
-    {
-        return $query->where('id', $resumeId)->where('user_id', $userId);
     }
 
     /**

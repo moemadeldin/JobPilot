@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\API\V1;
 
 use App\Actions\ChangePasswordAction;
-use App\DTOs\ChangePasswordDTO;
+use App\DTOs\Auth\ChangePasswordDTO;
 use App\Exceptions\AuthException;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Resources\ProfileResource;

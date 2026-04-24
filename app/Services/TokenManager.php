@@ -10,7 +10,7 @@ use App\Utilities\Constants;
 use Illuminate\Container\Attributes\CurrentUser;
 use InvalidArgumentException;
 
-final class TokenManager implements TokenManagerInterface
+final readonly class TokenManager implements TokenManagerInterface
 {
     public function createAccessToken(User $user, string $type): string
     {

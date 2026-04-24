@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\DTOs\ChangePasswordDTO;
+use App\DTOs\Auth\ChangePasswordDTO;
 use App\Exceptions\AuthException;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;

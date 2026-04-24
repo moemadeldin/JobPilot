@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Database\Factories\ProfileFactory;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,11 +15,7 @@ use Illuminate\Support\Carbon;
 /**
  * @property string $id
  * @property string|null $user_id
- * @property string|null $first_name
- * @property string|null $last_name
  * @property string|null $avatar
- * @property string|null $phone
- * @property string|null $country
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -47,20 +42,6 @@ final class Profile extends Model
         return $this->belongsTo(User::class);
     }
 
-    protected function fullName(): Attribute
-    {
-        return Attribute::make(
-            get: fn (): string => sprintf('%s %s', $this->first_name, $this->last_name)
-        );
-    }
-
-    protected function country(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value): string => ucfirst($value)
-        );
-    }
-
     /**
      * Get the attributes that should be cast.
      *
@@ -70,11 +51,7 @@ final class Profile extends Model
     {
         return [
             'user_id' => 'string',
-            'first_name' => 'string',
-            'last_name' => 'string',
             'avatar' => 'string',
-            'phone' => 'string',
-            'country' => 'string',
         ];
     }
 }

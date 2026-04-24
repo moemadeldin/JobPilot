@@ -13,6 +13,19 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 final class CustomJobApplicationResource extends JsonResource
 {
+    public const array JSON_STRUCTURE = [
+        'id',
+        'custom_job_vacancy_id',
+        'custom_job_vacancy_title',
+        'custom_job_vacancy_company',
+        'compatibility_score',
+        'feedback',
+        'improvement_suggestions',
+        'cover_letter',
+        'created_at',
+        'updated_at',
+    ];
+
     public function toArray(Request $request): array
     {
         return [
@@ -24,7 +37,6 @@ final class CustomJobApplicationResource extends JsonResource
             'feedback' => $this->resource->feedback,
             'improvement_suggestions' => $this->resource->improvement_suggestions,
             'cover_letter' => $this->resource->cover_letter,
-            'mock_interview_status' => $this->resource->mock_interview_status?->label(),
             'created_at' => $this->resource->created_at?->toIso8601String(),
             'updated_at' => $this->resource->updated_at?->toIso8601String(),
         ];

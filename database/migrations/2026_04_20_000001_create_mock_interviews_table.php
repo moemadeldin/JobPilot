@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignUuid('user_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
-            $table->uuidMorphs('interviewable');
             $table->string('status')
                 ->default(MockInterviewStatus::SUGGESTED->value);
             $table->timestamps();

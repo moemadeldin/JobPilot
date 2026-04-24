@@ -18,7 +18,7 @@ final class VerificationCodeRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email'],
-            'code' => ['required', 'string', 'digits:6'],
+            'code' => ['required', 'string'],
         ];
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\CustomJobVacancy;
-use App\Models\JobVacancy;
 use App\Models\User;
 use App\Services\GenerateCoverLetterService;
 use App\Traits\APIResponses;

@@ -39,5 +39,4 @@ final readonly class Constants
     public const string PROFILE_PICTURE_PATH = 'profile_pictures';
 
     public const string RESUMES_PATH = 'resumes';
-    
 }

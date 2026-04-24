@@ -1,8 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
-use App\Enums\MockInterviewStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,8 +21,6 @@ return new class extends Migration
             $table->json('feedback')->nullable();
             $table->json('improvement_suggestions')->nullable();
             $table->longText('cover_letter')->nullable();
-            $table->string('mock_interview_status')->index()
-                ->default(MockInterviewStatus::SUGGESTED->value);
             $table->timestamps();
             $table->softDeletes();
         });

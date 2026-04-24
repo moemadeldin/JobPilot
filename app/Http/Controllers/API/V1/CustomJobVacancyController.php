@@ -6,7 +6,6 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Actions\CustomJobVacancy\CreateCustomJobVacancyAction;
 use App\Actions\CustomJobVacancy\DeleteCustomJobVacancyAction;
-use App\DTOs\CreateCustomJobVacancyDTO;
 use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Requests\DeleteCustomJobVacancyRequest;
 use App\Http\Requests\StoreCustomJobVacancyRequest;

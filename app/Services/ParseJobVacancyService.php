@@ -13,7 +13,7 @@ final readonly class ParseJobVacancyService
         'Be strict - only extract actual job details.';
 
     public function __construct(private GroqClient $client) {}
-    
+
     public function parse(string $jobText): array
     {
         $prompt = $this->buildPrompt($jobText);
@@ -39,11 +39,11 @@ final readonly class ParseJobVacancyService
 
     private function buildPrompt(string $jobText): string
     {
-        $rules = <<<'RULES'
-CRITICAL RULES:
-- employment_type: MUST be exactly "full-time" or "part-time". If uncertain or any other value, use null.
-- expected_salary: Only return numeric values like "50000" or "80000". If salary is "Confidential", "DOE", "Negotiable", "N/A", or any non-numeric text, use null.
-RULES;
+        $rules = <<<'RULES_WRAP'
+        CRITICAL RULES:
+        - employment_type: MUST be exactly "full-time" or "part-time". If uncertain or any other value, use null.
+        - expected_salary: Only return numeric values like "50000" or "80000". If salary is "Confidential", "DOE", "Negotiable", "N/A", or any non-numeric text, use null.
+        RULES_WRAP;
 
         $format = <<<'FORMAT'
 Return JSON in this exact format:
