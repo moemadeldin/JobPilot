@@ -33,6 +33,7 @@ final readonly class CustomApplicationController
         $filters = $request->only(['status']);
 
         $applications = $this->query->builder($filters, $user)->paginate($perPage);
+
         return CustomJobApplicationResource::collection($applications);
     }
 
@@ -46,6 +47,7 @@ final readonly class CustomApplicationController
         }
 
         $customApplication->load('mockInterview');
+
         return $this->success(
             new CustomJobApplicationResource($customApplication),
             'Application details retrieved successfully'

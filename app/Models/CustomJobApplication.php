@@ -56,7 +56,9 @@ final class CustomJobApplication extends Model
     protected function filterStatus(Builder $query, ?string $status): void
     {
         if (! in_array($status, [null, '', '0'], true)) {
-            $query->where('mock_interview_status', $status);
+            $query->whereHas('mockInterview', function (Builder $q) use ($status): void {
+                $q->where('status', $status);
+            });
         }
     }
 

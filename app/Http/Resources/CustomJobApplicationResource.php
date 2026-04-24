@@ -36,7 +36,7 @@ final class CustomJobApplicationResource extends JsonResource
             'compatibility_score' => $this->resource->compatibility_score,
             'feedback' => $this->resource->feedback,
             'improvement_suggestions' => $this->resource->improvement_suggestions,
-            'mock_interview_status' => $this->whenLoaded('mockInterview', fn() => $this->resource->mockInterview->status->label()),
+            'mock_interview_status' => $this->whenLoaded('mockInterview', fn () => $this->resource->mockInterview->status->label()),
             'cover_letter' => $this->resource->cover_letter,
             'created_at' => $this->resource->created_at?->toIso8601String(),
             'updated_at' => $this->resource->updated_at?->toIso8601String(),

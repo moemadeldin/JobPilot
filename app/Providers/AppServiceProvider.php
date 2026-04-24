@@ -32,7 +32,7 @@ final class AppServiceProvider extends ServiceProvider
     {
         Model::unguard();
         Model::shouldBeStrict();
-        
+
         $this->app->bind(
             TokenManagerInterface::class,
             TokenManager::class

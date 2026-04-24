@@ -69,10 +69,12 @@ final class User extends Authenticatable
         'updated_at',
         'deleted_at',
     ];
+
     public function isActive(): bool
     {
         return $this->status === Status::ACTIVE;
     }
+
     /**
      * @return HasOne<Profile, $this>
      */
@@ -100,7 +102,6 @@ final class User extends Authenticatable
     /**
      * @return HasMany<CustomJobApplication, $this>
      */
-    
     public function customJobApplications(): HasMany
     {
         return $this->hasMany(CustomJobApplication::class);

@@ -11,7 +11,6 @@ use App\Enums\MockInterviewStatus;
 use App\Http\Requests\CustomMockInterviewRequest;
 use App\Http\Resources\InterviewQuestionResource;
 use App\Models\CustomJobApplication;
-use App\Models\MockInterviewQuestion;
 use App\Traits\APIResponses;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -23,9 +22,9 @@ final readonly class CustomMockInterviewController
     public function show(CustomMockInterviewRequest $request, CustomJobApplication $customApplication): JsonResponse
     {
 
-    $questions = $customApplication->mockInterview 
-        ? $customApplication->mockInterview->questions()->orderBy('order')->get() 
-        : collect([]);
+        $questions = $customApplication->mockInterview
+            ? $customApplication->mockInterview->questions()->orderBy('order')->get()
+            : collect([]);
 
         if ($questions->isEmpty()) {
             return $this->success([], 'No mock interview questions available.');

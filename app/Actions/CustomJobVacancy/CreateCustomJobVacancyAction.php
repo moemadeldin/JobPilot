@@ -30,7 +30,7 @@ final readonly class CreateCustomJobVacancyAction
      */
     public function handle(string $jobText, User $user): array
     {
-        return DB::transaction(function () use ($jobText, $user) {
+        return DB::transaction(function () use ($jobText, $user): array {
 
             $parsed = $this->parseService->parse($jobText);
             $vacancy = $this->createVacancy($user, $parsed);
@@ -58,7 +58,6 @@ final readonly class CreateCustomJobVacancyAction
                 $score,
                 $resumeText,
                 $jobText,
-                $user,
                 $application
             );
 
@@ -72,7 +71,7 @@ final readonly class CreateCustomJobVacancyAction
 
     private function createVacancy(User $user, array $parsed): CustomJobVacancy
     {
-        return CustomJobVacancy::create([
+        return CustomJobVacancy::query()->create([
             'title' => $parsed['title'],
             'company' => $parsed['company'],
             'description' => $parsed['description'],
@@ -95,7 +94,7 @@ final readonly class CreateCustomJobVacancyAction
         array $evaluation,
         int $score
     ): CustomJobApplication {
-        return CustomJobApplication::create([
+        return CustomJobApplication::query()->create([
             'user_id' => $user->id,
             'custom_job_vacancy_id' => $vacancy->id,
             'compatibility_score' => $score,
@@ -108,7 +107,6 @@ final readonly class CreateCustomJobVacancyAction
         int $score,
         string $resumeText,
         string $jobText,
-        User $user,
         CustomJobApplication $application
     ): ?MockInterview {
         if ($score < Constants::MINIMUM_SCORE) {
@@ -117,13 +115,13 @@ final readonly class CreateCustomJobVacancyAction
 
         $qaList = $this->generateService->generate($resumeText, $jobText);
 
-        $mockInterview = MockInterview::create([
+        $mockInterview = MockInterview::query()->create([
             'application_id' => $application->id,
             'status' => MockInterviewStatus::SUGGESTED->value,
         ]);
 
         foreach ($qaList as $index => $qa) {
-            MockInterviewQuestion::create([
+            MockInterviewQuestion::query()->create([
                 'mock_interview_id' => $mockInterview->id,
                 'question' => $qa['question'],
                 'answer' => $qa['answer'],

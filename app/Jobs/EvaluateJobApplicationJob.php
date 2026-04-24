@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Enums\MockInterviewStatus;
 use App\Models\CustomJobApplication;
 use App\Models\CustomJobVacancy;
-use App\Models\JobApplication;
-use App\Models\JobVacancy;
 use App\Models\Resume;
 use App\Services\EvaluateResumeWithAIService;
-use App\Utilities\Constants;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -49,11 +45,6 @@ final class EvaluateJobApplicationJob implements ShouldQueue
             (string) $resume->extracted_text,
             (string) $job->description
         );
-        $score = (int) ($evaluation['score'] ?? 0);
-
-        $mockInterviewStatus = $score >= Constants::MINIMUM_SCORE
-            ? MockInterviewStatus::SUGGESTED->value
-            : MockInterviewStatus::DISQUALIFIED->value;
 
         $application->update([
             'compatibility_score' => $evaluation['score'],
