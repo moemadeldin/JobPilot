@@ -49,7 +49,7 @@ describe('CreateResumeAction', function (): void {
 
         $action = resolve(CreateResumeAction::class);
 
-        $resume = $action->handle(['path' => $file], $user);
+        $action->handle(['path' => $file], $user);
 
         Queue::assertPushed(ExtractResumeTextJob::class);
     });

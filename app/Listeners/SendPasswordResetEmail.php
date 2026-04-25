@@ -8,7 +8,7 @@ use App\Events\PasswordVerificationCodeSent;
 use App\Mail\PasswordResetMail;
 use Illuminate\Support\Facades\Mail;
 
-final class SendPasswordResetEmail
+final readonly class SendPasswordResetEmail
 {
     /**
      * Handle the event.

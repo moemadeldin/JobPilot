@@ -10,8 +10,6 @@ use App\Models\User;
 use Illuminate\Http\Response;
 use Laravel\Sanctum\Sanctum;
 
-// Login Method
-
 it('can login user', function (): void {
     $user = User::factory()->create([
         'email' => 'johndoe@gmail.com',

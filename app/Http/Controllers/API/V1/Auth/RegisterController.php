@@ -6,7 +6,6 @@ namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Actions\Auth\RegisterAction;
 use App\DTOs\Auth\RegisterDTO;
-use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Requests\Auth\StoreUserRequest;
 use App\Http\Resources\LoginResource;
 use App\Traits\APIResponses;
@@ -27,7 +26,7 @@ final readonly class RegisterController
 
         return $this->success(
             new LoginResource($action->handle(RegisterDTO::fromArray($data))),
-            SuccessMessages::REGISTERED->value,
+            'User Registered Successfully.',
             Response::HTTP_CREATED
         );
     }

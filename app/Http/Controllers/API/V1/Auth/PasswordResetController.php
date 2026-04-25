@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\API\V1\Auth;
 
-use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\Auth\VerificationCodeRequest;
@@ -26,7 +25,7 @@ final readonly class PasswordResetController
         $email = $request->input('email');
 
         return $this->success(
-            $this->passwordResetService->forgot($email), SuccessMessages::CODE_SENT->value
+            $this->passwordResetService->forgot($email), 'Verification Code Sent Successfully.'
         );
     }
 
@@ -38,7 +37,7 @@ final readonly class PasswordResetController
         $code = $request->input('code');
 
         return $this->success(
-            $this->passwordResetService->checkCode($email, $code), SuccessMessages::CODE_IS_CORRECT->value
+            $this->passwordResetService->checkCode($email, $code), 'Verification Code is Correct.'
         );
     }
 
@@ -48,7 +47,7 @@ final readonly class PasswordResetController
         $newPassword = $request->input('new_password');
 
         return $this->success(
-            $this->passwordResetService->reset($user, $newPassword), SuccessMessages::PASSWORD_RECOVERED->value
+            $this->passwordResetService->reset($user, $newPassword), 'Password has been recovered.'
         );
     }
 }

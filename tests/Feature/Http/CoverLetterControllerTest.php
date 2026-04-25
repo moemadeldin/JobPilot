@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Services\GenerateCoverLetterService;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 
 describe('GenerateCoverLetterService', function (): void {
@@ -14,7 +15,7 @@ describe('GenerateCoverLetterService', function (): void {
                         'content' => 'Generated cover letter content',
                     ],
                 ]],
-            ], 200),
+            ], Response::HTTP_OK),
         ]);
     });
 

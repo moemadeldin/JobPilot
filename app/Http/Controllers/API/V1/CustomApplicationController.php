@@ -44,7 +44,7 @@ final readonly class CustomApplicationController
             return $this->fail('Application not found', Response::HTTP_NOT_FOUND);
         }
 
-        $customApplication->load(['mockInterview']);
+        $customApplication->load(['customJobVacancy', 'mockInterview']);
 
         return $this->success(
             new CustomJobApplicationResource($customApplication),

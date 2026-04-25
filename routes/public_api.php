@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['guest', 'throttle:5,1'])->group(function (): void {
     Route::post('/register', RegisterController::class)
         ->name('register.store');
+
     Route::post('/login', [SessionController::class, 'store'])
         ->name('login.store');
+
     Route::post('/forgot-password', [PasswordResetController::class, 'forgotPassword'])
         ->name('forgot.store');
 });

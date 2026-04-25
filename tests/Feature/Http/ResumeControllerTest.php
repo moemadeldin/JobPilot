@@ -1,34 +1,50 @@
 <?php
 
 declare(strict_types=1);
-
-use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 
-it('can upload resume', function (): void {
-    Storage::fake('public');
+describe('ResumeController', function (): void {
+    it('can get resume', function (): void {
+        $user = User::factory()->create();
+        $user->resume()->create([
+            'name' => 'test.pdf',
+            'path' => 'resumes/test.pdf',
+            'extracted_text' => 'Test content',
+        ]);
 
-    $user = User::factory()->create();
-    Sanctum::actingAs($user, ['*']);
+        Sanctum::actingAs($user);
 
-    $resumeFile = UploadedFile::fake()->create('resume.pdf', 200, 'application/pdf');
+        $response = $this->getJson(route('resumes.index'));
 
-    $response = $this->post(route('resumes.store'), [
-        'path' => $resumeFile,
-    ]);
+        $response->assertOk();
+    });
 
-    $response->assertStatus(Response::HTTP_CREATED);
+    it('can upload resume', function (): void {
+        Storage::fake('public');
 
-    $resume = Resume::query()->first();
+        $user = User::factory()->create();
+        Sanctum::actingAs($user, ['*']);
 
-    Storage::disk('public')->assertExists($resume->path);
+        $resumeFile = UploadedFile::fake()->create('resume.pdf', 200, 'application/pdf');
 
-    $this->assertDatabaseHas('resumes', [
-        'user_id' => $user->id,
-        'path' => $resume->path,
-    ]);
+        $response = $this->post(route('resumes.store'), [
+            'path' => $resumeFile,
+        ]);
+
+        $response->assertStatus(Response::HTTP_CREATED);
+
+        $user->load('resume');
+
+        expect($user->resume)->not->toBeNull();
+    });
+
+    it('requires authentication', function (): void {
+        $response = $this->getJson(route('resumes.index'));
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+    });
 });

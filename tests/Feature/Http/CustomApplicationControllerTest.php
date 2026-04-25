@@ -16,7 +16,7 @@ describe('CustomApplicationController', function (): void {
 
         Sanctum::actingAs($user);
 
-        $response = $this->getJson(route('custom-vacancies.apply'));
+        $response = $this->getJson(route('custom-applications.index'));
 
         $response->assertOk();
     });
@@ -47,7 +47,7 @@ describe('CustomApplicationController', function (): void {
     });
 
     it('requires authentication to list applications', function (): void {
-        $response = $this->getJson(route('custom-vacancies.apply'));
+        $response = $this->getJson(route('custom-applications.index'));
 
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     });

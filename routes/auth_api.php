@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::controller(SessionController::class)->group(function (): void {
         Route::delete('/logout', 'destroy')
             ->name('logout.destroy');
+
         Route::get('/me', 'show')
             ->name('me.show');
     });
@@ -23,17 +24,15 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::controller(PasswordResetController::class)->group(function (): void {
         Route::post('/verify-code', 'checkCode')
             ->name('verify.code');
+
         Route::post('/reset-password', 'resetPassword')
             ->name('reset.password');
     });
 
     Route::controller(ProfileController::class)->group(function (): void {
-        Route::get('/profile', 'index')
-            ->name('profile.index');
         Route::post('/profile', 'store')
             ->name('profile.store');
-        Route::put('/profile', 'update')
-            ->name('profile.update');
+
         Route::delete('/profile', 'destroy')
             ->name('profile.destroy');
     });
@@ -44,19 +43,23 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::controller(CustomJobVacancyController::class)->group(function (): void {
         Route::get('custom-vacancies', 'index')
             ->name('custom-vacancies.index');
+
         Route::post('custom-vacancies', 'store')
             ->name('custom-vacancies.store');
+
         Route::get('custom-vacancies/{customJobVacancy}', 'show')
             ->name('custom-vacancies.show');
+
         Route::delete('custom-vacancies/{customJobVacancy}', 'destroy')
             ->name('custom-vacancies.destroy');
     });
 
     Route::controller(CustomApplicationController::class)->group(function (): void {
         Route::get('custom-applications/', 'index')
-            ->name('custom-vacancies.apply');
+            ->name('custom-applications.index');
+
         Route::get('custom-applications/{customApplication}', 'show')
-            ->name('custom-vacancies.show');
+            ->name('custom-applications.show');
     });
 
     Route::get('custom-applications/{customApplication}/mock', CustomMockInterviewController::class)->name('mock.interview');

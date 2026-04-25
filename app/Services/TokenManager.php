@@ -15,10 +15,10 @@ final readonly class TokenManager implements TokenManagerInterface
     public function createAccessToken(User $user, string $type): string
     {
         $tokenName = match ($type) {
-            Constants::REGISTER_TOKEN_TYPE => Constants::REGISTER_TOKEN_TYPE,
-            Constants::LOGIN_TOKEN_TYPE => Constants::LOGIN_TOKEN_TYPE,
-            Constants::PASSWORD_RESET_TOKEN_TYPE => Constants::PASSWORD_RESET_TOKEN_TYPE,
-            Constants::EMAIL_VERIFICATION_TOKEN_TYPE => Constants::EMAIL_VERIFICATION_TOKEN_TYPE,
+            Constants::REGISTER_TOKEN_TYPE => Constants::REGISTER_TOKEN_NAME,
+            Constants::LOGIN_TOKEN_TYPE => Constants::LOGIN_TOKEN_NAME,
+            Constants::PASSWORD_RESET_TOKEN_TYPE => Constants::PASSWORD_RESET_TOKEN_NAME,
+            Constants::EMAIL_VERIFICATION_TOKEN_TYPE => Constants::EMAIL_VERIFICATION_TOKEN_NAME,
             default => throw new InvalidArgumentException('Invalid token type'),
         };
 

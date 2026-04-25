@@ -8,6 +8,7 @@ use App\Models\MockInterview;
 use App\Models\MockInterviewQuestion;
 use App\Models\Resume;
 use App\Models\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Laravel\Sanctum\Sanctum;
 
@@ -22,7 +23,7 @@ beforeEach(function (): void {
                     ]),
                 ],
             ]],
-        ], 200),
+        ], Response::HTTP_OK),
     ]);
 });
 
@@ -81,7 +82,7 @@ describe('CustomMockInterviewController', function (): void {
 
     it('requires authentication', function (): void {
         $user = User::factory()->create();
-        $resume = Resume::factory()->for($user)->create([
+        Resume::factory()->for($user)->create([
             'extracted_text' => 'Experienced Laravel developer with 5 years experience',
         ]);
         $customJobVacancy = CustomJobVacancy::factory()->for($user)->create([

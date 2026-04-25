@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\API\V1;
 
 use App\Actions\CreateResumeAction;
-use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Requests\StoreResumeRequest;
 use App\Http\Resources\ResumeResource;
 use App\Models\User;
@@ -25,6 +24,6 @@ final readonly class ResumeController
 
     public function store(#[CurrentUser] User $user, StoreResumeRequest $request, CreateResumeAction $action): JsonResponse
     {
-        return $this->success($action->handle($request->validated(), $user), SuccessMessages::RESUME_UPLOADED->value, Response::HTTP_CREATED);
+        return $this->success($action->handle($request->validated(), $user), 'Resume has been uploaded.', Response::HTTP_CREATED);
     }
 }

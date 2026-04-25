@@ -6,7 +6,6 @@ namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Actions\Auth\LoginAction;
 use App\DTOs\Auth\LoginDTO;
-use App\Enums\Messages\Auth\SuccessMessages;
 use App\Exceptions\AuthException;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\LoginResource;
@@ -39,7 +38,7 @@ final readonly class SessionController
                 new LoginResource(
                     $action->handle(LoginDTO::fromArray($data))
                 ),
-                SuccessMessages::LOGGED_IN->value
+                'User Logged in Successfully.'
             );
         } catch (AuthException $authException) {
             return $this->fail($authException->getMessage(), $authException->getCode());

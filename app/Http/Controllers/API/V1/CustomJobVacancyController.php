@@ -6,7 +6,6 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Actions\CustomJobVacancy\CreateCustomJobVacancyAction;
 use App\Actions\CustomJobVacancy\DeleteCustomJobVacancyAction;
-use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Requests\DeleteCustomJobVacancyRequest;
 use App\Http\Requests\StoreCustomJobVacancyRequest;
 use App\Http\Resources\CustomJobApplicationResource;
@@ -46,7 +45,7 @@ final readonly class CustomJobVacancyController
             'mock_interview' => $result['mock_interview']
                 ? new MockInterviewResource($result['mock_interview'])
                 : null,
-        ], SuccessMessages::JOB_VACANCY_CREATED->value, Response::HTTP_CREATED);
+        ], 'Job Vacancy Created Successfully.', Response::HTTP_CREATED);
     }
 
     public function show(CustomJobVacancy $customJobVacancy): JsonResponse

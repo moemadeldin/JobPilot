@@ -89,7 +89,7 @@ it('validates new password requirements', function (): void {
         'new_password_confirmation' => 'weak',
     ]);
 
-    $response->assertStatus(422);
+    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     $response->assertJsonValidationErrors(['new_password']);
 });
 
@@ -103,7 +103,7 @@ it('validates password confirmation matches', function (): void {
         'new_password_confirmation' => 'DifferentPassword123',
     ]);
 
-    $response->assertStatus(422);
+    $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     $response->assertJsonValidationErrors(['new_password']);
 });
 
@@ -113,5 +113,5 @@ it('requires authentication to reset password', function (): void {
         'new_password_confirmation' => 'Password123',
     ]);
 
-    $response->assertStatus(401);
+    $response->assertStatus(Response::HTTP_UNAUTHORIZED);
 });

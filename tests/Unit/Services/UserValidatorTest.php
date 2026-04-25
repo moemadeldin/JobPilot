@@ -1,8 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
-use App\Enums\Messages\Auth\ValidateMessages;
 use App\Enums\Status;
 use App\Exceptions\AuthException;
 use App\Models\User;
@@ -16,7 +14,7 @@ beforeEach(function (): void {
 test('user is not found', function (): void {
 
     $this->expectException(AuthException::class);
-    $this->expectExceptionMessage(ValidateMessages::INVALID_CREDENTIALS->value);
+    $this->expectExceptionMessage('Invalid credentials.');
     $this->expectExceptionCode(Response::HTTP_BAD_REQUEST);
 
     $this->validator->validateUser(null);
@@ -34,7 +32,7 @@ test('user is not active', function (): void {
     $user = User::factory()->create(['status' => Status::INACTIVE]);
 
     $this->expectException(AuthException::class);
-    $this->expectExceptionMessage(ValidateMessages::AUTH_ERROR->value);
+    $this->expectExceptionMessage('Authentication error.');
     $this->expectExceptionCode(Response::HTTP_FORBIDDEN);
 
     $this->validator->validateUserIsActive($user);
@@ -53,7 +51,7 @@ test('user passes wrong credentials', function (): void {
     $user = User::factory()->create(['password' => '0123456789Aa']);
 
     $this->expectException(AuthException::class);
-    $this->expectExceptionMessage(ValidateMessages::INVALID_CREDENTIALS->value);
+    $this->expectExceptionMessage('Invalid credentials.');
     $this->expectExceptionCode(Response::HTTP_BAD_REQUEST);
 
     $this->validator->validateUserCredentials($user, '0123456789');
@@ -72,7 +70,7 @@ test('user passes wrong verfiication code', function (): void {
     $user = User::factory()->create(['verification_code' => '2222']);
 
     $this->expectException(AuthException::class);
-    $this->expectExceptionMessage(ValidateMessages::INCORRECT_CODE->value);
+    $this->expectExceptionMessage('Invalid Code.');
     $this->expectExceptionCode(Response::HTTP_BAD_REQUEST);
 
     $this->validator->validateVerificationCode($user, '2223');

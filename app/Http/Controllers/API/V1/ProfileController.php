@@ -6,12 +6,9 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Actions\CreateAvatarAction;
 use App\Actions\DeleteAccountAction;
-use App\Actions\UpdateProfileAction;
-use App\DTOs\UpdateProfileDTO;
 use App\Exceptions\AuthException;
 use App\Http\Requests\DeleteAccountRequest;
 use App\Http\Requests\StoreAvatarRequest;
-use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\ProfileResource;
 use App\Models\User;
 use App\Traits\APIResponses;
@@ -24,11 +21,6 @@ final readonly class ProfileController
 {
     use APIResponses;
 
-    public function index(#[CurrentUser] User $user): JsonResponse
-    {
-        return $this->success(new ProfileResource($user), '');
-    }
-
     public function store(
         StoreAvatarRequest $request,
         CreateAvatarAction $action,
@@ -40,19 +32,6 @@ final readonly class ProfileController
         $user = $action->handle($user, $avatar);
 
         return $this->success(new ProfileResource($user), 'Avatar uploaded successfully.');
-    }
-
-    public function update(
-        UpdateProfileRequest $request,
-        UpdateProfileAction $action,
-        #[CurrentUser] User $user,
-    ): JsonResponse {
-        /** @var array<string, mixed> $data */
-        $data = $request->validated();
-
-        $user = $action->handle($user, UpdateProfileDTO::fromArray($data));
-
-        return $this->success(new ProfileResource($user), 'Profile updated successfully.');
     }
 
     public function destroy(

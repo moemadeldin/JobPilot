@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Enums\Messages\Auth\SuccessMessages;
 use App\Http\Requests\CustomMockInterviewRequest;
 use App\Http\Resources\InterviewQuestionResource;
 use App\Models\CustomJobApplication;
@@ -25,6 +24,6 @@ final readonly class CustomMockInterviewController
             return $this->success([], 'No mock interview questions available.');
         }
 
-        return $this->success(InterviewQuestionResource::collection($questions), SuccessMessages::MOCK_INTERVIEW_EXPECTED_QUESTIONS->value);
+        return $this->success(InterviewQuestionResource::collection($questions), 'Expected Interview Questions.');
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Enums\Messages\Auth\ValidateMessages;
 use App\Exceptions\AuthException;
 use App\Interfaces\Auth\UserValidatorInterface;
 use App\Models\User;
@@ -16,21 +15,12 @@ final readonly class UserValidator implements UserValidatorInterface
 {
     public function validateUser(?User $user): void
     {
-        if (! $user instanceof User) {
-            throw new AuthException(
-                ValidateMessages::INVALID_CREDENTIALS->value,
-                Response::HTTP_BAD_REQUEST
-            );
-        }
+        throw_unless($user instanceof User, AuthException::class, 'Invalid credentials.', Response::HTTP_BAD_REQUEST);
     }
 
     public function validateUserIsActive(User $user): void
     {
-        if (! $user->isActive()) {
-            throw new AuthException(
-                ValidateMessages::AUTH_ERROR->value, Response::HTTP_FORBIDDEN
-            );
-        }
+        throw_unless($user->isActive(), AuthException::class, 'Authentication error.', Response::HTTP_FORBIDDEN);
     }
 
     public function validateUserCredentials(User $user, #[SensitiveParameter] string $password): void
@@ -38,17 +28,11 @@ final readonly class UserValidator implements UserValidatorInterface
         /** @var string $hashedPassword */
         $hashedPassword = $user->password;
 
-        if (! Hash::check($password, $hashedPassword)) {
-            throw new AuthException(
-                ValidateMessages::INVALID_CREDENTIALS->value, Response::HTTP_BAD_REQUEST
-            );
-        }
+        throw_unless(Hash::check($password, $hashedPassword), AuthException::class, 'Invalid credentials.', Response::HTTP_BAD_REQUEST);
     }
 
     public function validateVerificationCode(User $user, string $verificationCode): void
     {
-        if ($user->verification_code !== $verificationCode) {
-            throw new AuthException(ValidateMessages::INCORRECT_CODE->value, Response::HTTP_BAD_REQUEST);
-        }
+        throw_if($user->verification_code !== $verificationCode, AuthException::class, 'Invalid Code.', Response::HTTP_BAD_REQUEST);
     }
 }
