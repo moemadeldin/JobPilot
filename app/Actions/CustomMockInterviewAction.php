@@ -25,7 +25,9 @@ final readonly class CustomMockInterviewAction
     {
         return DB::transaction(function () use ($application): array {
 
-            $application->mockInterview->update([
+            $mockInterview = $application->mockInterview;
+            throw_if($mockInterview === null, Exception::class, 'Mock interview not found');
+            $mockInterview->update([
                 'status' => MockInterviewStatus::QUALIFIED->value,
             ]);
 

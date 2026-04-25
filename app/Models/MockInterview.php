@@ -29,11 +29,17 @@ final class MockInterview extends Model
     use HasUuids;
     use SoftDeletes;
 
+    /**
+     * @return BelongsTo<CustomJobApplication, $this>
+     */
     public function application(): BelongsTo
     {
         return $this->belongsTo(CustomJobApplication::class, 'application_id');
     }
 
+    /**
+     * @return HasMany<MockInterviewQuestion, $this>
+     */
     public function questions(): HasMany
     {
         return $this->hasMany(MockInterviewQuestion::class)->orderBy('order');

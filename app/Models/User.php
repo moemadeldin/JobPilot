@@ -36,13 +36,9 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property string|null $access_token
- * @property-read Collection<int, UserAnalytic> $analytics
- * @property-read Collection<int, JobApplication> $applications
- * @property-read Collection<int, Company> $companies
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read Profile|null $profile
  * @property-read Resume|null $resume
- * @property-read Collection<int, Role> $roles
  * @property-read Collection<int, PersonalAccessToken> $tokens
  */
 final class User extends Authenticatable

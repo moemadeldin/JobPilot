@@ -51,6 +51,9 @@ final class CustomJobVacancy extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return HasMany<CustomJobApplication, $this>
+     */
     public function customJobApplications(): HasMany
     {
         return $this->hasMany(CustomJobApplication::class);

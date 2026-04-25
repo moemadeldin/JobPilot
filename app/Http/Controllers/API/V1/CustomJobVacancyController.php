@@ -17,13 +17,14 @@ use App\Traits\APIResponses;
 use App\Utilities\Constants;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 final readonly class CustomJobVacancyController
 {
     use APIResponses;
 
-    public function index(#[CurrentUser] User $user)
+    public function index(#[CurrentUser] User $user): AnonymousResourceCollection
     {
         $vacancies = $user->customJobVacancies()
             ->latest()
@@ -37,7 +38,9 @@ final readonly class CustomJobVacancyController
         CreateCustomJobVacancyAction $action,
         #[CurrentUser] User $user
     ): JsonResponse {
-        $result = $action->handle($request->safe()->job_text, $user);
+        /** @var array{job_text: string} $safe */
+        $safe = $request->safe();
+        $result = $action->handle($safe['job_text'], $user);
 
         return $this->success([
             'vacancy' => new CustomJobVacancyResource($result['vacancy']),

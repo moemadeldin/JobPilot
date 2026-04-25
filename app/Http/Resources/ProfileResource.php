@@ -39,7 +39,7 @@ final class ProfileResource extends JsonResource
                 'email' => $this->resource->email,
                 'avatar' => $this->resource->profile?->avatar,
                 'status' => $this->resource->status->label(),
-                'name' => $this->resource->resume->name,
+                'name' => $this->resource->resume !== null ? $this->resource->resume->name : '',
                 'resume' => $this->resource->resume?->path,
             ],
         ];

@@ -24,6 +24,9 @@ final class JobApplicationListResource extends JsonResource
         'updated_at',
     ];
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(Request $request): array
     {
         return [
@@ -32,7 +35,7 @@ final class JobApplicationListResource extends JsonResource
             'custom_job_vacancy_title' => $this->resource->customJobVacancy->title,
             'custom_job_vacancy_company' => $this->resource->customJobVacancy->company,
             'compatibility_score' => $this->resource->compatibility_score,
-            'mock_interview_status' => $this->whenLoaded('mockInterview', fn () => $this->resource->mockInterview->status->label()),
+            'mock_interview_status' => $this->whenLoaded('mockInterview', fn (): string => $this->resource->mockInterview?->status?->label() ?? ''),
             'created_at' => $this->resource->created_at?->toIso8601String(),
             'updated_at' => $this->resource->updated_at?->toIso8601String(),
         ];

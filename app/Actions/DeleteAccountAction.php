@@ -12,7 +12,7 @@ final readonly class DeleteAccountAction
 {
     public function handle(User $user, string $password): void
     {
-        throw_unless(Hash::check($password, $user->password), AuthException::class, 'The password is incorrect.');
+        throw_unless(Hash::check($password, (string) $user->password), AuthException::class, 'The password is incorrect.');
 
         $user->tokens()->delete();
         $user->delete();

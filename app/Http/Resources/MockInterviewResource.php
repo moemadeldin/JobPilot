@@ -23,6 +23,9 @@ final class MockInterviewResource extends JsonResource
         'created_at',
     ];
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(Request $request): array
     {
         return [

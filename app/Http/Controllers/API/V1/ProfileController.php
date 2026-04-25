@@ -40,10 +40,10 @@ final readonly class ProfileController
         #[CurrentUser] User $user,
     ): Response|JsonResponse {
         try {
-            /** @var array<string, mixed> $data */
+            /** @var array{password: string} $data */
             $data = $request->validated();
 
-            $action->handle($user, (string) $data['password']);
+            $action->handle($user, $data['password']);
 
             return $this->noContent();
         } catch (AuthException $authException) {

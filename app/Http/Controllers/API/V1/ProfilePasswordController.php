@@ -24,7 +24,7 @@ final readonly class ProfilePasswordController
         #[CurrentUser] User $user,
     ): JsonResponse {
         try {
-            /** @var array<string, mixed> $data */
+            /** @var array{current_password: mixed, new_password: mixed} $data */
             $data = $request->validated();
 
             $action->handle($user, ChangePasswordDTO::fromArray($data));

@@ -30,6 +30,9 @@ final class CustomJobVacancyResource extends JsonResource
         'nice_to_have',
     ];
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(Request $request): array
     {
         return [

@@ -14,13 +14,18 @@ final readonly class ChangePasswordDTO
     ) {}
 
     /**
-     * @param  array<string, mixed>  $data
+     * @param  array{current_password: mixed, new_password: mixed}  $data
      */
     public static function fromArray(array $data): self
     {
+        /** @var string $currentPassword */
+        $currentPassword = $data['current_password'];
+        /** @var string $newPassword */
+        $newPassword = $data['new_password'];
+
         return new self(
-            currentPassword: (string) $data['current_password'],
-            newPassword: (string) $data['new_password'],
+            currentPassword: $currentPassword,
+            newPassword: $newPassword,
         );
     }
 }

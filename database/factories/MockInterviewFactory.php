@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 final class MockInterviewFactory extends Factory
 {
+    /** @use RefreshOnCreate<MockInterview> */
     use RefreshOnCreate;
 
     protected $model = MockInterview::class;

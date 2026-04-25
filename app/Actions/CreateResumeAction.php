@@ -8,17 +8,23 @@ use App\Jobs\ExtractResumeTextJob;
 use App\Models\Resume;
 use App\Models\User;
 use App\Utilities\Constants;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 final readonly class CreateResumeAction
 {
+    /**
+     * @param  array{path: string|UploadedFile}  $data
+     */
     public function handle(array $data, User $user): Resume
     {
         $resume = DB::transaction(function () use ($user, $data): Resume {
             if ($user->resume) {
-                Storage::disk('public')->delete($user->resume->path);
+                /** @var string $path */
+                $path = $user->resume->path;
+                Storage::disk('public')->delete($path);
             }
 
             $filePath = is_string($data['path'])

@@ -30,12 +30,13 @@ final class EvaluateJobApplicationJob implements ShouldQueue
 
     public function handle(EvaluateResumeWithAIService $aiEvaluator): void
     {
-        $application = $this->application->load(['resume', 'jobVacancy']);
+        /** @var CustomJobApplication $application */
+        $application = $this->application->load(['user.resume', 'customJobVacancy']);
 
         /** @var Resume $resume */
-        $resume = $application->resume;
+        $resume = $application->user->resume;
         /** @var CustomJobVacancy $job */
-        $job = $application->jobVacancy;
+        $job = $application->customJobVacancy;
 
         if (empty($resume->extracted_text)) {
             throw new RuntimeException(sprintf('Resume [%s] has no extracted text to evaluate.', $resume->id));

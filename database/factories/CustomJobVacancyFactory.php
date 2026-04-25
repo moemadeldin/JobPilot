@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 final class CustomJobVacancyFactory extends Factory
 {
+    /** @use RefreshOnCreate<CustomJobVacancy> */
     use RefreshOnCreate;
 
     protected $model = CustomJobVacancy::class;

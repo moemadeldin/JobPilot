@@ -12,6 +12,7 @@ use App\Traits\APIResponses;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 
 final readonly class ResumeController
 {
@@ -24,6 +25,9 @@ final readonly class ResumeController
 
     public function store(#[CurrentUser] User $user, StoreResumeRequest $request, CreateResumeAction $action): JsonResponse
     {
-        return $this->success($action->handle($request->validated(), $user), 'Resume has been uploaded.', Response::HTTP_CREATED);
+        /** @var array{path: string|UploadedFile} $data */
+        $data = $request->validated();
+
+        return $this->success($action->handle($data, $user), 'Resume has been uploaded.', Response::HTTP_CREATED);
     }
 }

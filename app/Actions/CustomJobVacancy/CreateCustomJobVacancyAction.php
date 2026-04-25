@@ -78,6 +78,9 @@ final readonly class CreateCustomJobVacancyAction
         });
     }
 
+    /**
+     * @param  array<string, int|string|null>  $parsed
+     */
     private function createVacancy(User $user, array $parsed): CustomJobVacancy
     {
         return CustomJobVacancy::query()->create([
@@ -97,6 +100,9 @@ final readonly class CreateCustomJobVacancyAction
         ]);
     }
 
+    /**
+     * @param  array{score: int, feedback: array{strengths: list<string>, weaknesses: list<string>}, suggestions: string}  $evaluation
+     */
     private function createApplication(
         User $user,
         CustomJobVacancy $vacancy,

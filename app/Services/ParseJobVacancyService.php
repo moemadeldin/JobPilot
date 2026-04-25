@@ -14,6 +14,9 @@ final readonly class ParseJobVacancyService
 
     public function __construct(private GroqClient $client) {}
 
+    /**
+     * @return array<string, int|string|null>
+     */
     public function parse(string $jobText): array
     {
         $prompt = $this->getPrompt($jobText, 'prompts.parse_job_vacancy');
@@ -45,6 +48,9 @@ final readonly class ParseJobVacancyService
         return str_replace('{job_text}', $jobText, $template);
     }
 
+    /**
+     * @param  array<mixed, mixed>  $data
+     */
     private function stringOrNull(array $data, string $key): ?string
     {
         $value = $data[$key] ?? null;
@@ -52,6 +58,9 @@ final readonly class ParseJobVacancyService
         return is_string($value) && $value !== '' ? $value : null;
     }
 
+    /**
+     * @param  array<mixed, mixed>  $data
+     */
     private function intOrNull(array $data, string $key): ?int
     {
         $value = $data[$key] ?? null;

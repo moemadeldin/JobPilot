@@ -19,8 +19,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $user_id
  * @property string $custom_job_vacancy_id
  * @property int|null $compatibility_score
- * @property array|null $feedback
- * @property array|null $improvement_suggestions
+ * @property array{strengths: list<string>, weaknesses: list<string>}|null $feedback
+ * @property list<string>|null $improvement_suggestions
  * @property string|null $cover_letter
  * @property string|null $optimized_resume
  * @property-read User $user
@@ -35,16 +35,25 @@ final class CustomJobApplication extends Model
     use HasUuids;
     use SoftDeletes;
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<CustomJobVacancy, $this>
+     */
     public function customJobVacancy(): BelongsTo
     {
         return $this->belongsTo(CustomJobVacancy::class, 'custom_job_vacancy_id');
     }
 
+    /**
+     * @return HasOne<MockInterview, $this>
+     */
     public function mockInterview(): HasOne
     {
         return $this->hasOne(MockInterview::class, 'application_id');

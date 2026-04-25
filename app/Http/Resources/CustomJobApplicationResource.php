@@ -28,6 +28,9 @@ final class CustomJobApplicationResource extends JsonResource
         'updated_at',
     ];
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(Request $request): array
     {
         return [
