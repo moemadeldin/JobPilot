@@ -37,9 +37,8 @@ final readonly class CustomJobVacancyController
         CreateCustomJobVacancyAction $action,
         #[CurrentUser] User $user
     ): JsonResponse {
-        /** @var array{job_text: string} $safe */
-        $safe = $request->validated();
-        $result = $action->handle($safe['job_text'], $user);
+        $jobText = $request->validated('job_text');
+        $result = $action->handle($jobText, $user);
 
         return $this->success(new CustomJobVacancyWithResultsResource($result), 'Job Vacancy Created Successfully.', Response::HTTP_CREATED);
     }

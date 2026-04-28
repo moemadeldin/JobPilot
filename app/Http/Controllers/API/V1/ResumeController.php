@@ -28,8 +28,8 @@ final readonly class ResumeController
     public function store(#[CurrentUser] User $user, StoreResumeRequest $request, CreateResumeAction $action): JsonResponse
     {
         /** @var array{path: string|UploadedFile} $data */
-        $data = $request->validated();
+        $data = $request->validated('path');
 
-        return $this->success(new ResumeResource($action->handle($data, $user)), 'Resume has been uploaded.', Response::HTTP_CREATED);
+        return $this->success(new ResumeResource($action->handle(['path' => $data], $user)), 'Resume has been uploaded.', Response::HTTP_CREATED);
     }
 }

@@ -20,19 +20,24 @@ final readonly class CreateResumeAction
      */
     public function handle(array $data, User $user): Resume
     {
-        $resume = DB::transaction(function () use ($user, $data): Resume {
+        $user->loadMissing('resume');
+
+        $file = $data['path'];
+        $isFileString = is_string($file);
+
+        $resume = DB::transaction(function () use ($user, $file, $isFileString): Resume {
             if ($user->resume) {
                 /** @var string $path */
                 $path = $user->resume->path;
                 Storage::disk('public')->delete($path);
             }
 
-            $filePath = is_string($data['path'])
-                ? $data['path']
-                : $data['path']->storeAs(
+            $filePath = $isFileString
+                ? $file
+                : $file->storeAs(
                     Constants::RESUMES_PATH.'/'.$user->id,
-                    Str::slug(pathinfo((string) $data['path']->getClientOriginalName(), PATHINFO_FILENAME))
-.'.'.$data['path']->getClientOriginalExtension(),
+                    Str::slug(pathinfo((string) $file->getClientOriginalName(), PATHINFO_FILENAME))
+.'.'.$file->getClientOriginalExtension(),
                     'public'
                 );
 
@@ -40,9 +45,9 @@ final readonly class CreateResumeAction
                 'user_id' => $user->id,
             ],
                 [
-                    'name' => is_string($data['path'])
-                        ? basename($data['path'])
-                        : $data['path']->getClientOriginalName(),
+                    'name' => $isFileString
+                        ? basename($file)
+                        : $file->getClientOriginalName(),
                     'path' => $filePath,
                 ]);
         });

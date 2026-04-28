@@ -22,7 +22,7 @@ final readonly class PasswordResetController
     public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
     {
         /** @var string $email */
-        $email = $request->input('email');
+        $email = $request->validated('email');
 
         return $this->success(
             $this->passwordResetService->forgot($email), 'Verification Code Sent Successfully.'
@@ -32,9 +32,9 @@ final readonly class PasswordResetController
     public function checkCode(VerificationCodeRequest $request): JsonResponse
     {
         /** @var string $email */
-        $email = $request->input('email');
+        $email = $request->validated('email');
         /** @var string $code */
-        $code = $request->input('code');
+        $code = $request->validated('code');
 
         return $this->success(
             $this->passwordResetService->checkCode($email, $code), 'Verification Code is Correct.'
@@ -44,7 +44,7 @@ final readonly class PasswordResetController
     public function resetPassword(#[CurrentUser] User $user, ResetPasswordRequest $request): JsonResponse
     {
         /** @var string $newPassword */
-        $newPassword = $request->input('new_password');
+        $newPassword = $request->validated('new_password');
 
         return $this->success(
             $this->passwordResetService->reset($user, $newPassword), 'Password has been recovered.'

@@ -38,10 +38,9 @@ final readonly class ProfileController
         DeleteAccountAction $action,
         #[CurrentUser] User $user,
     ): Response {
-        /** @var array{password: string} $data */
-        $data = $request->validated();
+        $password = $request->validated('password');
 
-        $action->handle($user, $data['password']);
+        $action->handle($user, $password);
 
         return $this->noContent();
     }

@@ -15,6 +15,8 @@ final readonly class CreateAvatarAction
 {
     public function handle(User $user, UploadedFile $avatar): User
     {
+        $user->loadMissing('profile');
+
         return DB::transaction(function () use ($user, $avatar): User {
             if ($user->profile?->avatar && $user->profile->avatar !== Constants::DEFAULT_PROFILE_PICTURE_PATH) {
                 Storage::disk('public')->delete($user->profile->avatar);
@@ -31,6 +33,7 @@ final readonly class CreateAvatarAction
                 ['user_id' => $user->id],
                 ['avatar' => $path]
             );
+            $user->load('profile');
 
             return $user;
         });
