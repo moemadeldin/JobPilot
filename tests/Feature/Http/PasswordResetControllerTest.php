@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use App\Utilities\Constants;
 use Illuminate\Http\Response;
 use Laravel\Sanctum\Sanctum;
 
@@ -29,7 +30,7 @@ it('verifies code with valid code', function (): void {
     $user = User::factory()->create();
     $user->update([
         'verification_code' => '123456',
-        'verification_code_expire_at' => now()->addMinutes(10),
+        'verification_code_expire_at' => now()->addMinutes(Constants::EXPIRATION_VERIFICATION_CODE_TIME_IN_MINUTES),
     ]);
 
     Sanctum::actingAs($user);
@@ -46,7 +47,7 @@ it('fails with invalid code', function (): void {
     $user = User::factory()->create();
     $user->update([
         'verification_code' => '123456',
-        'verification_code_expire_at' => now()->addMinutes(10),
+        'verification_code_expire_at' => now()->addMinutes(Constants::EXPIRATION_VERIFICATION_CODE_TIME_IN_MINUTES),
     ]);
 
     Sanctum::actingAs($user);
@@ -56,14 +57,14 @@ it('fails with invalid code', function (): void {
         'code' => '000000',
     ]);
 
-    $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+    $response->assertStatus(Response::HTTP_BAD_REQUEST);
 });
 
 it('resets password successfully', function (): void {
     $user = User::factory()->create();
     $user->update([
         'verification_code' => '123456',
-        'verification_code_expire_at' => now()->addMinutes(10),
+        'verification_code_expire_at' => now()->addMinutes(Constants::EXPIRATION_VERIFICATION_CODE_TIME_IN_MINUTES),
     ]);
 
     Sanctum::actingAs($user);

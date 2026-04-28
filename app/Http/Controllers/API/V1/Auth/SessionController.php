@@ -6,7 +6,6 @@ namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Actions\Auth\LoginAction;
 use App\DTOs\Auth\LoginDTO;
-use App\Exceptions\AuthException;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\LoginResource;
 use App\Http\Resources\ProfileResource;
@@ -30,19 +29,17 @@ final readonly class SessionController
 
     public function store(LoginRequest $request, LoginAction $action): JsonResponse
     {
-        try {
-            /** @var array<string, string> $data */
-            $data = $request->validated();
 
-            return $this->success(
-                new LoginResource(
-                    $action->handle(LoginDTO::fromArray($data))
-                ),
-                'User Logged in Successfully.'
-            );
-        } catch (AuthException $authException) {
-            return $this->fail($authException->getMessage(), $authException->getCode());
-        }
+        /** @var array<string, string> $data */
+        $data = $request->validated();
+
+        return $this->success(
+            new LoginResource(
+                $action->handle(LoginDTO::fromArray($data))
+            ),
+            'User Logged in Successfully.'
+        );
+
     }
 
     public function destroy(#[CurrentUser] User $user): Response

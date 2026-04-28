@@ -6,7 +6,6 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Actions\ChangePasswordAction;
 use App\DTOs\Auth\ChangePasswordDTO;
-use App\Exceptions\AuthException;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Resources\ProfileResource;
 use App\Models\User;
@@ -23,15 +22,13 @@ final readonly class ProfilePasswordController
         ChangePasswordAction $action,
         #[CurrentUser] User $user,
     ): JsonResponse {
-        try {
-            /** @var array{current_password: mixed, new_password: mixed} $data */
-            $data = $request->validated();
 
-            $action->handle($user, ChangePasswordDTO::fromArray($data));
+        /** @var array{current_password: mixed, new_password: mixed} $data */
+        $data = $request->validated();
 
-            return $this->success(new ProfileResource($user), 'Password changed successfully.');
-        } catch (AuthException $authException) {
-            return $this->fail($authException->getMessage(), $authException->getCode());
-        }
+        $action->handle($user, ChangePasswordDTO::fromArray($data));
+
+        return $this->success(new ProfileResource($user), 'Password changed successfully.');
+
     }
 }

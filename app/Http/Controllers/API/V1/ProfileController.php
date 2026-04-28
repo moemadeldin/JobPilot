@@ -6,7 +6,6 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Actions\CreateAvatarAction;
 use App\Actions\DeleteAccountAction;
-use App\Exceptions\AuthException;
 use App\Http\Requests\DeleteAccountRequest;
 use App\Http\Requests\StoreAvatarRequest;
 use App\Http\Resources\ProfileResource;
@@ -38,16 +37,12 @@ final readonly class ProfileController
         DeleteAccountRequest $request,
         DeleteAccountAction $action,
         #[CurrentUser] User $user,
-    ): Response|JsonResponse {
-        try {
-            /** @var array{password: string} $data */
-            $data = $request->validated();
+    ): Response {
+        /** @var array{password: string} $data */
+        $data = $request->validated();
 
-            $action->handle($user, $data['password']);
+        $action->handle($user, $data['password']);
 
-            return $this->noContent();
-        } catch (AuthException $authException) {
-            return $this->fail($authException->getMessage(), $authException->getCode());
-        }
+        return $this->noContent();
     }
 }
