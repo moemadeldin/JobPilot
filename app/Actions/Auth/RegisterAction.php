@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Actions\Auth;
 
 use App\DTOs\Auth\RegisterDTO;
-use App\Interfaces\Auth\TokenManagerInterface;
 use App\Models\User;
+use App\Services\TokenManager;
 use App\Utilities\Constants;
 use Illuminate\Support\Facades\DB;
 
 final readonly class RegisterAction
 {
     public function __construct(
-        private TokenManagerInterface $tokenManager,
+        private TokenManager $tokenManager,
     ) {}
 
     public function handle(RegisterDTO $dto): User

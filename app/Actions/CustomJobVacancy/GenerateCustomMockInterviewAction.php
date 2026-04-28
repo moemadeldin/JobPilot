@@ -9,7 +9,6 @@ use App\Models\CustomJobVacancy;
 use App\Models\MockInterview;
 use App\Models\MockInterviewQuestion;
 use App\Services\GenerateMockInterviewQAService;
-use Illuminate\Http\Response;
 
 final readonly class GenerateCustomMockInterviewAction
 {
@@ -25,7 +24,7 @@ final readonly class GenerateCustomMockInterviewAction
         $resume = $user->resume;
         $vacancy = $application->customJobVacancy;
 
-        abort_if(! $resume || ! $resume->extracted_text, Response::HTTP_UNPROCESSABLE_ENTITY, 'Resume not found or has no extracted text.');
+        throw_if(! $resume || ! $resume->extracted_text, 'Resume not found or has no extracted text.');
 
         $jobDescription = $this->buildJobDescription($vacancy);
 
@@ -38,15 +37,16 @@ final readonly class GenerateCustomMockInterviewAction
             'application_id' => $application->id,
         ]);
 
-        $order = 1;
-        foreach ($qaList as $qa) {
-            MockInterviewQuestion::query()->create([
-                'mock_interview_id' => $mockInterview->id,
-                'question' => $qa['question'],
-                'answer' => $qa['answer'],
-                'order' => $order++,
-            ]);
-        }
+        $questionsData = collect($qaList)->map(fn ($qa, $index): array => [
+            'mock_interview_id' => $mockInterview->id,
+            'question' => $qa['question'],
+            'answer' => $qa['answer'],
+            'order' => $index + 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ])->values()->all();
+
+        MockInterviewQuestion::query()->insert($questionsData);
 
         $mockInterview->load('questions');
 

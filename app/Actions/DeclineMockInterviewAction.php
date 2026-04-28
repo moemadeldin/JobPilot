@@ -19,6 +19,7 @@ final readonly class DeclineMockInterviewAction
         $mockInterview->update(['status' => MockInterviewStatus::DISQUALIFIED->value]);
 
         $job->load('mockInterview');
+
         return $job;
     }
 }

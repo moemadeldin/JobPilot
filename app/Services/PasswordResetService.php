@@ -5,41 +5,33 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Events\PasswordVerificationCodeSent;
-use App\Interfaces\Auth\PasswordResetInterface;
-use App\Interfaces\Auth\TokenManagerInterface;
-use App\Interfaces\Auth\UserValidatorInterface;
 use App\Models\User;
 use App\Utilities\Constants;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\DB;
 use SensitiveParameter;
 
-final readonly class PasswordResetService implements PasswordResetInterface
+final readonly class PasswordResetService
 {
-    public function __construct(private TokenManagerInterface $tokenManagerService, private UserValidatorInterface $userValidator) {}
+    public function __construct(private TokenManager $tokenManager, private UserValidator $userValidator) {}
 
     public function forgot(string $email): User
     {
-        return DB::transaction(function () use ($email): User {
-            /** @var User $user */
-            $user = User::whereEmail($email)->firstOrFail();
+        /** @var User $user */
+        $user = User::whereEmail($email)->firstOrFail();
 
-            $this->validateStatusAndUpdateUserWithCodeAndToken($user);
+        $this->validateStatusAndUpdateUserWithCodeAndToken($user);
 
-            return $user;
-        });
+        return $user;
     }
 
     public function checkCode(string $email, string $verificationCode): User
     {
-        return DB::transaction(function () use ($email, $verificationCode): User {
-            /** @var User $user */
-            $user = User::whereEmail($email)->firstOrFail();
+        /** @var User $user */
+        $user = User::whereEmail($email)->firstOrFail();
 
-            $this->validateCodeAndUpdateUserWithToken($user, $verificationCode);
+        $this->validateCodeAndUpdateUserWithToken($user, $verificationCode);
 
-            return $user;
-        });
+        return $user;
 
     }
 
@@ -50,7 +42,7 @@ final readonly class PasswordResetService implements PasswordResetInterface
             'verification_code_expire_at' => null,
             'password' => $newPassword,
         ]);
-        $this->tokenManagerService->deleteAccessToken($user);
+        $this->tokenManager->deleteAccessToken($user);
 
         return $user;
     }
@@ -63,7 +55,7 @@ final readonly class PasswordResetService implements PasswordResetInterface
             'verification_code' => $this->generateRandomVerificationCode(),
             'verification_code_expire_at' => Date::now()->addMinutes(Constants::EXPIRATION_VERIFICATION_CODE_TIME_IN_MINUTES),
         ]);
-        $this->tokenManagerService->createAccessToken($user, Constants::PASSWORD_RESET_TOKEN_TYPE);
+        $this->tokenManager->createAccessToken($user, Constants::PASSWORD_RESET_TOKEN_TYPE);
 
         /** @var string $email */
         $email = $user->email;
@@ -76,7 +68,7 @@ final readonly class PasswordResetService implements PasswordResetInterface
     {
         $this->userValidator->validateVerificationCode($user, $verificationCode);
 
-        $this->tokenManagerService->createAccessToken($user, Constants::PASSWORD_RESET_TOKEN_TYPE);
+        $this->tokenManager->createAccessToken($user, Constants::PASSWORD_RESET_TOKEN_TYPE);
     }
 
     private function generateRandomVerificationCode(): int

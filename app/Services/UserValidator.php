@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Exceptions\AuthException;
-use App\Interfaces\Auth\UserValidatorInterface;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use SensitiveParameter;
 
-final readonly class UserValidator implements UserValidatorInterface
+final readonly class UserValidator
 {
     public function validateUser(?User $user): void
     {

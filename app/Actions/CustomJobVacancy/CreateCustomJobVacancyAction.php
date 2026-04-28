@@ -39,7 +39,8 @@ final readonly class CreateCustomJobVacancyAction
             $parsed = $this->parseService->parse($jobText);
             $vacancy = $this->createVacancy($user, $parsed);
 
-            $user->load('resume');
+            $user->loadMissing('resume');
+
             abort_if(
                 ! $user->resume || ! $user->resume->extracted_text,
                 Response::HTTP_UNPROCESSABLE_ENTITY,
@@ -139,14 +140,16 @@ final readonly class CreateCustomJobVacancyAction
             'status' => MockInterviewStatus::QUALIFIED->value,
         ]);
 
-        foreach ($qaList as $index => $qa) {
-            MockInterviewQuestion::query()->create([
-                'mock_interview_id' => $mockInterview->id,
-                'question' => $qa['question'],
-                'answer' => $qa['answer'],
-                'order' => $index + 1,
-            ]);
-        }
+        $questionsData = collect($qaList)->map(fn ($qa, $index): array => [
+            'mock_interview_id' => $mockInterview->id,
+            'question' => $qa['question'],
+            'answer' => $qa['answer'],
+            'order' => $index + 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ])->values()->all();
+
+        MockInterviewQuestion::query()->insert($questionsData);
 
         return $mockInterview->load('questions');
     }

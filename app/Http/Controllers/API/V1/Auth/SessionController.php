@@ -9,8 +9,8 @@ use App\DTOs\Auth\LoginDTO;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\LoginResource;
 use App\Http\Resources\ProfileResource;
-use App\Interfaces\Auth\TokenManagerInterface;
 use App\Models\User;
+use App\Services\TokenManager;
 use App\Traits\APIResponses;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
@@ -20,7 +20,7 @@ final readonly class SessionController
 {
     use APIResponses;
 
-    public function __construct(private TokenManagerInterface $tokenManager) {}
+    public function __construct(private TokenManager $tokenManager) {}
 
     public function show(#[CurrentUser] User $user): JsonResponse
     {

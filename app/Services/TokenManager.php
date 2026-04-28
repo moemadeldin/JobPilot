@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Interfaces\Auth\TokenManagerInterface;
 use App\Models\User;
 use App\Utilities\Constants;
 use Illuminate\Container\Attributes\CurrentUser;
 use InvalidArgumentException;
 
-final readonly class TokenManager implements TokenManagerInterface
+final readonly class TokenManager
 {
     public function createAccessToken(User $user, string $type): string
     {
@@ -27,6 +26,6 @@ final readonly class TokenManager implements TokenManagerInterface
 
     public function deleteAccessToken(#[CurrentUser] User $user): void
     {
-        $user->currentAccessToken()->delete();
+        $user->tokens()->delete();
     }
 }

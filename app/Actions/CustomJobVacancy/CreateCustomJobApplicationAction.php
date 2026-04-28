@@ -21,7 +21,7 @@ final readonly class CreateCustomJobApplicationAction
         CustomJobVacancy $customJobVacancy,
         User $user
     ): CustomJobApplication {
-        $user->load('resume');
+        $user->loadMissing('resume');
 
         $resume = $user->resume;
 

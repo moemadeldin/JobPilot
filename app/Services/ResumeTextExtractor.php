@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Interfaces\ResumeTextExtractorInterface;
 use Illuminate\Support\Facades\Storage;
 use Smalot\PdfParser\Parser;
 use Throwable;
 
-final readonly class ResumeTextExtractor implements ResumeTextExtractorInterface
+final readonly class ResumeTextExtractor
 {
     public function extract(string $path): ?string
     {
