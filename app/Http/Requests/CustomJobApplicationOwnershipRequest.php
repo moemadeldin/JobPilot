@@ -10,7 +10,7 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Container\Attributes\RouteParameter;
 use Illuminate\Foundation\Http\FormRequest;
 
-final class CustomMockInterviewRequest extends FormRequest
+final class CustomJobApplicationOwnershipRequest extends FormRequest
 {
     public function authorize(
         #[CurrentUser()] User $user,

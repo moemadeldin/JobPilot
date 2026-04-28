@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Http\Requests\CustomJobApplicationOwnershipRequest;
 use App\Http\Resources\CustomJobApplicationResource;
 use App\Http\Resources\JobApplicationListResource;
 use App\Models\CustomJobApplication;
@@ -15,7 +16,6 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 
 final readonly class CustomApplicationController
 {
@@ -38,14 +38,9 @@ final readonly class CustomApplicationController
     }
 
     public function show(
-        #[CurrentUser] User $user,
+        CustomJobApplicationOwnershipRequest $request,
         CustomJobApplication $customApplication
     ): JsonResponse {
-
-        if ($customApplication->user_id !== $user->id) {
-            return $this->fail('Application not found', Response::HTTP_NOT_FOUND);
-        }
-
         $customApplication->load(['customJobVacancy', 'mockInterview']);
 
         return $this->success(

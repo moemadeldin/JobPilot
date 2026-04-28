@@ -20,6 +20,8 @@ final readonly class ResumeController
 
     public function index(#[CurrentUser] User $user): JsonResponse
     {
+        $user->loadMissing('resume');
+
         return $this->success(new ResumeResource($user->resume), 'Your resume fetched successfully');
     }
 
@@ -28,6 +30,6 @@ final readonly class ResumeController
         /** @var array{path: string|UploadedFile} $data */
         $data = $request->validated();
 
-        return $this->success($action->handle($data, $user), 'Resume has been uploaded.', Response::HTTP_CREATED);
+        return $this->success(new ResumeResource($action->handle($data, $user)), 'Resume has been uploaded.', Response::HTTP_CREATED);
     }
 }

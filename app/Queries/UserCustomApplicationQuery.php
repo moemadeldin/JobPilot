@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 final readonly class UserCustomApplicationQuery
 {
     /**
-     * @param  array{status?: string}  $data
+     * @param  array<string, mixed>  $data
      * @return Builder<CustomJobApplication>
      */
     public function builder(array $data, User $user): Builder

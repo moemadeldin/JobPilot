@@ -22,6 +22,7 @@ final readonly class CoverLetterController
         #[CurrentUser] User $user,
         CustomJobVacancy $job,
     ): JsonResponse {
+        $user->loadMissing('resume');
 
         if (empty($user->resume->extracted_text)) {
             return $this->fail('Resume has no extracted text', Response::HTTP_UNPROCESSABLE_ENTITY);

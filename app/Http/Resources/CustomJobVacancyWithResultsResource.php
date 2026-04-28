@@ -14,6 +14,7 @@ final class CustomJobVacancyWithResultsResource extends JsonResource
         'application',
         'mock_interview',
     ];
+
     /**
      * Transform the resource into an array.
      *
