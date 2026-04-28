@@ -27,16 +27,7 @@ final readonly class EvaluateResumeWithAIService
         /** @var array{strengths: list<string>, weaknesses: list<string>} $feedback */
         $feedback = $data['feedback'] ?? ['strengths' => [], 'weaknesses' => []];
 
-        $score = 0;
-        if (isset($data['score'])) {
-            /** @var mixed $scoreValue */
-            $scoreValue = $data['score'];
-            if (is_int($scoreValue)) {
-                $score = $scoreValue;
-            } elseif (is_string($scoreValue) && is_numeric($scoreValue)) {
-                $score = (int) $scoreValue;
-            }
-        }
+        $score = (int) ($data['score'] ?? 0);
 
         /** @var string $suggestions */
         $suggestions = $data['suggestions'] ?? 'No suggestions available.';

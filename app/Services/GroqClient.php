@@ -9,9 +9,14 @@ use RuntimeException;
 
 final readonly class GroqClient
 {
-    /**
-     * @return array<mixed, mixed>
-     */
+    public function __construct(
+        private string $model,
+        private float $temperature,
+        private string $apiKey,
+        private string $apiChat,
+        private int $timeout
+    ) {}
+
     public function requestJson(string $systemPrompt, string $userPrompt): array
     {
         $content = $this->send($systemPrompt, $userPrompt, jsonMode: true);
@@ -27,14 +32,10 @@ final readonly class GroqClient
 
     private function send(string $systemPrompt, string $userPrompt, bool $jsonMode): string
     {
-        /** @var string $model */
-        $model = config('ai_services.model');
-        /** @var float $temperature */
-        $temperature = config('ai_services.temperature');
 
         $body = [
-            'model' => $model,
-            'temperature' => $temperature,
+            'model' => $this->model,
+            'temperature' => $this->temperature,
             'messages' => [
                 ['role' => 'system', 'content' => $systemPrompt],
                 ['role' => 'user',   'content' => $userPrompt],
@@ -45,16 +46,9 @@ final readonly class GroqClient
             $body['response_format'] = ['type' => 'json_object'];
         }
 
-        /** @var string $apiKey */
-        $apiKey = config('services.groq.api_key');
-        /** @var float|int $timeout */
-        $timeout = config('ai_services.timeout');
-        /** @var string $apiChat */
-        $apiChat = config('services.groq.api_chat');
-
-        $response = Http::withToken($apiKey)
-            ->timeout($timeout)
-            ->post($apiChat, $body)
+        $response = Http::withToken($this->apiKey)
+            ->timeout($this->timeout)
+            ->post($this->apiChat, $body)
             ->throw();
 
         /** @var string|null $content */

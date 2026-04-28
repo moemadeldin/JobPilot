@@ -32,18 +32,6 @@ final readonly class GenerateMockInterviewQAService
         /** @var list<mixed> $qaList */
         $qaList = $response['qa'] ?? [];
 
-        $result = [];
-        foreach ($qaList as $item) {
-            /** @var mixed $item */
-            if (is_array($item) && array_key_exists('question', $item) && array_key_exists('answer', $item)) {
-                /** @var array{question: string, answer: string} $item */
-                $result[] = [
-                    'question' => $item['question'],
-                    'answer' => $item['answer'],
-                ];
-            }
-        }
-
-        return $result;
+        return $qaList;
     }
 }
