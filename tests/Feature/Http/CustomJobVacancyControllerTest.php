@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Resources\CustomJobVacancyWithResultsResource;
 use App\Models\CustomJobVacancy;
 use App\Models\User;
 use Illuminate\Http\Response;
@@ -57,13 +58,7 @@ describe('CustomJobVacancyController', function (): void {
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $response->assertJsonStructure([
-            'data' => [
-                'vacancy',
-                'application',
-                'mock_interview',
-            ],
-        ]);
+        $response->assertJsonStructure(['data' => CustomJobVacancyWithResultsResource::JSON_STRUCTURE]);
     });
 
     it('can show a custom job vacancy', function (): void {

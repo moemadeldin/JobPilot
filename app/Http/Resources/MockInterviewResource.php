@@ -30,7 +30,7 @@ final class MockInterviewResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'questions' => $this->resource->questions->map(fn ($q): array => [
+            'questions' => $this->resource->questions->map(fn (object $q): array => [
                 'order' => $q->order,
                 'question' => $q->question,
                 'answer' => $q->answer,
