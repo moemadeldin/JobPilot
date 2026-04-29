@@ -27,6 +27,7 @@ it('can login user', function (): void {
             'user' => [
                 'id' => $user->id,
                 'email' => $user->email,
+                'avatar' => $user->profile?->avatar,
             ],
         ],
     ]);

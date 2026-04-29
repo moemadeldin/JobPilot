@@ -55,7 +55,7 @@ final readonly class CreateCustomJobVacancyAction
 
             if ($score >= Constants::MINIMUM_SCORE) {
                 $optimizedResume = $this->optimizeService->optimize($resumeText, $jobText);
-                $coverLetter = $this->coverLetterService->generate($optimizedResume, $jobText);    
+                $coverLetter = $this->coverLetterService->generate($optimizedResume, $jobText);
             } else {
                 $optimizedResume = null;
                 $coverLetter = null;
@@ -138,8 +138,9 @@ final readonly class CreateCustomJobVacancyAction
         if ($score < Constants::MINIMUM_SCORE) {
             MockInterview::query()->create([
                 'application_id' => $application->id,
-                'status' => MockInterviewStatus::DISQUALIFIED->value
+                'status' => MockInterviewStatus::DISQUALIFIED->value,
             ]);
+
             return null;
         }
 
