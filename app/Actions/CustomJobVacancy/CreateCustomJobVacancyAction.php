@@ -53,8 +53,13 @@ final readonly class CreateCustomJobVacancyAction
             $evaluation = $this->evaluateService->evaluate($resumeText, $jobText);
             $score = (int) ($evaluation['score'] ?? 0);
 
-            $optimizedResume = $this->optimizeService->optimize($resumeText, $jobText);
-            $coverLetter = $this->coverLetterService->generate($optimizedResume, $jobText);
+            if ($score >= Constants::MINIMUM_SCORE) {
+                $optimizedResume = $this->optimizeService->optimize($resumeText, $jobText);
+                $coverLetter = $this->coverLetterService->generate($optimizedResume, $jobText);    
+            } else {
+                $optimizedResume = null;
+                $coverLetter = null;
+            }
 
             $application = $this->createApplication(
                 $user,
@@ -110,8 +115,8 @@ final readonly class CreateCustomJobVacancyAction
         CustomJobVacancy $vacancy,
         array $evaluation,
         int $score,
-        string $optimizedResume,
-        string $coverLetter
+        ?string $optimizedResume,
+        ?string $coverLetter
     ): CustomJobApplication {
         return CustomJobApplication::query()->create([
             'user_id' => $user->id,
@@ -131,15 +136,19 @@ final readonly class CreateCustomJobVacancyAction
         CustomJobApplication $application
     ): ?MockInterview {
         if ($score < Constants::MINIMUM_SCORE) {
+            MockInterview::query()->create([
+                'application_id' => $application->id,
+                'status' => MockInterviewStatus::DISQUALIFIED->value
+            ]);
             return null;
         }
-
-        $qaList = $this->generateService->generate($resumeText, $jobText);
 
         $mockInterview = MockInterview::query()->create([
             'application_id' => $application->id,
             'status' => MockInterviewStatus::QUALIFIED->value,
         ]);
+
+        $qaList = $this->generateService->generate($resumeText, $jobText);
 
         $questionsData = collect($qaList)->map(fn ($qa, $index): array => [
             'id' => (string) Str::uuid(),

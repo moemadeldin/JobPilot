@@ -97,6 +97,7 @@ it('returns user details', function (): void {
                 'email' => $user->email,
                 'avatar' => $user->profile->avatar,
                 'status' => $user->status->label(),
+                'resume_name' => $user->resume?->name,
                 'resume' => $user->resume?->path,
             ],
         ],
