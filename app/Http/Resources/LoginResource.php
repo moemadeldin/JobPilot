@@ -38,6 +38,7 @@ final class LoginResource extends JsonResource
             'user' => [
                 'id' => $this->resource->id,
                 'email' => $this->resource->email,
+                'avatar' => $this->resource->profile->avatar
             ],
             'access_token' => $this->resource->access_token,
             'needs_resume' => ! $hasResume,
