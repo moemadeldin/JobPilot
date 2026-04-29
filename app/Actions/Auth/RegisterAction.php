@@ -23,7 +23,7 @@ final readonly class RegisterAction
             $user = User::query()->create([
                 'email' => $dto->email,
                 'password' => $dto->password,
-                'email_verified_at' => now()
+                'email_verified_at' => now(),
             ]);
 
             $user->profile()->create([

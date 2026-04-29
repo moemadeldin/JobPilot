@@ -19,7 +19,7 @@ it('can register a user', function (): void {
     expect($user)
         ->not->toBeNull()
         ->and($user->email)->toBe('johndoe@gmail.com')
-        ->and($user->email_verified_at)->toBeNull();
+        ->and($user->email_verified_at)->not->toBeNull();
 });
 
 it('validates request fields', function (): void {

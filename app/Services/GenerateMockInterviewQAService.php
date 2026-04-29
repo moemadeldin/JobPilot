@@ -32,6 +32,9 @@ final readonly class GenerateMockInterviewQAService
         /** @var list<mixed> $qaList */
         $qaList = $response['qa'] ?? [];
 
-        return $qaList;
+        $filtered = array_filter($qaList, static fn (mixed $item): bool => is_array($item) && isset($item['question'], $item['answer']));
+
+        /** @var list<array{question: string, answer: string}> */
+        return array_values($filtered);
     }
 }

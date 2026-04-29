@@ -18,6 +18,7 @@ use App\Services\ParseJobVacancyService;
 use App\Utilities\Constants;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 final readonly class CreateCustomJobVacancyAction
 {
@@ -141,6 +142,7 @@ final readonly class CreateCustomJobVacancyAction
         ]);
 
         $questionsData = collect($qaList)->map(fn ($qa, $index): array => [
+            'id' => (string) Str::uuid(),
             'mock_interview_id' => $mockInterview->id,
             'question' => $qa['question'],
             'answer' => $qa['answer'],

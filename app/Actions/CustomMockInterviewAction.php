@@ -11,6 +11,7 @@ use App\Models\MockInterviewQuestion;
 use App\Services\GenerateMockInterviewQAService;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 final readonly class CustomMockInterviewAction
 {
@@ -30,6 +31,7 @@ final readonly class CustomMockInterviewAction
 
             [$resumeText, $jobDescription] = $this->extractTexts($application);
 
+            /** @var list<array{question: string, answer: string}> $qaList */
             $qaList = $this->mockInterviewService->generate($resumeText, $jobDescription);
 
             return $this->storeQuestions($application, $qaList);
@@ -47,6 +49,9 @@ final readonly class CustomMockInterviewAction
         ]);
     }
 
+    /**
+     * @return array<int, string>
+     */
     private function extractTexts(CustomJobApplication $application): array
     {
         $resume = $application->user->resume;
@@ -64,6 +69,10 @@ final readonly class CustomMockInterviewAction
         ];
     }
 
+    /**
+     * @param  array<int, array{question: string, answer: string}>  $qaList
+     * @return array<int, array{order: int, question: string, answer: string}>
+     */
     private function storeQuestions(CustomJobApplication $application, array $qaList): array
     {
         $mockInterview = MockInterview::query()->create([
@@ -86,6 +95,7 @@ final readonly class CustomMockInterviewAction
             $answerText = is_string($qa['answer']) ? $qa['answer'] : '';
 
             $questionsData[] = [
+                'id' => (string) Str::uuid(),
                 'mock_interview_id' => $mockInterview->id,
                 'question' => $questionText,
                 'answer' => $answerText,

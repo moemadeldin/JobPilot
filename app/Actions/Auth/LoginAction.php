@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\TokenManager;
 use App\Services\UserValidator;
 use App\Utilities\Constants;
+use Illuminate\Http\Response;
 
 final readonly class LoginAction
 {
@@ -20,6 +21,8 @@ final readonly class LoginAction
     public function handle(LoginDTO $dto): User
     {
         $user = User::whereEmail($dto->email)->first();
+
+        abort_if($user === null, Response::HTTP_BAD_REQUEST, 'Invalid credentials');
 
         $this->userValidator->validateUser($user);
         $this->userValidator->validateUserCredentials($user, $dto->password);

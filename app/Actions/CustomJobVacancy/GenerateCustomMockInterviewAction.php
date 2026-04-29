@@ -9,6 +9,7 @@ use App\Models\CustomJobVacancy;
 use App\Models\MockInterview;
 use App\Models\MockInterviewQuestion;
 use App\Services\GenerateMockInterviewQAService;
+use Illuminate\Support\Str;
 
 final readonly class GenerateCustomMockInterviewAction
 {
@@ -38,6 +39,7 @@ final readonly class GenerateCustomMockInterviewAction
         ]);
 
         $questionsData = collect($qaList)->map(fn ($qa, $index): array => [
+            'id' => (string) Str::uuid(),
             'mock_interview_id' => $mockInterview->id,
             'question' => $qa['question'],
             'answer' => $qa['answer'],

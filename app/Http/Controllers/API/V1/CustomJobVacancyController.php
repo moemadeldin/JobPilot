@@ -37,6 +37,7 @@ final readonly class CustomJobVacancyController
         CreateCustomJobVacancyAction $action,
         #[CurrentUser] User $user
     ): JsonResponse {
+        /** @var string $jobText */
         $jobText = $request->validated('job_text');
         $result = $action->handle($jobText, $user);
 

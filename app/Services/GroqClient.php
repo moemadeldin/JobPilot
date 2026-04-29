@@ -17,6 +17,9 @@ final readonly class GroqClient
         private int $timeout
     ) {}
 
+    /**
+     * @return array<mixed, mixed>
+     */
     public function requestJson(string $systemPrompt, string $userPrompt): array
     {
         $content = $this->send($systemPrompt, $userPrompt, jsonMode: true);
